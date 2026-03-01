@@ -54,6 +54,14 @@ namespace GameEngine
 
             // Aquí luego pasarás matrices (Model/View/Projection)
             // shader.SetMatrix4("model", owner.Transform.WorldMatrix);
+            Camera mainCamera = Camera.Main;
+            if (mainCamera != null)
+            {
+                shader.SetMatrix4("view", mainCamera.GetViewMatrix());
+                shader.SetMatrix4("projection", mainCamera.GetProjectionMatrix());
+                Console.WriteLine("Main Camera Position " + mainCamera.Position);
+            }
+            shader.SetMatrix4("model", Matrix4.CreateTranslation(owner.transform.position));
             material.Apply();
 
             GL.BindVertexArray(vao);
@@ -119,7 +127,15 @@ namespace GameEngine
 
         private void InitializeBuffers()
         {
-            shader = new Shader("basic.vert", "basic.frag");
+            if (material != null)
+            {
+                shader = material.shader;
+            }
+            else
+            {
+                shader = new Shader("basic.vert", "basic.frag");
+            }
+                
 
             vao = GL.GenVertexArray();
             vbo = GL.GenBuffer();
@@ -166,7 +182,7 @@ namespace GameEngine
 
         public void SetShader(Shader shader)
         {
-            shader = this.shader;
+            this.shader = shader;
         }
 
         public void SetMaterial(Material material)

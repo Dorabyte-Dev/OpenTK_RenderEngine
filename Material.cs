@@ -15,7 +15,7 @@ namespace GameEngine
 {
     public class Material
     {
-        private Shader shader;
+        public Shader shader;
         private Color4 baseColor = Color4.White;
 
         private Dictionary<string, Texture> textures = new();

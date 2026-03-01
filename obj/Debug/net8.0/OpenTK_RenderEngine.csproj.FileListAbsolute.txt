@@ -48,3 +48,4 @@ D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Models\Primitives\Cylinder.
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Models\Primitives\Plane.fbx
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Models\Primitives\Sphere.fbx
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\awesomeface.png
+D:\Repositorios\OpenTK_RenderEngine\obj\Debug\net8.0\OpenTK_RenderEngine.sourcelink.json

@@ -27,34 +27,45 @@ namespace GameEngine
 
         }
         // ----- CAMERA -----
+        private Camera _camera;
         private Color4 _clearColor = new Color4(0.2f, 0.3f, 0.3f, 1.0f);
 
         // ----- RENDER PIPELINE -----
         Renderer rend;
 
+        // ----- MOVEMENT -----
+        private float speed = 1.5f;
+        private Vector2 _lastPos;
+        private bool _firstMove = true;
+        private float sensitivity = 0.2f;
+
         protected override void OnLoad() //Se ejecuta cuando carga el programa por primera vez
         {
             base.OnLoad();
 
+
+            _camera = new Camera(new Vector3(0, 0, 3), Size.X / (float)Size.Y);
             GameObject cube = new GameObject("Cube");
-            cube.transform.position = new Vector3(1, 1, 1);
+            cube.transform.position = new Vector3(0, 0, 0);
             Shader shader = new Shader("basic.vert", "basic.frag");
             Texture tex = Texture.LoadFromFile("Textures/awesomeface.png");
-            Material mat = new Material(shader, Color4.Blue);
+            Material mat = new Material(shader, tex);
             rend = cube.AddComponent<Renderer>();
-            rend.LoadModel("Models/Oso.fbx");
             rend.SetMaterial(mat);
+            rend.LoadModel("Models/Primitives/Cube.fbx");
+            
 
             Console.WriteLine(cube.DebugComponents());
 
             GL.ClearColor(_clearColor);
+            GL.Enable(EnableCap.DepthTest);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e) //Se ejecuta al renderizar cada frame visual del juego. Aquí va todo lo que se dibuja.
         {
             base.OnRenderFrame(e);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             RenderManager.Render();
 
@@ -72,15 +83,49 @@ namespace GameEngine
         {
             base.OnUpdateFrame(e);
 
-            if (KeyboardState.IsKeyDown(Keys.Escape))
+            if (!IsFocused) // check to see if the window is focused
+            {
+                return;
+            }
+            CursorState = CursorState.Grabbed;
+
+            KeyboardState input = KeyboardState;
+
+            if (input.IsKeyDown(Keys.Escape))
             {
                 Close();
             }
+
+            float delta = (float)e.Time;
+            if (KeyboardState.IsKeyDown(Keys.W)) _camera.Position += _camera.Front * speed * delta;
+            if (KeyboardState.IsKeyDown(Keys.S)) _camera.Position -= _camera.Front * speed * delta;
+            if (KeyboardState.IsKeyDown(Keys.A)) _camera.Position -= _camera.Right * speed * delta;
+            if (KeyboardState.IsKeyDown(Keys.D)) _camera.Position += _camera.Right * speed * delta;
+            if (KeyboardState.IsKeyDown(Keys.LeftShift)) _camera.Position -= _camera.Up * speed * delta;
+            if (KeyboardState.IsKeyDown(Keys.Space)) _camera.Position += _camera.Up * speed * delta;
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
             base.OnMouseMove(e);
+
+            if (IsFocused) // check to see if the window is focused  
+            {
+                var mouse = MouseState;
+                if (_firstMove)
+                {
+                    _lastPos = new Vector2(mouse.X, mouse.Y);
+                    _firstMove = false;
+                }
+                else
+                {
+                    var deltaX = mouse.X - _lastPos.X;
+                    var deltaY = mouse.Y - _lastPos.Y;
+                    _lastPos = new Vector2(mouse.X, mouse.Y);
+                    _camera.Yaw += deltaX * sensitivity;
+                    _camera.Pitch -= deltaY * sensitivity;
+                }
+            }
         }
 
         protected override void OnMouseWheel(MouseWheelEventArgs e)
