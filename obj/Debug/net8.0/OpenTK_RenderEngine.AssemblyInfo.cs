@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OpenTK_RenderEngine")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b8a2e00e33e3829bf12c1333150b63ba38419094")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+07c064cb608bfa49dfe70338d5d6bb7e18c682cd")]
 [assembly: System.Reflection.AssemblyProductAttribute("OpenTK_RenderEngine")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OpenTK_RenderEngine")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

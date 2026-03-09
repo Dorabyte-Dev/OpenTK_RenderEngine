@@ -35,8 +35,6 @@ D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\GameObject.cs
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Program.cs
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Time.cs
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Transform.cs
-D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\basic.frag
-D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\basic.vert
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Models\Oso.fbx
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\AssimpNet.dll
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\runtimes\linux-x64\native\libassimp.so
@@ -49,3 +47,8 @@ D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Models\Primitives\Plane.fbx
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Models\Primitives\Sphere.fbx
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\awesomeface.png
 D:\Repositorios\OpenTK_RenderEngine\obj\Debug\net8.0\OpenTK_RenderEngine.sourcelink.json
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Light.cs
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\basic.frag
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\basic.vert
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\phong.frag
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\phong.vert

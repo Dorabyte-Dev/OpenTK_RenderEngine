@@ -20,8 +20,8 @@ public class Shader
     {
         //Declaring and Creating Shaders
 
-        string vertexShaderSource = File.ReadAllText(vertexPath);
-        string fragmentShaderSource = File.ReadAllText(fragmentPath);
+        string vertexShaderSource = File.ReadAllText("Shaders/" + vertexPath);
+        string fragmentShaderSource = File.ReadAllText("Shaders/" + fragmentPath);
 
         int vertexShader = GL.CreateShader(ShaderType.VertexShader);
         GL.ShaderSource(vertexShader, vertexShaderSource);

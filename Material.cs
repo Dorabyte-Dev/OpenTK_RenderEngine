@@ -41,6 +41,11 @@ namespace GameEngine
             textures.Add("_mainTex", texture);
         }
 
+        public void SetBaseColor(Color4 color)
+        {
+            baseColor = color;
+        }
+
         public void SetFloat(string name, float value)
         {
             floats[name] = value;

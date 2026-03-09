@@ -47,15 +47,28 @@ namespace GameEngine
             _camera = new Camera(new Vector3(0, 0, 3), Size.X / (float)Size.Y);
             GameObject cube = new GameObject("Cube");
             cube.transform.position = new Vector3(0, 0, 0);
-            Shader shader = new Shader("basic.vert", "basic.frag");
+            Shader shader = new Shader("phong.vert", "phong.frag");
             Texture tex = Texture.LoadFromFile("Textures/awesomeface.png");
-            Material mat = new Material(shader, tex);
+            Material mat = new Material(shader);
+            mat.SetTexture("material.diffuse", tex);
+            mat.SetFloat("material.shininess", 32.0f); // 32 es un valor estándar
             rend = cube.AddComponent<Renderer>();
             rend.SetMaterial(mat);
             rend.LoadModel("Models/Primitives/Cube.fbx");
-            
 
-            Console.WriteLine(cube.DebugComponents());
+            GameObject lightObj = new GameObject("Directional Light");
+            // Apuntamos la luz hacia abajo y un poco hacia adelante
+            lightObj.transform.rotation = new Vector3(-45f, 45f, 0);
+
+            Light dirLight = lightObj.AddComponent<Light>();
+            dirLight.Type = LightType.Directional;
+            // Asegúrate de que los colores de la luz no sean negros
+            dirLight.Ambient = new Vector3(0.05f, 0.05f, 0.05f);
+            dirLight.Diffuse = new Vector3(0.4f, 0.4f, 0.4f);
+            dirLight.Specular = new Vector3(0.5f, 0.5f, 0.5f);
+
+
+            //Console.WriteLine(cube.DebugComponents());
 
             GL.ClearColor(_clearColor);
             GL.Enable(EnableCap.DepthTest);
@@ -131,6 +144,9 @@ namespace GameEngine
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
             base.OnMouseWheel(e);
+
+            // Ajustar el FOV usando la rueda del ratón
+            _camera.Fov -= (float)e.OffsetY;
         }
 
         protected override void OnUnload()

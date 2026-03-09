@@ -10,6 +10,19 @@ namespace GameEngine
     {
 
         private static List<Renderer> _renderers = new();
+        private static List<Light> _lights = new();
+
+        public static void AddLight(Light light)
+        {
+            if (!_lights.Contains(light))
+                _lights.Add(light);
+        }
+
+        public static void RemoveLight(Light light)
+        {
+            if (_lights.Contains(light))
+                _lights.Remove(light);
+        }
 
         public static void AddRenderer(Renderer renderer)
         {
@@ -34,5 +47,7 @@ namespace GameEngine
                 renderer.Render();
             }
         }
+
+        public static Light? GetActiveDirectionalLight() => _lights.FirstOrDefault(l => l.Type == LightType.Directional);
     }
 }

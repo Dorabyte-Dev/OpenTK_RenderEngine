@@ -52,16 +52,26 @@ namespace GameEngine
 
             shader.Use();
 
-            // Aquí luego pasarás matrices (Model/View/Projection)
-            // shader.SetMatrix4("model", owner.Transform.WorldMatrix);
+            //Transforms
             Camera mainCamera = Camera.Main;
             if (mainCamera != null)
             {
                 shader.SetMatrix4("view", mainCamera.GetViewMatrix());
                 shader.SetMatrix4("projection", mainCamera.GetProjectionMatrix());
+                shader.SetVector3("viewPos", mainCamera.Position);
                 Console.WriteLine("Main Camera Position " + mainCamera.Position);
             }
             shader.SetMatrix4("model", Matrix4.CreateTranslation(owner.transform.position));
+
+            Light? dirLight = RenderManager.GetActiveDirectionalLight();
+            if (dirLight != null)
+            {
+                shader.SetVector3("dirLight.direction", dirLight.Forward);
+                shader.SetVector3("dirLight.ambient", dirLight.Ambient);
+                shader.SetVector3("dirLight.diffuse", dirLight.Diffuse);
+                shader.SetVector3("dirLight.specular", dirLight.Specular);
+            }
+            
             material.Apply();
 
             GL.BindVertexArray(vao);
