@@ -63,6 +63,7 @@ namespace GameEngine
             }
             shader.SetMatrix4("model", Matrix4.CreateTranslation(owner.transform.position));
 
+            //Directional Light
             Light? dirLight = RenderManager.GetActiveDirectionalLight();
             if (dirLight != null)
             {
@@ -71,7 +72,33 @@ namespace GameEngine
                 shader.SetVector3("dirLight.diffuse", dirLight.Diffuse);
                 shader.SetVector3("dirLight.specular", dirLight.Specular);
             }
-            
+
+            // --- CÓDIGO DE LAS POINT LIGHTS ---
+            List<Light> pointLights = RenderManager.GetActivePointLights();
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (i < pointLights.Count)
+                {
+                    Light pLight = pointLights[i];
+
+                    shader.SetVector3($"pointLights[{i}].position", pLight.Position);
+
+                    shader.SetVector3($"pointLights[{i}].ambient", pLight.Ambient);
+                    shader.SetVector3($"pointLights[{i}].diffuse", pLight.Diffuse);
+                    shader.SetVector3($"pointLights[{i}].specular", pLight.Specular);
+
+                    shader.SetFloat($"pointLights[{i}].constant", pLight.Constant);
+                    shader.SetFloat($"pointLights[{i}].linear", pLight.Linear);
+                    shader.SetFloat($"pointLights[{i}].quadratic", pLight.Quadratic);
+                }
+                else
+                {
+                    // Si no hay luz para este índice, la apagamos seteando constant a 0
+                    shader.SetFloat($"pointLights[{i}].constant", 0.0f);
+                }
+            }
+
             material.Apply();
 
             GL.BindVertexArray(vao);

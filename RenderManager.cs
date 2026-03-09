@@ -49,5 +49,11 @@ namespace GameEngine
         }
 
         public static Light? GetActiveDirectionalLight() => _lights.FirstOrDefault(l => l.Type == LightType.Directional);
+
+        public static List<Light> GetActivePointLights()
+        {
+            // Filtramos la lista de luces para obtener solo las de tipo Point
+            return _lights.Where(l => l.Type == LightType.Point).ToList();
+        }
     }
 }

@@ -17,6 +17,7 @@ namespace GameEngine
         public LightType Type = LightType.Directional;
 
         // --- Propiedades Comunes ---
+        public Vector3 Position => owner.transform.position;
         public Vector3 Forward => owner.transform.Forward;
 
         public Vector3 Ambient = new Vector3(0.1f, 0.1f, 0.1f);

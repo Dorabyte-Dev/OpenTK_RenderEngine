@@ -67,6 +67,19 @@ namespace GameEngine
             dirLight.Diffuse = new Vector3(0.4f, 0.4f, 0.4f);
             dirLight.Specular = new Vector3(0.5f, 0.5f, 0.5f);
 
+            // Crear una Point Light
+            GameObject pointLightObj = new GameObject("Point Light 1");
+            // La ponemos un poco a la derecha, arriba y hacia nosotros
+            pointLightObj.transform.position = new Vector3(-1.0f, -1.0f, -2.0f);
+
+            Light pLight = pointLightObj.AddComponent<Light>();
+            pLight.Type = LightType.Point;
+
+            // Le damos un color llamativo (ej. rojo o azul) para notar bien la diferencia con la direccional
+            pLight.Ambient = new Vector3(0.05f, 0.0f, 0.0f);
+            pLight.Diffuse = new Vector3(1.0f, 0.2f, 0.2f); // Luz roja
+            pLight.Specular = new Vector3(1.0f, 0.5f, 0.5f);
+
 
             //Console.WriteLine(cube.DebugComponents());
 
