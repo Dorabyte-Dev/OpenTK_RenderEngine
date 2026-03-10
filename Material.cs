@@ -73,11 +73,15 @@ namespace GameEngine
             if(textures.Count <= 0) 
             {
                 shader.SetColor("baseColor", baseColor);
+                shader.SetInt("hasTexture", 0);
+
+                GL.ActiveTexture(TextureUnit.Texture0);
+                GL.BindTexture(TextureTarget.Texture2D, 0);
             }
             else
             {
                 int textureUnit = 0;
-
+                shader.SetInt("hasTexture", 1);
                 foreach (var kv in textures)
                 {
                     kv.Value.Use(TextureUnit.Texture0 + textureUnit);

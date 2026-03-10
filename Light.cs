@@ -11,14 +11,12 @@ namespace GameEngine
         Spot
     }
 
-    public class Light : Component
+    public class Light : GameObject
     {
         // Tipo de luz por defecto
         public LightType Type = LightType.Directional;
 
         // --- Propiedades Comunes ---
-        public Vector3 Position => owner.transform.position;
-        public Vector3 Forward => owner.transform.Forward;
 
         public Vector3 Ambient = new Vector3(0.1f, 0.1f, 0.1f);
         public Vector3 Diffuse = new Vector3(0.8f, 0.8f, 0.8f);
@@ -35,17 +33,15 @@ namespace GameEngine
         public float CutOff = MathF.Cos(MathHelper.DegreesToRadians(12.5f));
         public float OuterCutOff = MathF.Cos(MathHelper.DegreesToRadians(15.0f));
 
-        public Light(GameObject owner) : base(owner)
+        public Light(string name = "Light", LightType type = LightType.Directional) : base(name)
         {
             // ¡La magia del automatismo! 
             // En cuanto se crea la luz, se registra en el RenderManager.
+            Type = type;
             RenderManager.AddLight(this);
         }
 
-        public override void Start()
-        {
-            // Método requerido por tu clase base Component, puede quedar vacío de momento.
-        }
+
 
         // Es una buena práctica tener un método para limpiar el componente si se destruye el GameObject
         public void OnDestroy()

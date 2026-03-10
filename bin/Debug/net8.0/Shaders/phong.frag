@@ -43,7 +43,8 @@ struct SpotLight {
     float linearAtt;
     float quadAtt;
 };
-uniform SpotLight spotLight;
+#define NR_SPOT_LIGHTS 2
+uniform SpotLight spotLights[NR_SPOT_LIGHTS];
 
 uniform Material material;
 uniform vec3 viewPos;
@@ -72,7 +73,8 @@ void main()
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);   
         
     // phase 3: Spot light
-    result += CalcSpotLight(spotLight, norm, FragPos, viewDir);    
+    for(int i = 0; i < NR_SPOT_LIGHTS; i++)
+        result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir);    
     
     FragColor = vec4(result, 1.0);
 }

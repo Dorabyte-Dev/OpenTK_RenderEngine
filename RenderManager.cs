@@ -52,8 +52,12 @@ namespace GameEngine
 
         public static List<Light> GetActivePointLights()
         {
-            // Filtramos la lista de luces para obtener solo las de tipo Point
             return _lights.Where(l => l.Type == LightType.Point).ToList();
+        }
+
+        public static List<Light> GetActiveSpotLights()
+        {
+            return _lights.Where(l => l.Type == LightType.Spot).ToList();
         }
     }
 }

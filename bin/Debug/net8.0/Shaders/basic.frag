@@ -4,8 +4,17 @@ out vec4 FragColor;
 in vec4 BaseColor;
 in vec2 texCoord;
 uniform sampler2D _mainTex;
+uniform int hasTexture; 
 void main()
 {
-    //FragColor = BaseColor;
-    FragColor = texture(_mainTex, texCoord);
+    if (hasTexture == 1) 
+    {
+        vec4 texColor = texture(_mainTex, texCoord);
+        
+        FragColor = texColor * BaseColor;
+    } 
+    else 
+    {
+        FragColor = BaseColor;
+    }
 }

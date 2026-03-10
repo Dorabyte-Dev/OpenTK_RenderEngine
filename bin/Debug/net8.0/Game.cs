@@ -58,7 +58,7 @@ namespace GameEngine
 
         private readonly Vector3[] _pointLightPositions =
                 {
-            new Vector3(0.7f, 0.2f, 2.0f),
+            new Vector3(1.7f, 0.2f, 5.0f),
             new Vector3(2.3f, -3.3f, -4.0f),
             new Vector3(-4.0f, 2.0f, -12.0f),
             new Vector3(0.0f, 0.0f, -3.0f)
@@ -73,6 +73,7 @@ namespace GameEngine
             GL.Enable(EnableCap.DepthTest);
 
             Shader litShader = new Shader("phong.vert", "phong.frag");
+            Shader unlitShader = new Shader("basic.vert", "basic.frag");
             Texture texDiffuse = Texture.LoadFromFile("Textures/container2.png");
             Texture texSpecular = Texture.LoadFromFile("Textures/container2_specular.png");
 
@@ -94,25 +95,27 @@ namespace GameEngine
                 Renderer rend = cube.AddComponent<Renderer>();
                 rend.SetMaterial(cubeMaterial);
                 // Usamos tu FBX genérico en lugar de los vértices a mano
-                rend.LoadModel("Models/Primitives/Cylinder.fbx");
+                rend.LoadModel("Models/Primitives/Cube.fbx");
             }
 
             // 4. Crear la Luz Direccional (Aproximando tu vector -0.2, -1.0, -0.3)
             GameObject dirLightObj = new GameObject("Directional Light");
             dirLightObj.transform.rotation = new Vector3(-70f, -30f, 0f);
 
-            Light dirLight = dirLightObj.AddComponent<Light>();
-            dirLight.Type = LightType.Directional;
+            Light dirLight = new Light("DirectionalLight", LightType.Directional);
             dirLight.Ambient = new Vector3(0.05f, 0.05f, 0.05f);
             dirLight.Diffuse = new Vector3(0.4f, 0.4f, 0.4f);
             dirLight.Specular = new Vector3(0.5f, 0.5f, 0.5f);
 
             for (int i = 0; i < _pointLightPositions.Length; i++)
             {
-                GameObject plObj = new GameObject($"PointLight_{i}");
-                plObj.transform.position = _pointLightPositions[i];
+                Light pLight = new Light($"PointLight_{i}", LightType.Point);
+                pLight.transform.position = _pointLightPositions[i];
+                pLight.transform.scale = new Vector3(.1f);
+                Renderer lightRend = pLight.AddComponent<Renderer>();
+                lightRend.SetMaterial(new Material(unlitShader, Color4.White));
+                lightRend.LoadModel("Models/Primitives/Sphere.fbx");
 
-                Light pLight = plObj.AddComponent<Light>();
                 pLight.Type = LightType.Point;
                 pLight.Ambient = new Vector3(0.05f, 0.05f, 0.05f);
                 pLight.Diffuse = new Vector3(0.8f, 0.8f, 0.8f);
