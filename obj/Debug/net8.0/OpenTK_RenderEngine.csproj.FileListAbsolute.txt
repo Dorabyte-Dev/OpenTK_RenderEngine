@@ -52,3 +52,5 @@ D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\basic.frag
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\basic.vert
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\phong.frag
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\phong.vert
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\container2.png
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\container2_specular.png

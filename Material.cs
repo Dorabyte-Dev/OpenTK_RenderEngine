@@ -80,7 +80,7 @@ namespace GameEngine
 
                 foreach (var kv in textures)
                 {
-                    kv.Value.Use((TextureUnit)textureUnit);
+                    kv.Value.Use(TextureUnit.Texture0 + textureUnit);
                     shader.SetInt(kv.Key, textureUnit);
                     textureUnit++;
                 }

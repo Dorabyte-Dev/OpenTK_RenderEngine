@@ -28,7 +28,7 @@ namespace GameEngine
         }
         // ----- CAMERA -----
         private Camera _camera;
-        private Color4 _clearColor = new Color4(0.2f, 0.3f, 0.3f, 1.0f);
+        private Color4 _clearColor = new Color4(0.1f, 0.1f, 0.1f, 1.0f);
 
         // ----- RENDER PIPELINE -----
         Renderer rend;
@@ -39,52 +39,90 @@ namespace GameEngine
         private bool _firstMove = true;
         private float sensitivity = 0.2f;
 
+
+        // ----- SCENE -----
+        private readonly Vector3 _cubeScale = new Vector3(1.0f, 1.0f, 1.0f);
+        private readonly Vector3[] _cubePositions =
+        {
+            new Vector3(0.0f, 0.0f, 0.0f),
+            new Vector3(1.0f, 0f, 0f),
+            new Vector3(2f, 0f, 0f),
+            new Vector3(-3.8f, -2.0f, -12.3f),
+            new Vector3(2.4f, -0.4f, -3.5f),
+            new Vector3(-1.7f, 3.0f, -7.5f),
+            new Vector3(1.3f, -2.0f, -2.5f),
+            new Vector3(1.5f, 2.0f, -2.5f),
+            new Vector3(1.5f, 0.2f, -1.5f),
+            new Vector3(-1.3f, 1.0f, -1.5f)
+        };
+
+        private readonly Vector3[] _pointLightPositions =
+                {
+            new Vector3(0.7f, 0.2f, 2.0f),
+            new Vector3(2.3f, -3.3f, -4.0f),
+            new Vector3(-4.0f, 2.0f, -12.0f),
+            new Vector3(0.0f, 0.0f, -3.0f)
+        };
+
         protected override void OnLoad() //Se ejecuta cuando carga el programa por primera vez
         {
             base.OnLoad();
 
-
             _camera = new Camera(new Vector3(0, 0, 3), Size.X / (float)Size.Y);
-            GameObject cube = new GameObject("Cube");
-            cube.transform.position = new Vector3(0, 0, 0);
-            Shader shader = new Shader("phong.vert", "phong.frag");
-            Texture tex = Texture.LoadFromFile("Textures/awesomeface.png");
-            Material mat = new Material(shader);
-            mat.SetTexture("material.diffuse", tex);
-            mat.SetFloat("material.shininess", 32.0f); // 32 es un valor estándar
-            rend = cube.AddComponent<Renderer>();
-            rend.SetMaterial(mat);
-            rend.LoadModel("Models/Primitives/Cube.fbx");
+            GL.ClearColor(_clearColor); // El color de fondo oscuro de tu antigua escena
+            GL.Enable(EnableCap.DepthTest);
 
-            GameObject lightObj = new GameObject("Directional Light");
-            // Apuntamos la luz hacia abajo y un poco hacia adelante
-            lightObj.transform.rotation = new Vector3(-45f, 45f, 0);
+            Shader litShader = new Shader("phong.vert", "phong.frag");
+            Texture texDiffuse = Texture.LoadFromFile("Textures/container2.png");
+            Texture texSpecular = Texture.LoadFromFile("Textures/container2_specular.png");
 
-            Light dirLight = lightObj.AddComponent<Light>();
+            Material cubeMaterial = new Material(litShader);
+            cubeMaterial.SetTexture("material.diffuse", texDiffuse);
+            cubeMaterial.SetTexture("material.specular", texSpecular);
+            cubeMaterial.SetFloat("material.shininess", 32.0f);
+
+            // 3. Generar los 10 Cubos en bucle
+            for (int i = 0; i < _cubePositions.Length; i++)
+            {
+                GameObject cube = new GameObject($"Cube_{i}");
+                cube.transform.position = _cubePositions[i];
+                cube.transform.scale = _cubeScale;
+                // En tu código viejo rotabas en base a un eje y un ángulo. 
+                // Esta es una aproximación en ángulos de Euler para darles ese aspecto caótico:
+                cube.transform.rotation = new Vector3(20.0f * i, 6.0f * i, 10.0f * i);
+
+                Renderer rend = cube.AddComponent<Renderer>();
+                rend.SetMaterial(cubeMaterial);
+                // Usamos tu FBX genérico en lugar de los vértices a mano
+                rend.LoadModel("Models/Primitives/Cylinder.fbx");
+            }
+
+            // 4. Crear la Luz Direccional (Aproximando tu vector -0.2, -1.0, -0.3)
+            GameObject dirLightObj = new GameObject("Directional Light");
+            dirLightObj.transform.rotation = new Vector3(-70f, -30f, 0f);
+
+            Light dirLight = dirLightObj.AddComponent<Light>();
             dirLight.Type = LightType.Directional;
-            // Asegúrate de que los colores de la luz no sean negros
             dirLight.Ambient = new Vector3(0.05f, 0.05f, 0.05f);
             dirLight.Diffuse = new Vector3(0.4f, 0.4f, 0.4f);
             dirLight.Specular = new Vector3(0.5f, 0.5f, 0.5f);
 
-            // Crear una Point Light
-            GameObject pointLightObj = new GameObject("Point Light 1");
-            // La ponemos un poco a la derecha, arriba y hacia nosotros
-            pointLightObj.transform.position = new Vector3(-1.0f, -1.0f, -2.0f);
+            for (int i = 0; i < _pointLightPositions.Length; i++)
+            {
+                GameObject plObj = new GameObject($"PointLight_{i}");
+                plObj.transform.position = _pointLightPositions[i];
 
-            Light pLight = pointLightObj.AddComponent<Light>();
-            pLight.Type = LightType.Point;
+                Light pLight = plObj.AddComponent<Light>();
+                pLight.Type = LightType.Point;
+                pLight.Ambient = new Vector3(0.05f, 0.05f, 0.05f);
+                pLight.Diffuse = new Vector3(0.8f, 0.8f, 0.8f);
+                pLight.Specular = new Vector3(1.0f, 1.0f, 1.0f);
 
-            // Le damos un color llamativo (ej. rojo o azul) para notar bien la diferencia con la direccional
-            pLight.Ambient = new Vector3(0.05f, 0.0f, 0.0f);
-            pLight.Diffuse = new Vector3(1.0f, 0.2f, 0.2f); // Luz roja
-            pLight.Specular = new Vector3(1.0f, 0.5f, 0.5f);
-
-
-            //Console.WriteLine(cube.DebugComponents());
-
-            GL.ClearColor(_clearColor);
-            GL.Enable(EnableCap.DepthTest);
+                // Tus valores exactos de atenuación
+                pLight.Constant = 1.0f;
+                pLight.Linear = 0.14f;
+                pLight.Quadratic = 0.07f;
+            }
         }
 
         protected override void OnRenderFrame(FrameEventArgs e) //Se ejecuta al renderizar cada frame visual del juego. Aquí va todo lo que se dibuja.
