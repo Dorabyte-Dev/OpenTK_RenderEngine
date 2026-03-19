@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "fYM8whyGMRCG0Y++btUgGozRC3l4OSlbehoVc0GGwkls3aQdd9m7hMZ9ZOO7aOEDx2saeOs6sAaPn3LrN68GAg==",
+  "dgSpecHash": "b7lX2nR1PkFT/fkf3jbz9t0CQqgJcIzHAXi417n3OIjSEBq2GEobNfTL5B+UKhuAr/P3QuNXE5tGvBPBBY5Wng==",
   "success": true,
   "projectFilePath": "D:\\Repositorios\\OpenTK_RenderEngine\\OpenTK_RenderEngine.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dorab\\.nuget\\packages\\assimpnet\\4.1.0\\assimpnet.4.1.0.nupkg.sha512",
+    "C:\\Users\\dorab\\.nuget\\packages\\bulletsharp\\0.11.1\\bulletsharp.0.11.1.nupkg.sha512",
     "C:\\Users\\dorab\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\dorab\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\dorab\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
@@ -92,5 +93,16 @@
     "C:\\Users\\dorab\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\dorab\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "El paquete \"BulletSharp 0.11.1\" se restauró con \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\" en lugar de la plataforma de destino del proyecto \"net8.0\". Puede que el paquete no sea totalmente compatible con el proyecto.",
+      "libraryId": "BulletSharp",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

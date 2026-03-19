@@ -39,9 +39,9 @@ struct SpotLight {
     vec3 diffuse;
     vec3 specular;
 
-    float constAtt;
-    float linearAtt;
-    float quadAtt;
+    float constant;
+    float linear;
+    float quadratic;
 };
 #define NR_SPOT_LIGHTS 2
 uniform SpotLight spotLights[NR_SPOT_LIGHTS];
@@ -132,7 +132,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {   
-    if (light.constAtt < 0.001 || light.cutOff == light.outerCutOff) //Check later
+    if (light.constant < 0.001 || light.cutOff == light.outerCutOff) //Check later
         return vec3(0.0);
 
     vec3 lightDir = normalize(light.position - fragPos);
@@ -146,8 +146,8 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
     // attenuation
     float distance    = length(light.position - fragPos);
-    float attenuation = 1.0 / (light.constAtt + light.linearAtt * distance + 
-  			     light.quadAtt * (distance * distance));    
+    float attenuation = 1.0 / (light.constant + light.linear * distance + 
+  			     light.quadratic * (distance * distance));    
 
     //Spotlight
     float theta     = dot(lightDir, normalize(-light.direction));

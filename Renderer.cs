@@ -98,6 +98,34 @@ namespace GameEngine
                 }
             }
 
+            List<Light> spotLights = RenderManager.GetActiveSpotLights();
+
+            for (int i = 0; i < 2; i++)
+            {
+                if (i < spotLights.Count)
+                {
+                    Light sLight = spotLights[i];
+
+                    shader.SetVector3($"spotLights[{i}].position", sLight.transform.position);
+                    shader.SetVector3($"spotLights[{i}].direction", sLight.transform.Forward);
+
+                    shader.SetVector3($"spotLights[{i}].ambient", sLight.Ambient);
+                    shader.SetVector3($"spotLights[{i}].diffuse", sLight.Diffuse);
+                    shader.SetVector3($"spotLights[{i}].specular", sLight.Specular);
+
+                    shader.SetFloat($"spotLights[{i}].constant", sLight.Constant);
+                    shader.SetFloat($"spotLights[{i}].linear", sLight.Linear);
+                    shader.SetFloat($"spotLights[{i}].quadratic", sLight.Quadratic);
+                    shader.SetFloat($"spotLights[{i}].cutOff", sLight.CutOff);
+                    shader.SetFloat($"spotLights[{i}].outerCutOff", sLight.OuterCutOff);
+                }
+                else
+                {
+                    // Si no hay luz para este índice, la apagamos seteando constant a 0
+                    shader.SetFloat($"spotLights[{i}].constant", 0.0f);
+                }
+            }
+
             material.Apply();
 
             GL.BindVertexArray(vao);

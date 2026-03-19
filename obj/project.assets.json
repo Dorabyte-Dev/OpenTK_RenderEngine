@@ -39,6 +39,18 @@
           }
         }
       },
+      "BulletSharp/0.11.1": {
+        "type": "package",
+        "compile": {
+          "lib/net40-client/BulletSharp.dll": {}
+        },
+        "runtime": {
+          "lib/net40-client/BulletSharp.dll": {}
+        },
+        "build": {
+          "build/net40-client/BulletSharp.targets": {}
+        }
+      },
       "Microsoft.NETCore.Platforms/1.1.0": {
         "type": "package",
         "compile": {
@@ -1559,6 +1571,24 @@
         "runtimes/osx-x64/native/libassimp.dylib",
         "runtimes/win-x64/native/assimp.dll",
         "runtimes/win-x86/native/assimp.dll"
+      ]
+    },
+    "BulletSharp/0.11.1": {
+      "sha512": "h63YXDBPZV2WZJ5YmP65NTAq0PiNN37lGrX/Ln+Of8ya1kZasIR815dkb/q2xE2HCafIbS9iRf7w7QzLoCTWRw==",
+      "type": "package",
+      "path": "bulletsharp/0.11.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/net40-client/BulletSharp.dll.config",
+        "build/net40-client/BulletSharp.targets",
+        "build/net40-client/libbulletc-linux-x64.so",
+        "build/net40-client/libbulletc-linux-x86.so",
+        "build/net40-client/libbulletc-windows-x64.dll",
+        "build/net40-client/libbulletc-windows-x86.dll",
+        "bulletsharp.0.11.1.nupkg.sha512",
+        "bulletsharp.nuspec",
+        "lib/net40-client/BulletSharp.dll"
       ]
     },
     "Microsoft.NETCore.Platforms/1.1.0": {
@@ -5055,6 +5085,7 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "AssimpNet >= 4.1.0",
+      "BulletSharp >= 0.11.1",
       "OpenTK >= 4.9.4",
       "StbImageSharp >= 2.30.15"
     ]
@@ -5102,6 +5133,10 @@
             "target": "Package",
             "version": "[4.1.0, )"
           },
+          "BulletSharp": {
+            "target": "Package",
+            "version": "[0.11.1, )"
+          },
           "OpenTK": {
             "target": "Package",
             "version": "[4.9.4, )"
@@ -5130,5 +5165,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "El paquete \"BulletSharp 0.11.1\" se restauró con \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\" en lugar de la plataforma de destino del proyecto \"net8.0\". Puede que el paquete no sea totalmente compatible con el proyecto.",
+      "libraryId": "BulletSharp",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }
