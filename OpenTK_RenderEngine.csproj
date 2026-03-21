@@ -30,6 +30,9 @@
     <Compile Update="Program.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="Rigidbody.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="Time.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>

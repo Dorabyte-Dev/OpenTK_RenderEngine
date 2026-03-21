@@ -6,6 +6,10 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Mathematics;
+using Vector3 = OpenTK.Mathematics.Vector3;
+
+using BulletSharp;
+using BulletSharp.Math;
 
 using Assimp;
 using PrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
@@ -13,15 +17,9 @@ using System.Reflection;
 
 namespace GameEngine
 {
-
-    //A GameObject should be instanced with
-    //  -Default Empty Transform (or position, if needed)
-    //  -A renderer if the gameObject requires to render a model
-    //      -With a Material that tells the renderer how to render it
-    //          -With a Shader inside the Material
-    //          -With a Texture or Base Color, or none
     public class Game : GameWindow
     {
+        #region Variables
         public Game(int width, int height, string title) : base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title })
         {
 
@@ -32,6 +30,13 @@ namespace GameEngine
 
         // ----- RENDER PIPELINE -----
         Renderer rend;
+
+        // ----- PHYSICS -----
+        private DefaultCollisionConfiguration _collisionConf;
+        private CollisionDispatcher _dispatcher;
+        private DbvtBroadphase _broadphase;
+        private SequentialImpulseConstraintSolver _solver;
+        public DiscreteDynamicsWorld PhysicsWorld { get; private set; }
 
         // ----- MOVEMENT -----
         private float speed = 1.5f;
@@ -64,9 +69,15 @@ namespace GameEngine
             new Vector3(0.0f, 0.0f, -3.0f)
         };
 
+        #endregion
+        #region LifeCycle Functions
+
         protected override void OnLoad() //Se ejecuta cuando carga el programa por primera vez
         {
             base.OnLoad();
+
+            InitPhysics();
+
 
             _camera = new Camera(new Vector3(0, 0, 3), Size.X / (float)Size.Y);
             GL.ClearColor(_clearColor); // El color de fondo oscuro de tu antigua escena
@@ -146,9 +157,12 @@ namespace GameEngine
             GL.Viewport(0, 0, e.Width, e.Height);
         }
 
+        #region Inputs
         protected override void OnUpdateFrame(FrameEventArgs e) //Se ejecuta al renderizar cada frame lógico del juego. Aquí va todo lo que es jugable.
         {
             base.OnUpdateFrame(e);
+
+            PhysicsWorld.StepSimulation((float)Time.deltaTime, 10);
 
             if (!IsFocused) // check to see if the window is focused
             {
@@ -206,6 +220,29 @@ namespace GameEngine
         protected override void OnUnload()
         {
             base.OnUnload();
+            CleanupPhysics();
+        }
+        #endregion
+        #endregion
+        private void InitPhysics()
+        {
+            _collisionConf = new DefaultCollisionConfiguration();
+            _dispatcher = new CollisionDispatcher(_collisionConf);
+            _broadphase = new DbvtBroadphase();
+            _solver = new SequentialImpulseConstraintSolver();
+
+            PhysicsWorld = new DiscreteDynamicsWorld(_dispatcher, _broadphase, _solver, _collisionConf);
+
+            PhysicsWorld.Gravity = new BulletSharp.Math.Vector3(0, -9.81f, 0);
+        }
+
+        public void CleanupPhysics()
+        {
+            PhysicsWorld.Dispose();
+            _solver.Dispose();
+            _broadphase.Dispose();
+            _dispatcher.Dispose();
+            _collisionConf.Dispose();
         }
     }
 }
