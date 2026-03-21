@@ -59,3 +59,5 @@ D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\BlackTex.png
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\WhiteTex.jpg
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Models\Castle.fbx
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\TexturasMago.png
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Rigidbody.cs
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\BulletSharp.dll

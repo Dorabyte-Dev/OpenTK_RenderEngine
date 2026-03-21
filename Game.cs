@@ -28,38 +28,39 @@ namespace GameEngine
         private Camera _camera;
         private Color4 _clearColor = new Color4(0.1f, 0.1f, 0.1f, 1.0f);
 
-        // ----- RENDER PIPELINE -----
-        Renderer rend;
-
-        // ----- PHYSICS -----
-        private DefaultCollisionConfiguration _collisionConf;
-        private CollisionDispatcher _dispatcher;
-        private DbvtBroadphase _broadphase;
-        private SequentialImpulseConstraintSolver _solver;
-        public DiscreteDynamicsWorld PhysicsWorld { get; private set; }
-
         // ----- MOVEMENT -----
         private float speed = 1.5f;
         private Vector2 _lastPos;
         private bool _firstMove = true;
         private float sensitivity = 0.2f;
 
+        // ---- PHYSICS -----
+        private double _physicsAccumulator = 0.0;
+        private const double FixedTimeStep = 1.0 / 60.0;
 
         // ----- SCENE -----
+        private Scene _mainScene;
         private readonly Vector3 _cubeScale = new Vector3(1.0f, 1.0f, 1.0f);
         private readonly Vector3[] _cubePositions =
-        {
-            new Vector3(0.0f, 0.0f, 0.0f),
-            new Vector3(1.0f, 0f, 0f),
-            new Vector3(2f, 0f, 0f),
-            new Vector3(-3.8f, -2.0f, -12.3f),
-            new Vector3(2.4f, -0.4f, -3.5f),
-            new Vector3(-1.7f, 3.0f, -7.5f),
-            new Vector3(1.3f, -2.0f, -2.5f),
-            new Vector3(1.5f, 2.0f, -2.5f),
-            new Vector3(1.5f, 0.2f, -1.5f),
-            new Vector3(-1.3f, 1.0f, -1.5f)
-        };
+{
+    // Fila Z = 0
+    new Vector3(0f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(2f, 0f, 0f), new Vector3(3f, 0f, 0f), new Vector3(4f, 0f, 0f), new Vector3(5f, 0f, 0f),
+    
+    // Fila Z = 1
+    new Vector3(0f, 0f, 1f), new Vector3(1f, 0f, 1f), new Vector3(2f, 0f, 1f), new Vector3(3f, 0f, 1f), new Vector3(4f, 0f, 1f), new Vector3(5f, 0f, 1f),
+    
+    // Fila Z = 2
+    new Vector3(0f, 0f, 2f), new Vector3(1f, 0f, 2f), new Vector3(2f, 0f, 2f), new Vector3(3f, 0f, 2f), new Vector3(4f, 0f, 2f), new Vector3(5f, 0f, 2f),
+    
+    // Fila Z = 3
+    new Vector3(0f, 0f, 3f), new Vector3(1f, 0f, 3f), new Vector3(2f, 0f, 3f), new Vector3(3f, 0f, 3f), new Vector3(4f, 0f, 3f), new Vector3(5f, 0f, 3f),
+    
+    // Fila Z = 4
+    new Vector3(0f, 0f, 4f), new Vector3(1f, 0f, 4f), new Vector3(2f, 0f, 4f), new Vector3(3f, 0f, 4f), new Vector3(4f, 0f, 4f), new Vector3(5f, 0f, 4f),
+    
+    // Fila Z = 5
+    new Vector3(0f, 0f, 5f), new Vector3(1f, 0f, 5f), new Vector3(2f, 0f, 5f), new Vector3(3f, 0f, 5f), new Vector3(4f, 0f, 5f), new Vector3(5f, 0f, 5f),
+};
 
         private readonly Vector3[] _pointLightPositions =
                 {
@@ -76,8 +77,7 @@ namespace GameEngine
         {
             base.OnLoad();
 
-            InitPhysics();
-
+            _mainScene = new Scene("Main Scene");
 
             _camera = new Camera(new Vector3(0, 0, 3), Size.X / (float)Size.Y);
             GL.ClearColor(_clearColor); // El color de fondo oscuro de tu antigua escena
@@ -94,20 +94,17 @@ namespace GameEngine
             cubeMaterial.SetFloat("material.shininess", 32.0f);
 
             // 3. Generar los 10 Cubos en bucle
-            for (int i = 0; i < _cubePositions.Length; i++)
+            /*for (int i = 0; i < _cubePositions.Length; i++)
             {
                 GameObject cube = new GameObject($"Cube_{i}");
                 cube.transform.position = _cubePositions[i];
                 cube.transform.scale = _cubeScale;
-                // En tu código viejo rotabas en base a un eje y un ángulo. 
-                // Esta es una aproximación en ángulos de Euler para darles ese aspecto caótico:
-                cube.transform.rotation = new Vector3(20.0f * i, 6.0f * i, 10.0f * i);
 
                 Renderer rend = cube.AddComponent<Renderer>();
                 rend.SetMaterial(cubeMaterial);
                 // Usamos tu FBX genérico en lugar de los vértices a mano
                 rend.LoadModel("Models/Primitives/Cube.fbx");
-            }
+            }*/
 
             // 4. Crear la Luz Direccional (Aproximando tu vector -0.2, -1.0, -0.3)
             GameObject dirLightObj = new GameObject("Directional Light");
@@ -137,6 +134,21 @@ namespace GameEngine
                 pLight.Linear = 0.14f;
                 pLight.Quadratic = 0.07f;
             }
+
+            GameObject fallingCube = new GameObject("Falling Cube");
+            Renderer fallingRend = fallingCube.AddComponent<Renderer>();
+            fallingRend.SetMaterial(cubeMaterial);
+            fallingRend.LoadModel("Models/Primitives/Cube.fbx");
+
+            Collider col = fallingCube.AddComponent<Collider>();
+
+            // (El Rigidbody se auto-añadirá al PhysicsManager cuando la escena llame a Start)
+            Rigidbody rb = fallingCube.AddComponent<Rigidbody>();
+            rb.Mass = 1.0f;
+
+            PhysicsManager.InitializePhysics();
+            _mainScene.Start();
+           
         }
 
         protected override void OnRenderFrame(FrameEventArgs e) //Se ejecuta al renderizar cada frame visual del juego. Aquí va todo lo que se dibuja.
@@ -162,7 +174,7 @@ namespace GameEngine
         {
             base.OnUpdateFrame(e);
 
-            PhysicsWorld.StepSimulation((float)Time.deltaTime, 10);
+            Time.Update();
 
             if (!IsFocused) // check to see if the window is focused
             {
@@ -170,20 +182,35 @@ namespace GameEngine
             }
             CursorState = CursorState.Grabbed;
 
-            KeyboardState input = KeyboardState;
 
+
+            PhysicsManager.StepSimulation((float)Time.deltaTime);
+
+
+
+            _mainScene.Update((float)e.Time);
+            _mainScene.FixedUpdate((float)e.Time);
+            _mainScene.LateUpdate((float)e.Time);
+
+            HandleInputs(e);
+        }
+
+        private void HandleInputs(FrameEventArgs e)
+        {
+            KeyboardState input = KeyboardState;
             if (input.IsKeyDown(Keys.Escape))
             {
                 Close();
             }
+
 
             float delta = (float)e.Time;
             if (KeyboardState.IsKeyDown(Keys.W)) _camera.Position += _camera.Front * speed * delta;
             if (KeyboardState.IsKeyDown(Keys.S)) _camera.Position -= _camera.Front * speed * delta;
             if (KeyboardState.IsKeyDown(Keys.A)) _camera.Position -= _camera.Right * speed * delta;
             if (KeyboardState.IsKeyDown(Keys.D)) _camera.Position += _camera.Right * speed * delta;
-            if (KeyboardState.IsKeyDown(Keys.LeftShift)) _camera.Position -= _camera.Up * speed * delta;
-            if (KeyboardState.IsKeyDown(Keys.Space)) _camera.Position += _camera.Up * speed * delta;
+            if (KeyboardState.IsKeyDown(Keys.Q) || KeyboardState.IsKeyDown(Keys.LeftShift)) _camera.Position -= _camera.Up * speed * delta;
+            if (KeyboardState.IsKeyDown(Keys.E) || KeyboardState.IsKeyDown(Keys.Space)) _camera.Position += _camera.Up * speed * delta;
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
@@ -220,30 +247,10 @@ namespace GameEngine
         protected override void OnUnload()
         {
             base.OnUnload();
-            CleanupPhysics();
+            PhysicsManager.CleanUp();
         }
         #endregion
         #endregion
-        private void InitPhysics()
-        {
-            _collisionConf = new DefaultCollisionConfiguration();
-            _dispatcher = new CollisionDispatcher(_collisionConf);
-            _broadphase = new DbvtBroadphase();
-            _solver = new SequentialImpulseConstraintSolver();
-
-            PhysicsWorld = new DiscreteDynamicsWorld(_dispatcher, _broadphase, _solver, _collisionConf);
-
-            PhysicsWorld.Gravity = new BulletSharp.Math.Vector3(0, -9.81f, 0);
-        }
-
-        public void CleanupPhysics()
-        {
-            PhysicsWorld.Dispose();
-            _solver.Dispose();
-            _broadphase.Dispose();
-            _dispatcher.Dispose();
-            _collisionConf.Dispose();
-        }
     }
 }
 

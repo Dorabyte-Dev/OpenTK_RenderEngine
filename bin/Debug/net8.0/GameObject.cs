@@ -23,8 +23,12 @@ namespace GameEngine {
         public GameObject() {
             name = "GameObject";
             active = true;
-            //_transform = new Transform(this);
             _transform = AddComponent<Transform>();
+
+            if (Scene.ActiveScene != null)
+            {
+                Scene.ActiveScene.AddGameObject(this);
+            }
         }
 
         public GameObject(string name)
@@ -32,6 +36,11 @@ namespace GameEngine {
             this.name = name;
             active = true;
             _transform = AddComponent<Transform>();
+
+            if (Scene.ActiveScene != null)
+            {
+                Scene.ActiveScene.AddGameObject(this);
+            }
         }
 
         public T AddComponent<T>() where T : Component

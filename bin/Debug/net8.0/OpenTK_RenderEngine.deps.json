@@ -9,6 +9,7 @@
       "OpenTK_RenderEngine/1.0.0": {
         "dependencies": {
           "AssimpNet": "4.1.0",
+          "BulletSharp": "0.11.1",
           "OpenTK": "4.9.4",
           "StbImageSharp": "2.30.15"
         },
@@ -46,6 +47,14 @@
             "rid": "win-x86",
             "assetType": "native",
             "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "BulletSharp/0.11.1": {
+        "runtime": {
+          "lib/net40-client/BulletSharp.dll": {
+            "assemblyVersion": "0.11.0.0",
+            "fileVersion": "0.11.0.0"
           }
         }
       },
@@ -877,6 +886,13 @@
       "sha512": "sha512-z/4Tmf3Q2r1+vN6o/szArEZvPsdYNRYiS0L/yArybQd7n7KCiS9L4lRZhwwlHJb/edECM+Jky0XisVspr5aQWQ==",
       "path": "assimpnet/4.1.0",
       "hashPath": "assimpnet.4.1.0.nupkg.sha512"
+    },
+    "BulletSharp/0.11.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-h63YXDBPZV2WZJ5YmP65NTAq0PiNN37lGrX/Ln+Of8ya1kZasIR815dkb/q2xE2HCafIbS9iRf7w7QzLoCTWRw==",
+      "path": "bulletsharp/0.11.1",
+      "hashPath": "bulletsharp.0.11.1.nupkg.sha512"
     },
     "Microsoft.NETCore.Platforms/1.1.0": {
       "type": "package",
