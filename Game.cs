@@ -26,7 +26,7 @@ namespace GameEngine
         }
         // ----- CAMERA -----
         private Camera _camera;
-        private Color4 _clearColor = new Color4(0.1f, 0.1f, 0.1f, 1.0f);
+        private Color4 _clearColor = new Color4(0.1f, 0.4f, 0.2f, 1.0f);
 
         // ----- MOVEMENT -----
         private float speed = 1.5f;
@@ -42,25 +42,25 @@ namespace GameEngine
         private Scene _mainScene;
         private readonly Vector3 _cubeScale = new Vector3(1.0f, 1.0f, 1.0f);
         private readonly Vector3[] _cubePositions =
-{
-    // Fila Z = 0
-    new Vector3(0f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(2f, 0f, 0f), new Vector3(3f, 0f, 0f), new Vector3(4f, 0f, 0f), new Vector3(5f, 0f, 0f),
+        {
+            // Fila Z = 0
+            new Vector3(0f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(2f, 0f, 0f), new Vector3(3f, 0f, 0f), new Vector3(4f, 0f, 0f), new Vector3(5f, 0f, 0f),
     
-    // Fila Z = 1
-    new Vector3(0f, 0f, 1f), new Vector3(1f, 0f, 1f), new Vector3(2f, 0f, 1f), new Vector3(3f, 0f, 1f), new Vector3(4f, 0f, 1f), new Vector3(5f, 0f, 1f),
+            // Fila Z = 1
+            new Vector3(0f, 0f, 1f), new Vector3(1f, 0f, 1f), new Vector3(2f, 0f, 1f), new Vector3(3f, 0f, 1f), new Vector3(4f, 0f, 1f), new Vector3(5f, 0f, 1f),
     
-    // Fila Z = 2
-    new Vector3(0f, 0f, 2f), new Vector3(1f, 0f, 2f), new Vector3(2f, 0f, 2f), new Vector3(3f, 0f, 2f), new Vector3(4f, 0f, 2f), new Vector3(5f, 0f, 2f),
+            // Fila Z = 2
+            new Vector3(0f, 0f, 2f), new Vector3(1f, 0f, 2f), new Vector3(2f, 0f, 2f), new Vector3(3f, 0f, 2f), new Vector3(4f, 0f, 2f), new Vector3(5f, 0f, 2f),
     
-    // Fila Z = 3
-    new Vector3(0f, 0f, 3f), new Vector3(1f, 0f, 3f), new Vector3(2f, 0f, 3f), new Vector3(3f, 0f, 3f), new Vector3(4f, 0f, 3f), new Vector3(5f, 0f, 3f),
+            // Fila Z = 3
+            new Vector3(0f, 0f, 3f), new Vector3(1f, 0f, 3f), new Vector3(2f, 0f, 3f), new Vector3(3f, 0f, 3f), new Vector3(4f, 0f, 3f), new Vector3(5f, 0f, 3f),
     
-    // Fila Z = 4
-    new Vector3(0f, 0f, 4f), new Vector3(1f, 0f, 4f), new Vector3(2f, 0f, 4f), new Vector3(3f, 0f, 4f), new Vector3(4f, 0f, 4f), new Vector3(5f, 0f, 4f),
+            // Fila Z = 4
+            new Vector3(0f, 0f, 4f), new Vector3(1f, 0f, 4f), new Vector3(2f, 0f, 4f), new Vector3(3f, 0f, 4f), new Vector3(4f, 0f, 4f), new Vector3(5f, 0f, 4f),
     
-    // Fila Z = 5
-    new Vector3(0f, 0f, 5f), new Vector3(1f, 0f, 5f), new Vector3(2f, 0f, 5f), new Vector3(3f, 0f, 5f), new Vector3(4f, 0f, 5f), new Vector3(5f, 0f, 5f),
-};
+            // Fila Z = 5
+            new Vector3(0f, 0f, 5f), new Vector3(1f, 0f, 5f), new Vector3(2f, 0f, 5f), new Vector3(3f, 0f, 5f), new Vector3(4f, 0f, 5f), new Vector3(5f, 0f, 5f),
+        };
 
         private readonly Vector3[] _pointLightPositions =
                 {
@@ -69,6 +69,8 @@ namespace GameEngine
             new Vector3(-4.0f, 2.0f, -12.0f),
             new Vector3(0.0f, 0.0f, -3.0f)
         };
+
+        GameObject fallingCube;
 
         #endregion
         #region LifeCycle Functions
@@ -94,28 +96,37 @@ namespace GameEngine
             cubeMaterial.SetFloat("material.shininess", 32.0f);
 
             // 3. Generar los 10 Cubos en bucle
-            /*for (int i = 0; i < _cubePositions.Length; i++)
+            for (int i = 0; i < _cubePositions.Length; i++)
             {
                 GameObject cube = new GameObject($"Cube_{i}");
-                cube.transform.position = _cubePositions[i];
+                cube.transform.position = _cubePositions[i] + new Vector3(-2.5f, -5, -7.5f);
                 cube.transform.scale = _cubeScale;
 
                 Renderer rend = cube.AddComponent<Renderer>();
                 rend.SetMaterial(cubeMaterial);
                 // Usamos tu FBX genérico en lugar de los vértices a mano
                 rend.LoadModel("Models/Primitives/Cube.fbx");
-            }*/
+
+                Rigidbody cubeRb = cube.AddComponent<Rigidbody>();
+                cubeRb.Mass = 0;
+                cubeRb.Restitution = 0.5f;
+                cubeRb.UseGravity = false;
+
+                Collider collider = cube.AddComponent<Collider>();
+
+            }
 
             // 4. Crear la Luz Direccional (Aproximando tu vector -0.2, -1.0, -0.3)
             GameObject dirLightObj = new GameObject("Directional Light");
-            dirLightObj.transform.rotation = new Vector3(-70f, -30f, 0f);
+            
 
             Light dirLight = new Light("DirectionalLight", LightType.Directional);
+            dirLight.transform.rotation = new Vector3(-70f, 30f, 0f);
             dirLight.Ambient = new Vector3(0.05f, 0.05f, 0.05f);
-            dirLight.Diffuse = new Vector3(0.4f, 0.4f, 0.4f);
-            dirLight.Specular = new Vector3(0.5f, 0.5f, 0.5f);
+            dirLight.Diffuse = new Vector3(0.6f, 0.6f, 0.6f);
+            dirLight.Specular = new Vector3(0.8f, 0.8f, 0.8f);
 
-            for (int i = 0; i < _pointLightPositions.Length; i++)
+            /*for (int i = 0; i < _pointLightPositions.Length; i++)
             {
                 Light pLight = new Light($"PointLight_{i}", LightType.Point);
                 pLight.transform.position = _pointLightPositions[i];
@@ -133,9 +144,10 @@ namespace GameEngine
                 pLight.Constant = 1.0f;
                 pLight.Linear = 0.14f;
                 pLight.Quadratic = 0.07f;
-            }
+            }*/
 
-            GameObject fallingCube = new GameObject("Falling Cube");
+            fallingCube = new GameObject("Falling Cube");
+            fallingCube.transform.position = new Vector3(0f, 5f, -5f);
             Renderer fallingRend = fallingCube.AddComponent<Renderer>();
             fallingRend.SetMaterial(cubeMaterial);
             fallingRend.LoadModel("Models/Primitives/Cube.fbx");
@@ -145,6 +157,8 @@ namespace GameEngine
             // (El Rigidbody se auto-añadirá al PhysicsManager cuando la escena llame a Start)
             Rigidbody rb = fallingCube.AddComponent<Rigidbody>();
             rb.Mass = 1.0f;
+            rb.Restitution = 0.5f;
+            rb.UseGravity = true;
 
             PhysicsManager.InitializePhysics();
             _mainScene.Start();
@@ -191,6 +205,16 @@ namespace GameEngine
             _mainScene.Update((float)e.Time);
             _mainScene.FixedUpdate((float)e.Time);
             _mainScene.LateUpdate((float)e.Time);
+
+
+            if (KeyboardState.IsKeyDown(Keys.R) && fallingCube != null)
+            {
+                Rigidbody rb = fallingCube.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.SetVelocity(new Vector3(-5.0f, 0.0f, 0.0f));
+                }
+            }
 
             HandleInputs(e);
         }

@@ -5,14 +5,14 @@ namespace GameEngine
 {
     public static class PhysicsManager
     {
-        // Variables internas ocultas al resto del motor
+        //Physics Pipeline
         private static DefaultCollisionConfiguration _collisionConf;
         private static CollisionDispatcher _dispatcher;
         private static DbvtBroadphase _broadphase;
         private static SequentialImpulseConstraintSolver _solver;
         private static DiscreteDynamicsWorld _physicsWorld;
 
-        // Propiedad global para modificar la gravedad fácilmente
+        //Global Gravity
         public static Vector3 Gravity
         {
             get { return _physicsWorld != null ? _physicsWorld.Gravity : Vector3.Zero; }
@@ -55,7 +55,7 @@ namespace GameEngine
             Gravity = gravityDirection;
         }
 
-        // Lo llamaremos desde OnUpdateFrame en Game.cs
+        //Called on OnUpdateFrame inside Game.cs
         public static void StepSimulation(float deltaTime)
         {
             if (_physicsWorld != null)
@@ -64,7 +64,7 @@ namespace GameEngine
             }
         }
 
-        // Métodos puente para que Rigidbody.cs se comunique de forma limpia
+        //Bridge methods for adding/removing rigid bodies to the physics world
         public static void AddRigidBody(BulletSharp.RigidBody body)
         {
             if (_physicsWorld != null && body != null)
