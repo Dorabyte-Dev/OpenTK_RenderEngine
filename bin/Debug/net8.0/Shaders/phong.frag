@@ -4,6 +4,7 @@ struct Material {
     sampler2D specular;
 
     float shininess;
+    int isBlinn;
 };
 
 struct DirLight {
@@ -76,6 +77,9 @@ void main()
     for(int i = 0; i < NR_SPOT_LIGHTS; i++)
         result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir);    
     
+    float gamma = 2.2;
+    result = pow(result, vec3(1.0/gamma));
+
     FragColor = vec4(result, 1.0);
 }
 
@@ -89,9 +93,22 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     // diffuse shading
     float diff = max(dot(normal, lightDir), 0.0);
 
-    // specular shading
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    float spec;
+    float kPi = 3.14159265f;
+
+    if(material.isBlinn == 0)
+    {
+        float kEnergyConservation = ( 2.0 + material.shininess ) / ( 2.0 * kPi ); 
+        vec3 reflectDir = reflect(-lightDir, normal);
+        spec = kEnergyConservation * pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    }
+    else
+    {
+        float kEnergyConservation = ( 8.0 + material.shininess ) / ( 8.0 * kPi ); 
+		vec3 halfwayDir = normalize(lightDir + viewDir);  
+		spec = kEnergyConservation * pow(max(dot(normal, halfwayDir), 0.0), material.shininess * 2);
+        
+	}
 
     // combine results
     vec3 ambient  = light.ambient  * vec3(texture(material.diffuse, texCoord));
@@ -111,8 +128,21 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float diff = max(dot(normal, lightDir), 0.0);
 
     // specular shading
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    float spec;
+    float kPi = 3.14159265f;
+
+    if(material.isBlinn == 0)
+    {
+        float kEnergyConservation = ( 2.0 + material.shininess ) / ( 2.0 * kPi ); 
+        vec3 reflectDir = reflect(-lightDir, normal);
+        spec = kEnergyConservation * pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    }
+    else{
+        float kEnergyConservation = ( 8.0 + material.shininess ) / ( 8.0 * kPi ); 
+		vec3 halfwayDir = normalize(lightDir + viewDir);  
+		spec = kEnergyConservation * pow(max(dot(normal, halfwayDir), 0.0), material.shininess * 2);
+	}
+    
 
     // attenuation
     float distance    = length(light.position - fragPos);
@@ -141,8 +171,20 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float diff = max(dot(normal, lightDir), 0.0);
 
     // specular shading
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    float spec;
+    float kPi = 3.14159265f;
+
+    if(material.isBlinn == 0)
+    {
+        float kEnergyConservation = ( 2.0 + material.shininess ) / ( 2.0 * kPi ); 
+        vec3 reflectDir = reflect(-lightDir, normal);
+        spec = kEnergyConservation * pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    }
+    else{
+        float kEnergyConservation = ( 8.0 + material.shininess ) / ( 8.0 * kPi ); 
+		vec3 halfwayDir = normalize(lightDir + viewDir);  
+		spec = kEnergyConservation * pow(max(dot(normal, halfwayDir), 0.0), material.shininess * 2);
+	}
 
     // attenuation
     float distance    = length(light.position - fragPos);

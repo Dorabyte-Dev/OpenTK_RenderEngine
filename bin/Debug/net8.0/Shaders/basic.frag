@@ -8,5 +8,5 @@ uniform float hasTexture;
 void main()
 {
     vec4 texColor = texture(_mainTex, texCoord);
-    FragColor = texColor;
+    FragColor = BaseColor;
 }

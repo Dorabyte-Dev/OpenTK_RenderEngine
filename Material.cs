@@ -20,6 +20,7 @@ namespace GameEngine
 
         private Dictionary<string, Texture> textures = new();
 
+        private Dictionary<string, int> ints = new();
         private Dictionary<string, float> floats = new();
         private Dictionary<string, Vector3> vectors = new();
         private Dictionary<string, Matrix4> matrices = new();
@@ -45,7 +46,10 @@ namespace GameEngine
         {
             baseColor = color;
         }
-
+        public void SetInt(string name, int value)
+        {
+            ints[name] = value;
+        }
         public void SetFloat(string name, float value)
         {
             floats[name] = value;
@@ -89,6 +93,8 @@ namespace GameEngine
                     textureUnit++;
                 }
             }
+            foreach (var kv in ints)
+                shader.SetInt(kv.Key, kv.Value);
             foreach (var kv in floats)
                 shader.SetFloat(kv.Key, kv.Value);
 

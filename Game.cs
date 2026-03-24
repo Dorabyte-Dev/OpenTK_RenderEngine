@@ -71,6 +71,7 @@ namespace GameEngine
         };
 
         GameObject fallingCube;
+        Material cubeMaterial;
 
         #endregion
         #region LifeCycle Functions
@@ -81,22 +82,23 @@ namespace GameEngine
 
             _mainScene = new Scene("Main Scene");
 
-            _camera = new Camera(new Vector3(0, 0, 3), Size.X / (float)Size.Y);
+            _camera = new Camera(new Vector3(0, 5, 3), Size.X / (float)Size.Y);
             GL.ClearColor(_clearColor); // El color de fondo oscuro de tu antigua escena
             GL.Enable(EnableCap.DepthTest);
 
             Shader litShader = new Shader("phong.vert", "phong.frag");
             Shader unlitShader = new Shader("basic.vert", "basic.frag");
             Texture texDiffuse = Texture.LoadFromFile("Textures/container2.png");
-            Texture texSpecular = Texture.LoadFromFile("Textures/container2_specular.png");
+            Texture texSpecular = Texture.LoadFromFile("Textures/WhiteTex.jpg");
 
-            Material cubeMaterial = new Material(litShader);
+            cubeMaterial = new Material(litShader);
             cubeMaterial.SetTexture("material.diffuse", texDiffuse);
             cubeMaterial.SetTexture("material.specular", texSpecular);
-            cubeMaterial.SetFloat("material.shininess", 32.0f);
+            cubeMaterial.SetFloat("material.shininess", 1.0f);
+            cubeMaterial.SetInt("material.isBlinn", 0);
 
             // 3. Generar los 10 Cubos en bucle
-            for (int i = 0; i < _cubePositions.Length; i++)
+            /*for (int i = 0; i < _cubePositions.Length; i++)
             {
                 GameObject cube = new GameObject($"Cube_{i}");
                 cube.transform.position = _cubePositions[i] + new Vector3(-2.5f, -5, -7.5f);
@@ -114,17 +116,37 @@ namespace GameEngine
 
                 Collider collider = cube.AddComponent<Collider>();
 
-            }
+            }*/
+
+            GameObject cube = new GameObject($"Cube_{0}");
+            cube.transform.position = _cubePositions[0] + new Vector3(-2.5f, -5, -7.5f);
+            cube.transform.scale = _cubeScale * 20;
+
+            Renderer rend = cube.AddComponent<Renderer>();
+            rend.SetMaterial(cubeMaterial);
+            // Usamos tu FBX genérico en lugar de los vértices a mano
+            rend.LoadModel("Models/Primitives/Cube.fbx");
+
+            Rigidbody cubeRb = cube.AddComponent<Rigidbody>();
+            cubeRb.Mass = 0;
+            cubeRb.Restitution = 0.5f;
+            cubeRb.UseGravity = false;
+
+            Collider collider = cube.AddComponent<Collider>();
+
 
             // 4. Crear la Luz Direccional (Aproximando tu vector -0.2, -1.0, -0.3)
-            GameObject dirLightObj = new GameObject("Directional Light");
-            
 
-            Light dirLight = new Light("DirectionalLight", LightType.Directional);
+
+            Light dirLight = new Light("DirectionalLight", LightType.Point);
+            dirLight.transform.position = new Vector3(0f, 8f, 0f);
             dirLight.transform.rotation = new Vector3(-70f, 30f, 0f);
             dirLight.Ambient = new Vector3(0.05f, 0.05f, 0.05f);
             dirLight.Diffuse = new Vector3(0.6f, 0.6f, 0.6f);
             dirLight.Specular = new Vector3(0.8f, 0.8f, 0.8f);
+            Renderer dirLightRend = dirLight.AddComponent<Renderer>();
+            dirLightRend.SetMaterial(new Material(unlitShader, Color4.White));
+            dirLightRend.LoadModel("Models/Primitives/Cube.fbx");
 
             /*for (int i = 0; i < _pointLightPositions.Length; i++)
             {
@@ -171,6 +193,7 @@ namespace GameEngine
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            
             RenderManager.Render();
 
             SwapBuffers();
@@ -214,6 +237,15 @@ namespace GameEngine
                 {
                     rb.SetVelocity(new Vector3(-5.0f, 0.0f, 0.0f));
                 }
+            }
+
+            if (KeyboardState.IsKeyDown(Keys.T))
+            {
+                GL.Enable(EnableCap.FramebufferSrgb);
+            }
+            if (KeyboardState.IsKeyDown(Keys.Y))
+            {
+                cubeMaterial.SetInt("material.isBlinn", 0);
             }
 
             HandleInputs(e);
