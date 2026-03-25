@@ -61,3 +61,5 @@ D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Models\Castle.fbx
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\TexturasMago.png
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Rigidbody.cs
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\BulletSharp.dll
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\brickwall.jpg
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\brickwall_normal.png

@@ -72,7 +72,7 @@ namespace GameEngine
                 shader.SetVector3("dirLight.specular", dirLight.Specular);
             }
 
-            // --- CÓDIGO DE LAS POINT LIGHTS ---
+            //Point Lights
             List<Light> pointLights = RenderManager.GetActivePointLights();
 
             for (int i = 0; i < 4; i++)
@@ -93,11 +93,11 @@ namespace GameEngine
                 }
                 else
                 {
-                    // Si no hay luz para este índice, la apagamos seteando constant a 0
                     shader.SetFloat($"pointLights[{i}].constant", 0.0f);
                 }
             }
 
+            //SpotLights
             List<Light> spotLights = RenderManager.GetActiveSpotLights();
 
             for (int i = 0; i < 2; i++)
@@ -121,7 +121,6 @@ namespace GameEngine
                 }
                 else
                 {
-                    // Si no hay luz para este índice, la apagamos seteando constant a 0
                     shader.SetFloat($"spotLights[{i}].constant", 0.0f);
                 }
             }
@@ -155,7 +154,8 @@ namespace GameEngine
                 path,
                 PostProcessSteps.Triangulate |
                 PostProcessSteps.GenerateNormals |
-                PostProcessSteps.SortByPrimitiveType
+                PostProcessSteps.SortByPrimitiveType |
+                PostProcessSteps.CalculateTangentSpace
             );
 
             vertexData = new();
@@ -164,17 +164,22 @@ namespace GameEngine
 
             foreach (var mesh in scene.Meshes)
             {
+                bool hasTangents = mesh.HasTangentBasis;
                 for (int i = 0; i < mesh.Vertices.Count; i++)
                 {
                     var pos = mesh.Vertices[i];
                     var normal = mesh.Normals[i];
-                    var uv = mesh.TextureCoordinateChannels[0][i];
+                    var uv = mesh.HasTextureCoords(0) ? mesh.TextureCoordinateChannels[0][i] : new Assimp.Vector3D(0, 0, 0);
+                    var tangent = hasTangents ? mesh.Tangents[i] : new Assimp.Vector3D(0, 0, 0);
+                    var bitangent = hasTangents ? mesh.BiTangents[i] : new Assimp.Vector3D(0, 0, 0);
 
                     vertexData.AddRange(new float[]
                     {
                         pos.X, pos.Y, pos.Z,
                         normal.X, normal.Y, normal.Z,
-                        uv.X, uv.Y
+                        uv.X, uv.Y,
+                        tangent.X, tangent.Y, tangent.Z,
+                        bitangent.X, bitangent.Y, bitangent.Z
                     });
                 }
 
@@ -225,7 +230,7 @@ namespace GameEngine
                 BufferUsageHint.StaticDraw
             );
 
-            int stride = 8 * sizeof(float);
+            int stride = 14 * sizeof(float);
 
             // Position
             GL.EnableVertexAttribArray(0);
@@ -238,6 +243,14 @@ namespace GameEngine
             // UV
             GL.EnableVertexAttribArray(2);
             GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, stride, 6 * sizeof(float));
+
+            //Tangent
+            GL.EnableVertexAttribArray(3);
+            GL.VertexAttribPointer(3, 3, VertexAttribPointerType.Float, false, stride, 8 * sizeof(float));
+
+            //Bitangent
+            GL.EnableVertexAttribArray(4);
+            GL.VertexAttribPointer(4, 3, VertexAttribPointerType.Float, false, stride, 11 * sizeof(float));
 
             GL.BindVertexArray(0);
 

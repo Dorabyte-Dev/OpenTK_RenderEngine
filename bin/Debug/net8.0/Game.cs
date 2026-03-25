@@ -26,7 +26,7 @@ namespace GameEngine
         }
         // ----- CAMERA -----
         private Camera _camera;
-        private Color4 _clearColor = new Color4(0.1f, 0.4f, 0.2f, 1.0f);
+        private Color4 _clearColor = new Color4(0.0f, 0.0f, 0.0f, 1.0f);
 
         // ----- MOVEMENT -----
         private float speed = 1.5f;
@@ -71,7 +71,9 @@ namespace GameEngine
         };
 
         GameObject fallingCube;
-        Material cubeMaterial;
+        Material planeMaterial;
+        private bool differenceState;
+        private bool differenceState2;
 
         #endregion
         #region LifeCycle Functions
@@ -85,17 +87,46 @@ namespace GameEngine
             _camera = new Camera(new Vector3(0, 5, 3), Size.X / (float)Size.Y);
             GL.ClearColor(_clearColor); // El color de fondo oscuro de tu antigua escena
             GL.Enable(EnableCap.DepthTest);
-
+            
+            //InitializeShaders
             Shader litShader = new Shader("phong.vert", "phong.frag");
             Shader unlitShader = new Shader("basic.vert", "basic.frag");
             Texture texDiffuse = Texture.LoadFromFile("Textures/container2.png");
             Texture texSpecular = Texture.LoadFromFile("Textures/WhiteTex.jpg");
+            Texture texNormal = Texture.LoadFromFile("Textures/brickwall_normal.png");
 
-            cubeMaterial = new Material(litShader);
-            cubeMaterial.SetTexture("material.diffuse", texDiffuse);
-            cubeMaterial.SetTexture("material.specular", texSpecular);
-            cubeMaterial.SetFloat("material.shininess", 1.0f);
-            cubeMaterial.SetInt("material.isBlinn", 0);
+            //Set up Plane Material
+            planeMaterial = new Material(litShader);
+            planeMaterial.SetTexture("material.diffuse", texDiffuse);
+            planeMaterial.SetTexture("material.specular", texSpecular);
+            planeMaterial.SetTexture("material.normalMap", texNormal);
+            planeMaterial.SetFloat("material.shininess", 1.0f);
+            planeMaterial.SetInt("material.isNotBlinn", 0);
+
+            //Generate Plane
+            GameObject plane = new GameObject($"Plane_{0}");
+            plane.transform.rotation = new Vector3(-90f, 0f, 0f);
+            plane.transform.scale = new Vector3(10f);
+            Renderer rend = plane.AddComponent<Renderer>();
+            rend.SetMaterial(planeMaterial);
+            rend.LoadModel("Models/Primitives/Plane.fbx");
+
+            //Generate Point Light
+            Light pLight = new Light("PointLight", LightType.Point);
+            pLight.transform.position = new Vector3(0, .5f, 0);
+            pLight.transform.scale = new Vector3(.1f);
+            Renderer lightRend = pLight.AddComponent<Renderer>();
+            lightRend.SetMaterial(new Material(unlitShader, Color4.White));
+            lightRend.LoadModel("Models/Primitives/Sphere.fbx");
+
+            pLight.Type = LightType.Point;
+            pLight.Ambient = new Vector3(0.05f, 0.05f, 0.05f);
+            pLight.Diffuse = new Vector3(0.8f, 0.8f, 0.8f);
+            pLight.Specular = new Vector3(1.0f, 1.0f, 1.0f);
+
+            pLight.Constant = 1.0f;
+            pLight.Linear = 0f;
+            pLight.Quadratic = 1f;
 
             // 3. Generar los 10 Cubos en bucle
             /*for (int i = 0; i < _cubePositions.Length; i++)
@@ -118,27 +149,20 @@ namespace GameEngine
 
             }*/
 
-            GameObject cube = new GameObject($"Cube_{0}");
-            cube.transform.position = _cubePositions[0] + new Vector3(-2.5f, -5, -7.5f);
-            cube.transform.scale = _cubeScale * 20;
 
-            Renderer rend = cube.AddComponent<Renderer>();
-            rend.SetMaterial(cubeMaterial);
-            // Usamos tu FBX genérico en lugar de los vértices a mano
-            rend.LoadModel("Models/Primitives/Cube.fbx");
 
-            Rigidbody cubeRb = cube.AddComponent<Rigidbody>();
+            /*Rigidbody cubeRb = plane.AddComponent<Rigidbody>();
             cubeRb.Mass = 0;
             cubeRb.Restitution = 0.5f;
             cubeRb.UseGravity = false;
 
-            Collider collider = cube.AddComponent<Collider>();
+            Collider collider = cube.AddComponent<Collider>();*/
 
 
             // 4. Crear la Luz Direccional (Aproximando tu vector -0.2, -1.0, -0.3)
 
 
-            Light dirLight = new Light("DirectionalLight", LightType.Point);
+            /*Light dirLight = new Light("DirectionalLight", LightType.Point);
             dirLight.transform.position = new Vector3(0f, 8f, 0f);
             dirLight.transform.rotation = new Vector3(-70f, 30f, 0f);
             dirLight.Ambient = new Vector3(0.05f, 0.05f, 0.05f);
@@ -146,7 +170,7 @@ namespace GameEngine
             dirLight.Specular = new Vector3(0.8f, 0.8f, 0.8f);
             Renderer dirLightRend = dirLight.AddComponent<Renderer>();
             dirLightRend.SetMaterial(new Material(unlitShader, Color4.White));
-            dirLightRend.LoadModel("Models/Primitives/Cube.fbx");
+            dirLightRend.LoadModel("Models/Primitives/Cube.fbx");*/
 
             /*for (int i = 0; i < _pointLightPositions.Length; i++)
             {
@@ -168,10 +192,10 @@ namespace GameEngine
                 pLight.Quadratic = 0.07f;
             }*/
 
-            fallingCube = new GameObject("Falling Cube");
+            /*fallingCube = new GameObject("Falling Cube");
             fallingCube.transform.position = new Vector3(0f, 5f, -5f);
             Renderer fallingRend = fallingCube.AddComponent<Renderer>();
-            fallingRend.SetMaterial(cubeMaterial);
+            fallingRend.SetMaterial(planeMaterial);
             fallingRend.LoadModel("Models/Primitives/Cube.fbx");
 
             Collider col = fallingCube.AddComponent<Collider>();
@@ -183,7 +207,7 @@ namespace GameEngine
             rb.UseGravity = true;
 
             PhysicsManager.InitializePhysics();
-            _mainScene.Start();
+            _mainScene.Start();*/
            
         }
 
@@ -239,13 +263,14 @@ namespace GameEngine
                 }
             }
 
-            if (KeyboardState.IsKeyDown(Keys.T))
+            if (KeyboardState.IsKeyPressed(Keys.G))
             {
-                GL.Enable(EnableCap.FramebufferSrgb);
+                DifferenceComparer();
             }
-            if (KeyboardState.IsKeyDown(Keys.Y))
+
+            if(KeyboardState.IsKeyPressed(Keys.H))
             {
-                cubeMaterial.SetInt("material.isBlinn", 0);
+                DifferenceComparer2();
             }
 
             HandleInputs(e);
@@ -307,6 +332,36 @@ namespace GameEngine
         }
         #endregion
         #endregion
+
+        void DifferenceComparer()
+        {
+            if (differenceState)
+            {
+                planeMaterial.SetInt("isNotBlinn", 1);
+                /*planeMaterial.SetInt("gammaCorrection", 1);
+                Texture.temp_sRGB = true;*/
+            }
+            else
+            {
+                planeMaterial.SetInt("isNotBlinn", 0);
+                /*planeMaterial.SetInt("gammaCorrection", 0);
+                Texture.temp_sRGB = false;*/
+            }
+            differenceState = !differenceState;
+        }
+
+        void DifferenceComparer2()
+        {
+            if (differenceState2)
+            {
+                planeMaterial.SetInt("material.isNotBlinn", 1);
+            }
+            else
+            {
+                planeMaterial.SetInt("material.isNotBlinn", 0);
+            }
+            differenceState2 = !differenceState2;
+        }
     }
 }
 

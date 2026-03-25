@@ -2,9 +2,9 @@
 struct Material {
     sampler2D diffuse;
     sampler2D specular;
-
+    sampler2D normalMap;
     float shininess;
-    int isBlinn;
+    int isNotBlinn;
 };
 
 struct DirLight {
@@ -49,10 +49,12 @@ uniform SpotLight spotLights[NR_SPOT_LIGHTS];
 
 uniform Material material;
 uniform vec3 viewPos;
+uniform int gammaCorrection;
 
 in vec3 Normal;
 in vec3 FragPos;
 in vec2 texCoord;
+in mat3 TBN;
 
 out vec4 FragColor;
 
@@ -63,7 +65,10 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 void main()
 {
     // properties
-    vec3 norm = normalize(Normal);
+    vec3 norm = texture(material.normalMap, texCoord).rgb;
+    norm = norm * 2.0 - 1.0;
+    norm = normalize(TBN * norm);
+
     vec3 viewDir = normalize(viewPos - FragPos);
 
     // phase 1: Directional lighting
@@ -77,9 +82,12 @@ void main()
     for(int i = 0; i < NR_SPOT_LIGHTS; i++)
         result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir);    
     
-    float gamma = 2.2;
-    result = pow(result, vec3(1.0/gamma));
-
+    if(gammaCorrection == 1)
+    {
+        float gamma = 2.2;
+        result = pow(result, vec3(1.0/gamma));
+    }
+    
     FragColor = vec4(result, 1.0);
 }
 
@@ -96,7 +104,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     float spec;
     float kPi = 3.14159265f;
 
-    if(material.isBlinn == 0)
+    if(material.isNotBlinn == 1)
     {
         float kEnergyConservation = ( 2.0 + material.shininess ) / ( 2.0 * kPi ); 
         vec3 reflectDir = reflect(-lightDir, normal);
@@ -131,7 +139,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float spec;
     float kPi = 3.14159265f;
 
-    if(material.isBlinn == 0)
+    if(material.isNotBlinn == 1)
     {
         float kEnergyConservation = ( 2.0 + material.shininess ) / ( 2.0 * kPi ); 
         vec3 reflectDir = reflect(-lightDir, normal);
@@ -174,7 +182,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float spec;
     float kPi = 3.14159265f;
 
-    if(material.isBlinn == 0)
+    if(material.isNotBlinn == 1)
     {
         float kEnergyConservation = ( 2.0 + material.shininess ) / ( 2.0 * kPi ); 
         vec3 reflectDir = reflect(-lightDir, normal);
