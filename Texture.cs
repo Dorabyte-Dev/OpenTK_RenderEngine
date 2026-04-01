@@ -16,8 +16,7 @@ namespace GameEngine
     public class Texture
     {
         public int Handle;
-        public static bool temp_sRGB = false;
-        public static Texture LoadFromFile(string path)
+        public static Texture LoadFromFile(string path, bool isSRGB = true)
         {
             // Generate handle
             int handle = GL.GenTexture();
@@ -32,7 +31,7 @@ namespace GameEngine
             {
                 ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
 
-                if (temp_sRGB)
+                if (isSRGB)
                 {
                     GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.SrgbAlpha, image.Width, image.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, image.Data);
                 }

@@ -69,6 +69,74 @@ public class Shader
         GL.DeleteShader(vertexShader);
         GL.DeleteShader(fragmentShader);
     }
+    public Shader(string vertexPath, string geometryPath, string fragmentPath)
+    {
+        //Declaring and Creating Shaders
+
+        string vertexShaderSource = File.ReadAllText("Shaders/" + vertexPath);
+        string geometryShaderSource = File.ReadAllText("Shaders/" + geometryPath);
+        string fragmentShaderSource = File.ReadAllText("Shaders/" + fragmentPath);
+
+        int vertexShader = GL.CreateShader(ShaderType.VertexShader);
+        GL.ShaderSource(vertexShader, vertexShaderSource);
+
+        int geometryShader = GL.CreateShader(ShaderType.GeometryShader);
+        GL.ShaderSource(geometryShader, geometryShaderSource);
+
+        int fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
+        GL.ShaderSource(fragmentShader, fragmentShaderSource);
+
+        //Compiling Shaders
+
+        GL.CompileShader(vertexShader);
+
+        GL.GetShader(vertexShader, ShaderParameter.CompileStatus, out int vertexSuccess);
+        if (vertexSuccess == 0)
+        {
+            string infoLog = GL.GetShaderInfoLog(vertexShader);
+            Console.WriteLine(infoLog);
+        }
+
+        GL.CompileShader(geometryShader);
+        GL.GetShader(geometryShader, ShaderParameter.CompileStatus, out int geometrySuccess);
+        if(geometrySuccess == 0)
+        {
+            string infolog = GL.GetShaderInfoLog(geometryShader);
+            Console.WriteLine(infolog);
+        }
+
+        GL.CompileShader(fragmentShader);
+        GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out int fragmentSuccess);
+        if (fragmentSuccess == 0)
+        {
+            string infoLog = GL.GetShaderInfoLog(fragmentShader);
+            Console.WriteLine(infoLog);
+        }
+
+        //Attaching Shaders to a program
+
+        Handle = GL.CreateProgram();
+
+        GL.AttachShader(Handle, vertexShader);
+        GL.AttachShader(Handle, geometryShader);
+        GL.AttachShader(Handle, fragmentShader);
+
+        GL.LinkProgram(Handle);
+
+        GL.GetProgram(Handle, GetProgramParameterName.LinkStatus, out int success);
+        if (success == 0)
+        {
+            string infoLog = GL.GetProgramInfoLog(Handle);
+            Console.WriteLine(infoLog);
+        }
+
+        GL.DetachShader(Handle, vertexShader);
+        GL.DetachShader(Handle, geometryShader);
+        GL.DetachShader(Handle, fragmentShader);
+        GL.DeleteShader(vertexShader);
+        GL.DeleteShader(geometryShader);
+        GL.DeleteShader(fragmentShader);
+    }
 
     public void Use()
     {

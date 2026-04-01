@@ -1,4 +1,4 @@
-#version 330
+#version 330 core
 struct Material {
     sampler2D diffuse;
     sampler2D specular;
@@ -50,26 +50,34 @@ uniform SpotLight spotLights[NR_SPOT_LIGHTS];
 uniform Material material;
 uniform vec3 viewPos;
 uniform int gammaCorrection;
+uniform sampler2D shadowMap;
+uniform samplerCube shadowCubemap;
+uniform float far_plane;
 
 in vec3 Normal;
 in vec3 FragPos;
 in vec2 texCoord;
 in mat3 TBN;
+in vec4 FragPosLightSpace;
 
 out vec4 FragColor;
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
+float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir);
+float PointShadowCalculation(vec3 fragPos, vec3 lightPos);
 
 void main()
 {
     // properties
-    vec3 norm = texture(material.normalMap, texCoord).rgb;
+    /*vec3 norm = texture(material.normalMap, texCoord).rgb;
     norm = norm * 2.0 - 1.0;
-    norm = normalize(TBN * norm);
+    norm = normalize(TBN * norm);*/
 
     vec3 viewDir = normalize(viewPos - FragPos);
+
+    vec3 norm = normalize(Normal);
 
     // phase 1: Directional lighting
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
@@ -118,12 +126,14 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
         
 	}
 
+    float shadow = ShadowCalculation(FragPosLightSpace, normal, lightDir);
+
     // combine results
     vec3 ambient  = light.ambient  * vec3(texture(material.diffuse, texCoord));
     vec3 diffuse  = light.diffuse  * diff * vec3(texture(material.diffuse, texCoord));
     vec3 specular = light.specular * spec * vec3(texture(material.specular, texCoord));
 
-    return (ambient + diffuse + specular);
+    return (ambient + (1.0 - shadow) * (diffuse + specular));
 }
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
@@ -165,7 +175,9 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     diffuse  *= attenuation;
     specular *= attenuation;
 
-    return (ambient + diffuse + specular);
+    float shadow = PointShadowCalculation(fragPos, light.position);
+
+    return (ambient + (1.0 - shadow) * (diffuse + specular));
 }
 
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
@@ -215,3 +227,63 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
     return(ambient + diffuse + specular);
 }
+
+float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
+{
+    // 1. División de perspectiva (de normalizar el clip space)
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    
+    // 2. Transformar de rango [-1, 1] a rango [0, 1] para leer la textura
+    projCoords = projCoords * 0.5 + 0.5;
+
+    // 3. Obtener la profundidad más cercana desde el punto de vista de la luz
+    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+    
+    // 4. Obtener la profundidad de nuestro píxel actual
+    float currentDepth = projCoords.z;
+    
+    float bias = max(0.01 * (1.0 - dot(normal, lightDir)), 0.005);
+
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+            shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
+        }    
+    }
+    shadow /= 9.0;
+    
+    return shadow;
+}
+
+float PointShadowCalculation(vec3 fragPos, vec3 lightPos)
+{
+    vec3 fragToLight = fragPos - lightPos; 
+    float closestDepth = texture(shadowCubemap, fragToLight).r;
+    closestDepth *= far_plane;
+    float currentDepth = length(fragToLight);
+    float shadow  = 0.0;
+    float bias    = 0.05; 
+    float samples = 4.0;
+    float offset  = 0.1;
+    for(float x = -offset; x < offset; x += offset / (samples * 0.5))
+    {
+        for(float y = -offset; y < offset; y += offset / (samples * 0.5))
+        {
+            for(float z = -offset; z < offset; z += offset / (samples * 0.5))
+            {
+                float closestDepth = texture(shadowCubemap, fragToLight + vec3(x, y, z)).r; 
+                closestDepth *= far_plane;   // undo mapping [0;1]
+                if(currentDepth - bias > closestDepth)
+                    shadow += 1.0;
+            }
+        }
+    }
+    shadow /= (samples * samples * samples);
+
+    return shadow;
+}  
+

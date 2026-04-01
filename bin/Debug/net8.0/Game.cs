@@ -26,7 +26,7 @@ namespace GameEngine
         }
         // ----- CAMERA -----
         private Camera _camera;
-        private Color4 _clearColor = new Color4(0.0f, 0.0f, 0.0f, 1.0f);
+        private Color4 _clearColor = new Color4(0.0f, 0.0f, 0.3f, 1.0f);
 
         // ----- MOVEMENT -----
         private float speed = 1.5f;
@@ -71,144 +71,124 @@ namespace GameEngine
         };
 
         GameObject fallingCube;
+        Light dirLight;
         Material planeMaterial;
         private bool differenceState;
         private bool differenceState2;
 
+        // ----- SHADERS -----
+        Shader litShader;
+
         #endregion
         #region LifeCycle Functions
 
-        protected override void OnLoad() //Se ejecuta cuando carga el programa por primera vez
+        protected override void OnLoad()
         {
             base.OnLoad();
 
             _mainScene = new Scene("Main Scene");
-
-            _camera = new Camera(new Vector3(0, 5, 3), Size.X / (float)Size.Y);
-            GL.ClearColor(_clearColor); // El color de fondo oscuro de tu antigua escena
+            _camera = new Camera(new Vector3(0, 0, 3.5f), Size.X / (float)Size.Y); // Cámara un poco más atrás
+            GL.ClearColor(_clearColor);
             GL.Enable(EnableCap.DepthTest);
-            
-            //InitializeShaders
-            Shader litShader = new Shader("phong.vert", "phong.frag");
-            Shader unlitShader = new Shader("basic.vert", "basic.frag");
-            Texture texDiffuse = Texture.LoadFromFile("Textures/container2.png");
-            Texture texSpecular = Texture.LoadFromFile("Textures/WhiteTex.jpg");
-            Texture texNormal = Texture.LoadFromFile("Textures/brickwall_normal.png");
 
-            //Set up Plane Material
+            // ¡CRÍTICO! Inicializar el Framebuffer de sombras
+            RenderManager.InitShadowMap();
+            RenderManager.InitPointShadowMap();
+
+            // Shaders
+            litShader = new Shader("phong.vert", "phong.frag");
+            Shader unlitShader = new Shader("basic.vert", "basic.frag");
+
+            // Texturas y Material
+            Texture texDiffuse = Texture.LoadFromFile("Textures/container2.png");
+            Texture texSpecular = texDiffuse;
+
             planeMaterial = new Material(litShader);
             planeMaterial.SetTexture("material.diffuse", texDiffuse);
             planeMaterial.SetTexture("material.specular", texSpecular);
-            planeMaterial.SetTexture("material.normalMap", texNormal);
-            planeMaterial.SetFloat("material.shininess", 1.0f);
-            planeMaterial.SetInt("material.isNotBlinn", 0);
+            planeMaterial.SetFloat("material.shininess", 32.0f);
+            planeMaterial.SetInt("material.isNotBlinn", 1);
 
-            //Generate Plane
-            GameObject plane = new GameObject($"Plane_{0}");
-            plane.transform.rotation = new Vector3(-90f, 0f, 0f);
-            plane.transform.scale = new Vector3(10f);
-            Renderer rend = plane.AddComponent<Renderer>();
-            rend.SetMaterial(planeMaterial);
-            rend.LoadModel("Models/Primitives/Plane.fbx");
 
-            //Generate Point Light
-            Light pLight = new Light("PointLight", LightType.Point);
-            pLight.transform.position = new Vector3(0, .5f, 0);
-            pLight.transform.scale = new Vector3(.1f);
-            Renderer lightRend = pLight.AddComponent<Renderer>();
-            lightRend.SetMaterial(new Material(unlitShader, Color4.White));
-            lightRend.LoadModel("Models/Primitives/Sphere.fbx");
+            // 1. LA HABITACIÓN (6 Planos formando un cubo gigante de 10x10x10)
+            // Asumiendo que tu Plane.fbx con rotación (-90,0,0) se vuelve un suelo horizontal.
+            Vector3[] roomRotations = {
+    new Vector3(-90f, 0f, 0f),  // Suelo
+    new Vector3(90f, 0f, 0f),   // Techo
+    new Vector3(0f, 0f, 0f),    // Pared Fondo (Asumiendo que el plano mira a +Z)
+    new Vector3(0f, 180f, 0f),  // Pared Frente
+    new Vector3(0f, 90f, 0f),   // Pared Izquierda
+    new Vector3(0f, -90f, 0f)   // Pared Derecha
+};
 
-            pLight.Type = LightType.Point;
-            pLight.Ambient = new Vector3(0.05f, 0.05f, 0.05f);
-            pLight.Diffuse = new Vector3(0.8f, 0.8f, 0.8f);
-            pLight.Specular = new Vector3(1.0f, 1.0f, 1.0f);
+            Vector3[] roomPositions = {
+    new Vector3(0f, -5f, 0f),   // Suelo
+    new Vector3(0f, 5f, 0f),    // Techo
+    new Vector3(0f, 0f, -5f),   // Pared Fondo
+    new Vector3(0f, 0f, 5f),    // Pared Frente
+    new Vector3(-5f, 0f, 0f),   // Pared Izquierda
+    new Vector3(5f, 0f, 0f)     // Pared Derecha
+};
 
-            pLight.Constant = 1.0f;
-            pLight.Linear = 0f;
-            pLight.Quadratic = 1f;
+            for (int i = 0; i < 6; i++)
+            {
+                GameObject wall = new GameObject($"Wall_{i}");
+                wall.transform.position = roomPositions[i];
+                wall.transform.rotation = roomRotations[i];
+                wall.transform.scale = new Vector3(10f); // Escala para que cierren las esquinas
+                Renderer wallRend = wall.AddComponent<Renderer>();
+                wallRend.SetMaterial(planeMaterial);
+                wallRend.LoadModel("Models/Primitives/Plane.fbx");
+            }
 
-            // 3. Generar los 10 Cubos en bucle
-            /*for (int i = 0; i < _cubePositions.Length; i++)
+            // 2. OBJETOS FLOTANTES (Para proyectar sombras en todas las direcciones)
+            Vector3[] cubePositions = {
+                new Vector3(2.0f, -1.5f, 1.0f),    // Abajo a la derecha
+                new Vector3(-2.0f, 1.5f, -1.5f),   // Arriba a la izquierda, atrás
+                new Vector3(0.0f, 2.5f, 1.5f),     // Casi en el techo
+                new Vector3(-1.5f, -2.5f, 2.0f)    // Cerca del suelo
+            };
+
+            Vector3[] cubeRotations = {
+                new Vector3(15f, 30f, 45f),
+                new Vector3(60f, 0f, -30f),
+                new Vector3(0f, 45f, 0f),
+                new Vector3(-20f, -45f, 60f)
+            };
+
+            for (int i = 0; i < cubePositions.Length; i++)
             {
                 GameObject cube = new GameObject($"Cube_{i}");
-                cube.transform.position = _cubePositions[i] + new Vector3(-2.5f, -5, -7.5f);
-                cube.transform.scale = _cubeScale;
+                cube.transform.position = cubePositions[i];
+                cube.transform.rotation = cubeRotations[i];
+                cube.transform.scale = new Vector3(1.5f); // Cubos medianos
+                Renderer cubeRend = cube.AddComponent<Renderer>();
+                cubeRend.SetMaterial(planeMaterial);
+                cubeRend.LoadModel("Models/Primitives/Cube.fbx");
+            }
 
-                Renderer rend = cube.AddComponent<Renderer>();
-                rend.SetMaterial(cubeMaterial);
-                // Usamos tu FBX genérico en lugar de los vértices a mano
-                rend.LoadModel("Models/Primitives/Cube.fbx");
+            // 3. LA LUZ PUNTUAL (En el corazón de la habitación)
+            Light pointLight = new Light("CenterPointLight", LightType.Point);
+            pointLight.transform.position = new Vector3(0.0f, 0.0f, 0.0f); // Justo en el centro
+            pointLight.Ambient = new Vector3(0.05f); // Penumbra suave en las esquinas
 
-                Rigidbody cubeRb = cube.AddComponent<Rigidbody>();
-                cubeRb.Mass = 0;
-                cubeRb.Restitution = 0.5f;
-                cubeRb.UseGravity = false;
+            // HDR: Usamos multiplicadores altísimos para contrarrestar la atenuación física real
+            pointLight.Diffuse = new Vector3(70.0f, 70.0f, 70.0f);
+            pointLight.Specular = new Vector3(20.0f, 20.0f, 20.0f);
 
-                Collider collider = cube.AddComponent<Collider>();
+            // Atenuación física real (Ley de la Inversa del Cuadrado)
+            pointLight.Constant = 1.0f;
+            pointLight.Linear = 0.0f;
+            pointLight.Quadratic = 0.5f; // Hará que la luz llegue bien a las paredes a 5 metros de distancia
 
-            }*/
-
-
-
-            /*Rigidbody cubeRb = plane.AddComponent<Rigidbody>();
-            cubeRb.Mass = 0;
-            cubeRb.Restitution = 0.5f;
-            cubeRb.UseGravity = false;
-
-            Collider collider = cube.AddComponent<Collider>();*/
-
-
-            // 4. Crear la Luz Direccional (Aproximando tu vector -0.2, -1.0, -0.3)
-
-
-            /*Light dirLight = new Light("DirectionalLight", LightType.Point);
-            dirLight.transform.position = new Vector3(0f, 8f, 0f);
-            dirLight.transform.rotation = new Vector3(-70f, 30f, 0f);
-            dirLight.Ambient = new Vector3(0.05f, 0.05f, 0.05f);
-            dirLight.Diffuse = new Vector3(0.6f, 0.6f, 0.6f);
-            dirLight.Specular = new Vector3(0.8f, 0.8f, 0.8f);
-            Renderer dirLightRend = dirLight.AddComponent<Renderer>();
-            dirLightRend.SetMaterial(new Material(unlitShader, Color4.White));
-            dirLightRend.LoadModel("Models/Primitives/Cube.fbx");*/
-
-            /*for (int i = 0; i < _pointLightPositions.Length; i++)
-            {
-                Light pLight = new Light($"PointLight_{i}", LightType.Point);
-                pLight.transform.position = _pointLightPositions[i];
-                pLight.transform.scale = new Vector3(.1f);
-                Renderer lightRend = pLight.AddComponent<Renderer>();
-                lightRend.SetMaterial(new Material(unlitShader, Color4.White));
-                lightRend.LoadModel("Models/Primitives/Sphere.fbx");
-
-                pLight.Type = LightType.Point;
-                pLight.Ambient = new Vector3(0.05f, 0.05f, 0.05f);
-                pLight.Diffuse = new Vector3(0.8f, 0.8f, 0.8f);
-                pLight.Specular = new Vector3(1.0f, 1.0f, 1.0f);
-
-                // Tus valores exactos de atenuación
-                pLight.Constant = 1.0f;
-                pLight.Linear = 0.14f;
-                pLight.Quadratic = 0.07f;
-            }*/
-
-            /*fallingCube = new GameObject("Falling Cube");
-            fallingCube.transform.position = new Vector3(0f, 5f, -5f);
-            Renderer fallingRend = fallingCube.AddComponent<Renderer>();
-            fallingRend.SetMaterial(planeMaterial);
-            fallingRend.LoadModel("Models/Primitives/Cube.fbx");
-
-            Collider col = fallingCube.AddComponent<Collider>();
-
-            // (El Rigidbody se auto-añadirá al PhysicsManager cuando la escena llame a Start)
-            Rigidbody rb = fallingCube.AddComponent<Rigidbody>();
-            rb.Mass = 1.0f;
-            rb.Restitution = 0.5f;
-            rb.UseGravity = true;
+            // El cubito visual blanco para saber de dónde sale la luz
+            Renderer lightVisual = pointLight.AddComponent<Renderer>();
+            lightVisual.SetMaterial(new Material(unlitShader, Color4.White));
+            lightVisual.LoadModel("Models/Primitives/Sphere.fbx");
+            pointLight.transform.scale = new Vector3(0.2f);
 
             PhysicsManager.InitializePhysics();
-            _mainScene.Start();*/
-           
+            _mainScene.Start();
         }
 
         protected override void OnRenderFrame(FrameEventArgs e) //Se ejecuta al renderizar cada frame visual del juego. Aquí va todo lo que se dibuja.
@@ -217,8 +197,8 @@ namespace GameEngine
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            
-            RenderManager.Render();
+            Light? dirLight = RenderManager.GetActiveDirectionalLight();
+            RenderManager.RenderScene(_mainScene, _camera, dirLight, litShader);
 
             SwapBuffers();
         }
@@ -228,6 +208,9 @@ namespace GameEngine
             base.OnFramebufferResize(e);
 
             GL.Viewport(0, 0, e.Width, e.Height);
+
+            RenderManager.ScreenWidth = e.Width;
+            RenderManager.ScreenHeight = e.Height;
         }
 
         #region Inputs
@@ -243,7 +226,7 @@ namespace GameEngine
             }
             CursorState = CursorState.Grabbed;
 
-
+            //dirLight.transform.rotation = new Vector3(0.0f, 0, 0.0f); // Hacemos girar la luz para ver cómo se actualizan las sombras en tiempo real
 
             PhysicsManager.StepSimulation((float)Time.deltaTime);
 

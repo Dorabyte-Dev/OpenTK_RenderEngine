@@ -138,6 +138,25 @@ namespace GameEngine
 
             GL.BindVertexArray(0);
         }
+        public void RenderDepth(Shader customShader)
+        {
+            if (!initialized) return;
+
+            customShader.Use();
+
+            customShader.SetMatrix4("model", owner.transform.ModelMatrix);
+
+            GL.BindVertexArray(vao);
+
+            GL.DrawElements(
+                PrimitiveType.Triangles,
+                indexCount,
+                DrawElementsType.UnsignedInt,
+                0
+            );
+
+            GL.BindVertexArray(0);
+        }
 
         public void LoadModel(string path)
         {
@@ -262,6 +281,10 @@ namespace GameEngine
             this.shader = shader;
         }
 
+        public Material GetMaterial()
+        {
+            return material;
+        }
         public void SetMaterial(Material material)
         {
             this.material = material;
