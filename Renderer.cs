@@ -1,16 +1,7 @@
 ﻿using Assimp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 using OpenTK.Graphics.OpenGL4;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
-using OpenTK.Mathematics;
 using PrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
 
 namespace GameEngine
@@ -28,7 +19,6 @@ namespace GameEngine
         private int indexCount;
 
         // Resources
-        private Shader shader;
         private Material material;
 
         // State
@@ -50,30 +40,32 @@ namespace GameEngine
         {
             if (!initialized) return;
 
-            shader.Use();
+            material.shader.Use();
 
             //Transforms
             Camera mainCamera = Camera.Main;
             if (mainCamera != null)
             {
-                shader.SetMatrix4("view", mainCamera.GetViewMatrix());
-                shader.SetMatrix4("projection", mainCamera.GetProjectionMatrix());
-                shader.SetVector3("viewPos", mainCamera.Position);
+                material.shader.SetMatrix4("view", mainCamera.GetViewMatrix());
+                material.shader.SetMatrix4("projection", mainCamera.GetProjectionMatrix());
+                material.shader.SetVector3("viewPos", mainCamera.Position);
             }
-            shader.SetMatrix4("model", owner.transform.ModelMatrix);
+            material.shader.SetMatrix4("model", owner.transform.ModelMatrix);
 
             //Directional Light
             Light? dirLight = RenderManager.GetActiveDirectionalLight();
             if (dirLight != null)
             {
-                shader.SetVector3("dirLight.direction", dirLight.transform.Forward);
-                shader.SetVector3("dirLight.ambient", dirLight.Ambient);
-                shader.SetVector3("dirLight.diffuse", dirLight.Diffuse);
-                shader.SetVector3("dirLight.specular", dirLight.Specular);
+                material.shader.SetVector3("dirLight.direction", dirLight.transform.Forward);
+                material.shader.SetVector3("dirLight.ambient", dirLight.Ambient);
+                material.shader.SetVector3("dirLight.diffuse", dirLight.Diffuse);
+                material.shader.SetVector3("dirLight.specular", dirLight.Specular);
             }
 
             //Point Lights
             List<Light> pointLights = RenderManager.GetActivePointLights();
+
+            material.shader.SetInt("activePointLights", Math.Clamp(pointLights.Count, 0, RenderManager.MAX_POINT_LIGHTS));
 
             for (int i = 0; i < 4; i++)
             {
@@ -81,24 +73,26 @@ namespace GameEngine
                 {
                     Light pLight = pointLights[i];
 
-                    shader.SetVector3($"pointLights[{i}].position", pLight.transform.position);
+                    material.shader.SetVector3($"pointLights[{i}].position", pLight.transform.position);
 
-                    shader.SetVector3($"pointLights[{i}].ambient", pLight.Ambient);
-                    shader.SetVector3($"pointLights[{i}].diffuse", pLight.Diffuse);
-                    shader.SetVector3($"pointLights[{i}].specular", pLight.Specular);
+                    material.shader.SetVector3($"pointLights[{i}].ambient", pLight.Ambient);
+                    material.shader.SetVector3($"pointLights[{i}].diffuse", pLight.Diffuse);
+                    material.shader.SetVector3($"pointLights[{i}].specular", pLight.Specular);
 
-                    shader.SetFloat($"pointLights[{i}].constant", pLight.Constant);
-                    shader.SetFloat($"pointLights[{i}].linear", pLight.Linear);
-                    shader.SetFloat($"pointLights[{i}].quadratic", pLight.Quadratic);
+                    material.shader.SetFloat($"pointLights[{i}].constant", pLight.Constant);
+                    material.shader.SetFloat($"pointLights[{i}].linear", pLight.Linear);
+                    material.shader.SetFloat($"pointLights[{i}].quadratic", pLight.Quadratic);
                 }
                 else
                 {
-                    shader.SetFloat($"pointLights[{i}].constant", 0.0f);
+                    material.shader.SetFloat($"pointLights[{i}].constant", 0.0f);
                 }
             }
 
             //SpotLights
             List<Light> spotLights = RenderManager.GetActiveSpotLights();
+
+            material.shader.SetInt("activeSpotLights", spotLights.Count/*Math.Clamp(spotLights.Count, 0, RenderManager.MAX_SPOT_LIGHTS)*/);
 
             for (int i = 0; i < 2; i++)
             {
@@ -106,22 +100,22 @@ namespace GameEngine
                 {
                     Light sLight = spotLights[i];
 
-                    shader.SetVector3($"spotLights[{i}].position", sLight.transform.position);
-                    shader.SetVector3($"spotLights[{i}].direction", sLight.transform.Forward);
+                    material.shader.SetVector3($"spotLights[{i}].position", sLight.transform.position);
+                    material.shader.SetVector3($"spotLights[{i}].direction", sLight.transform.Forward);
 
-                    shader.SetVector3($"spotLights[{i}].ambient", sLight.Ambient);
-                    shader.SetVector3($"spotLights[{i}].diffuse", sLight.Diffuse);
-                    shader.SetVector3($"spotLights[{i}].specular", sLight.Specular);
+                    material.shader.SetVector3($"spotLights[{i}].ambient", sLight.Ambient);
+                    material.shader.SetVector3($"spotLights[{i}].diffuse", sLight.Diffuse);
+                    material.shader.SetVector3($"spotLights[{i}].specular", sLight.Specular);
 
-                    shader.SetFloat($"spotLights[{i}].constant", sLight.Constant);
-                    shader.SetFloat($"spotLights[{i}].linear", sLight.Linear);
-                    shader.SetFloat($"spotLights[{i}].quadratic", sLight.Quadratic);
-                    shader.SetFloat($"spotLights[{i}].cutOff", sLight.CutOff);
-                    shader.SetFloat($"spotLights[{i}].outerCutOff", sLight.OuterCutOff);
+                    material.shader.SetFloat($"spotLights[{i}].constant", sLight.Constant);
+                    material.shader.SetFloat($"spotLights[{i}].linear", sLight.Linear);
+                    material.shader.SetFloat($"spotLights[{i}].quadratic", sLight.Quadratic);
+                    material.shader.SetFloat($"spotLights[{i}].cutOff", sLight.CutOff);
+                    material.shader.SetFloat($"spotLights[{i}].outerCutOff", sLight.OuterCutOff);
                 }
                 else
                 {
-                    shader.SetFloat($"spotLights[{i}].constant", 0.0f);
+                    material.shader.SetFloat($"spotLights[{i}].constant", 0.0f);
                 }
             }
 
@@ -215,15 +209,12 @@ namespace GameEngine
 
         private void InitializeBuffers()
         {
-            if (material != null)
+            if (material == null)
             {
-                shader = material.shader;
+                Shader defaultShader = new Shader("basic.vert", "basic.frag");
+                material = new Material(defaultShader);
             }
-            else
-            {
-                shader = new Shader("basic.vert", "basic.frag");
-            }
-                
+
 
             vao = GL.GenVertexArray();
             vbo = GL.GenBuffer();
@@ -276,14 +267,13 @@ namespace GameEngine
             initialized = true;
         }
 
-        public void SetShader(Shader shader)
-        {
-            this.shader = shader;
-        }
-
         public Material GetMaterial()
         {
             return material;
+        }
+        public Shader? GetShader()
+        {
+            return material?.shader;
         }
         public void SetMaterial(Material material)
         {

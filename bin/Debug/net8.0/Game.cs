@@ -81,7 +81,6 @@ namespace GameEngine
 
         #endregion
         #region LifeCycle Functions
-
         protected override void OnLoad()
         {
             base.OnLoad();
@@ -92,100 +91,152 @@ namespace GameEngine
             GL.Enable(EnableCap.DepthTest);
 
             // ¡CRÍTICO! Inicializar el Framebuffer de sombras
-            RenderManager.InitShadowMap();
+            RenderManager.InitDirectionalShadowMap();
             RenderManager.InitPointShadowMap();
+            RenderManager.InitSpotShadowMap();
 
             // Shaders
             litShader = new Shader("phong.vert", "phong.frag");
             Shader unlitShader = new Shader("basic.vert", "basic.frag");
 
-            // Texturas y Material
-            Texture texDiffuse = Texture.LoadFromFile("Textures/container2.png");
+            // --- 1. MATERIALES DE LABORATORIO (Grises y neutros) ---
+            Texture texDiffuse = Texture.LoadFromFile("Textures/brickwall.jpg"); // Úsala como base, o una textura blanca/gris si tienes
             Texture texSpecular = texDiffuse;
 
-            planeMaterial = new Material(litShader);
-            planeMaterial.SetTexture("material.diffuse", texDiffuse);
-            planeMaterial.SetTexture("material.specular", texSpecular);
-            planeMaterial.SetFloat("material.shininess", 32.0f);
-            planeMaterial.SetInt("material.isNotBlinn", 1);
+            Material labMaterial = new Material(litShader);
+            labMaterial.SetTexture("material.diffuse", texDiffuse);
+            labMaterial.SetTexture("material.specular", texSpecular);
+            labMaterial.SetFloat("material.shininess", 16.0f);
+            labMaterial.SetInt("material.isNotBlinn", 1);
+
+            Material lightBulbMaterial = new Material(unlitShader, Color4.White);
 
 
-            // 1. LA HABITACIÓN (6 Planos formando un cubo gigante de 10x10x10)
-            // Asumiendo que tu Plane.fbx con rotación (-90,0,0) se vuelve un suelo horizontal.
-            Vector3[] roomRotations = {
-    new Vector3(-90f, 0f, 0f),  // Suelo
-    new Vector3(90f, 0f, 0f),   // Techo
-    new Vector3(0f, 0f, 0f),    // Pared Fondo (Asumiendo que el plano mira a +Z)
-    new Vector3(0f, 180f, 0f),  // Pared Frente
-    new Vector3(0f, 90f, 0f),   // Pared Izquierda
-    new Vector3(0f, -90f, 0f)   // Pared Derecha
+            // --- 2. LA CÁMARA DE PRUEBAS (Suelo y 3 Paredes) ---
+            // Suelo
+            GameObject floor = new GameObject("Floor");
+            floor.transform.position = new Vector3(0f, -2f, 0f);
+            floor.transform.rotation = new Vector3(-90f, 0f, 0f);
+            floor.transform.scale = new Vector3(15f, 15f, 1f);
+            Renderer floorRend = floor.AddComponent<Renderer>();
+            floorRend.SetMaterial(labMaterial);
+            floorRend.LoadModel("Models/Primitives/Plane.fbx");
+
+            // Pared Fondo
+            GameObject wallBack = new GameObject("WallBack");
+            wallBack.transform.position = new Vector3(0f, 3f, -10f);
+            wallBack.transform.rotation = new Vector3(0f, 0f, 0f);
+            wallBack.transform.scale = new Vector3(15f, 10f, 1f);
+            Renderer wallBackRend = wallBack.AddComponent<Renderer>();
+            wallBackRend.SetMaterial(labMaterial);
+            wallBackRend.LoadModel("Models/Primitives/Cube.fbx");
+
+            // Pared Izquierda
+            GameObject wallLeft = new GameObject("WallLeft");
+            wallLeft.transform.position = new Vector3(-10f, 3f, 0f);
+            wallLeft.transform.rotation = new Vector3(0f, 90f, 0f);
+            wallLeft.transform.scale = new Vector3(15f, 10f, 1f);
+            Renderer wallLeftRend = wallLeft.AddComponent<Renderer>();
+            wallLeftRend.SetMaterial(labMaterial);
+            wallLeftRend.LoadModel("Models/Primitives/Cube.fbx");
+
+
+            // --- 3. OBJETOS DE PRUEBA (Props) ---
+            // Prop 1: Pilar central (Para ver la sombra direccional claramente)
+            GameObject pillar = new GameObject("Pillar");
+            pillar.transform.position = new Vector3(0f, 0f, 0f);
+            pillar.transform.scale = new Vector3(1f, 4f, 1f);
+            Renderer pillarRend = pillar.AddComponent<Renderer>();
+            pillarRend.SetMaterial(labMaterial);
+            pillarRend.LoadModel("Models/Primitives/Cube.fbx");
+
+            // Props 2-5: Prisión para la Point Light (Para comprobar las 6 caras del Cubemap)
+            Vector3[] cagePositions = {
+    new Vector3(-6.0f, -1.0f, -4.0f), // Izquierda
+    new Vector3(-4.0f, -1.0f, -4.0f), // Derecha
+    new Vector3(-5.0f, -1.0f, -5.0f), // Atrás
+    new Vector3(-5.0f, -1.0f, -3.0f)  // Adelante
 };
-
-            Vector3[] roomPositions = {
-    new Vector3(0f, -5f, 0f),   // Suelo
-    new Vector3(0f, 5f, 0f),    // Techo
-    new Vector3(0f, 0f, -5f),   // Pared Fondo
-    new Vector3(0f, 0f, 5f),    // Pared Frente
-    new Vector3(-5f, 0f, 0f),   // Pared Izquierda
-    new Vector3(5f, 0f, 0f)     // Pared Derecha
-};
-
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 4; i++)
             {
-                GameObject wall = new GameObject($"Wall_{i}");
-                wall.transform.position = roomPositions[i];
-                wall.transform.rotation = roomRotations[i];
-                wall.transform.scale = new Vector3(10f); // Escala para que cierren las esquinas
-                Renderer wallRend = wall.AddComponent<Renderer>();
-                wallRend.SetMaterial(planeMaterial);
-                wallRend.LoadModel("Models/Primitives/Plane.fbx");
+                GameObject cageCube = new GameObject($"CageCube_{i}");
+                cageCube.transform.position = cagePositions[i];
+                cageCube.transform.scale = new Vector3(0.5f, 2f, 0.5f);
+                Renderer cageRend = cageCube.AddComponent<Renderer>();
+                cageRend.SetMaterial(labMaterial);
+                cageRend.LoadModel("Models/Primitives/Cube.fbx");
             }
 
-            // 2. OBJETOS FLOTANTES (Para proyectar sombras en todas las direcciones)
-            Vector3[] cubePositions = {
-                new Vector3(2.0f, -1.5f, 1.0f),    // Abajo a la derecha
-                new Vector3(-2.0f, 1.5f, -1.5f),   // Arriba a la izquierda, atrás
-                new Vector3(0.0f, 2.5f, 1.5f),     // Casi en el techo
-                new Vector3(-1.5f, -2.5f, 2.0f)    // Cerca del suelo
-            };
+            // Prop 6: Cubo flotante en la pared (Para comprobar la Spot Light)
+            GameObject spotTarget = new GameObject("SpotTarget");
+            spotTarget.transform.position = new Vector3(5f, 2f, -8f);
+            spotTarget.transform.scale = new Vector3(1.5f, 1.5f, 0.2f); // Plano y pegado a la pared
+            Renderer targetRend = spotTarget.AddComponent<Renderer>();
+            targetRend.SetMaterial(labMaterial);
+            targetRend.LoadModel("Models/Primitives/Cube.fbx");
 
-            Vector3[] cubeRotations = {
-                new Vector3(15f, 30f, 45f),
-                new Vector3(60f, 0f, -30f),
-                new Vector3(0f, 45f, 0f),
-                new Vector3(-20f, -45f, 60f)
-            };
 
-            for (int i = 0; i < cubePositions.Length; i++)
-            {
-                GameObject cube = new GameObject($"Cube_{i}");
-                cube.transform.position = cubePositions[i];
-                cube.transform.rotation = cubeRotations[i];
-                cube.transform.scale = new Vector3(1.5f); // Cubos medianos
-                Renderer cubeRend = cube.AddComponent<Renderer>();
-                cubeRend.SetMaterial(planeMaterial);
-                cubeRend.LoadModel("Models/Primitives/Cube.fbx");
-            }
+            // --- 4. LUZ DIRECCIONAL (Gris neutro) ---
+            Light dirLight = new Light("DirLight", LightType.Directional);
+            dirLight.transform.position = new Vector3(10.0f, 20.0f, 10.0f);
+            dirLight.transform.rotation = new Vector3(-60f, -45f, 0f); // Apunta desde arriba-derecha
+            dirLight.Ambient = new Vector3(0.2f, 0.2f, 0.25f);
 
-            // 3. LA LUZ PUNTUAL (En el corazón de la habitación)
-            Light pointLight = new Light("CenterPointLight", LightType.Point);
-            pointLight.transform.position = new Vector3(0.0f, 0.0f, 0.0f); // Justo en el centro
-            pointLight.Ambient = new Vector3(0.05f); // Penumbra suave en las esquinas
+            // 4. Multiplicamos la fuerza de la luz por 5 para que compita con el HDR
+            dirLight.Diffuse = new Vector3(3.0f, 3.0f, 3.0f); // Luz blanca fuerte
+            dirLight.Specular = new Vector3(1.0f, 1.0f, 1.0f);
 
-            // HDR: Usamos multiplicadores altísimos para contrarrestar la atenuación física real
-            pointLight.Diffuse = new Vector3(70.0f, 70.0f, 70.0f);
-            pointLight.Specular = new Vector3(20.0f, 20.0f, 20.0f);
 
-            // Atenuación física real (Ley de la Inversa del Cuadrado)
-            pointLight.Constant = 1.0f;
-            pointLight.Linear = 0.0f;
-            pointLight.Quadratic = 0.5f; // Hará que la luz llegue bien a las paredes a 5 metros de distancia
+            // --- 5. LUZ PUNTUAL (Test de Cubemap - Luz Roja) ---
+            // La metemos exactamente en medio de los 4 pilares de la "prisión"
+            Light pLight = new Light("TestPointLight", LightType.Point);
+            pLight.transform.position = new Vector3(-5.0f, 0.0f, -4.0f);
+            pLight.Ambient = new Vector3(0.0f);
+            pLight.Diffuse = new Vector3(25.0f, 0.0f, 0.0f); // ROJO puro HDR
+            pLight.Specular = new Vector3(5.0f, 0.0f, 0.0f);
+            pLight.Constant = 1.0f;
+            pLight.Linear = 0.09f;
+            pLight.Quadratic = 0.032f;
 
-            // El cubito visual blanco para saber de dónde sale la luz
-            Renderer lightVisual = pointLight.AddComponent<Renderer>();
-            lightVisual.SetMaterial(new Material(unlitShader, Color4.White));
-            lightVisual.LoadModel("Models/Primitives/Sphere.fbx");
-            pointLight.transform.scale = new Vector3(0.2f);
+            Renderer pVisual = pLight.AddComponent<Renderer>();
+            pVisual.SetMaterial(new Material(unlitShader, new Color4(1f, 0f, 0f, 1f)));
+            pVisual.LoadModel("Models/Primitives/Cube.fbx");
+            pLight.transform.scale = new Vector3(0.2f);
+
+            Light pLight2 = new Light("TestPointLight2", LightType.Point);
+            pLight2.transform.position = new Vector3(-1.0f, 0.0f, -4.0f);
+            pLight2.Ambient = new Vector3(0.0f);
+            pLight2.Diffuse = new Vector3(25.0f, 0.0f, 0.0f); // ROJO puro HDR
+            pLight2.Specular = new Vector3(5.0f, 0.0f, 0.0f);
+            pLight2.Constant = 1.0f;
+            pLight2.Linear = 0.09f;
+            pLight2.Quadratic = 0.032f;
+
+            Renderer pVisual2 = pLight2.AddComponent<Renderer>();
+            pVisual2.SetMaterial(new Material(unlitShader, new Color4(1f, 0f, 0f, 1f)));
+            pVisual2.LoadModel("Models/Primitives/Cube.fbx");
+            pLight2.transform.scale = new Vector3(0.2f);
+
+
+            // --- 6. LUZ FOCAL (Test de Frustum y Array 2D - Luz Azul) ---
+            // Apunta directamente a la pared del fondo, pasando por el cubo flotante
+            Light sLight = new Light("TestSpotLight", LightType.Spot);
+            sLight.transform.position = new Vector3(5.0f, 2.0f, -2.0f);
+            sLight.transform.rotation = new Vector3(0f, 0f, 0f); // Mira directo hacia -Z (la pared)
+            sLight.Ambient = new Vector3(0.0f);
+            sLight.Diffuse = new Vector3(0.0f, 0.0f, 40.0f); // AZUL puro HDR
+            sLight.Specular = new Vector3(0.0f, 0.0f, 10.0f);
+            sLight.Constant = 1.0f;
+            sLight.Linear = 0.045f;
+            sLight.Quadratic = 0.0075f;
+            // Ángulo estrecho para ver bien el círculo proyectado en la pared
+            sLight.CutOff = (float)Math.Cos(MathHelper.DegreesToRadians(12.5f));
+            sLight.OuterCutOff = (float)Math.Cos(MathHelper.DegreesToRadians(17.5f));
+
+            Renderer sVisual = sLight.AddComponent<Renderer>();
+            sVisual.SetMaterial(new Material(unlitShader, new Color4(0f, 0f, 1f, 1f)));
+            sVisual.LoadModel("Models/Primitives/Cube.fbx");
+            sLight.transform.scale = new Vector3(0.2f);
 
             PhysicsManager.InitializePhysics();
             _mainScene.Start();
@@ -197,8 +248,7 @@ namespace GameEngine
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Light? dirLight = RenderManager.GetActiveDirectionalLight();
-            RenderManager.RenderScene(_mainScene, _camera, dirLight, litShader);
+            RenderManager.RenderScene();
 
             SwapBuffers();
         }
@@ -315,7 +365,6 @@ namespace GameEngine
         }
         #endregion
         #endregion
-
         void DifferenceComparer()
         {
             if (differenceState)
@@ -332,7 +381,6 @@ namespace GameEngine
             }
             differenceState = !differenceState;
         }
-
         void DifferenceComparer2()
         {
             if (differenceState2)
