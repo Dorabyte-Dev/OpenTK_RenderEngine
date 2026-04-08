@@ -280,5 +280,18 @@ namespace GameEngine
             this.material = material;
         }
 
+
+        public override void Destroy()
+        {
+            RenderManager.RemoveRenderer(this);
+
+            // Liberar la memoria de la tarjeta gráfica
+            // (Asegúrate de que estas variables coincidan con cómo las llamaste en tu Renderer)
+            if (vao != 0) GL.DeleteVertexArray(vao);
+            if (vbo != 0) GL.DeleteBuffer(vbo);
+            if (ebo != 0) GL.DeleteBuffer(ebo);
+
+            // Opcional: Si el material carga texturas únicas, también podrías llamar a GL.DeleteTexture()
+        }
     }
 }

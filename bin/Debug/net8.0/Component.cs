@@ -43,6 +43,6 @@ namespace GameEngine
         public virtual void LateUpdate(float deltaTime) { }
         public virtual void OnEnable() { }
         public virtual void OnDisable() { }
-        public virtual void OnDestroy() { }
+        public virtual void Destroy() { }
     }
 }

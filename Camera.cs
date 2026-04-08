@@ -29,9 +29,36 @@ namespace GameEngine
             }
         }
 
-        public Vector3 Front => owner.transform.Forward;
-        public Vector3 Up => owner.transform.Up;
-        public Vector3 Right => owner.transform.Right;
+        public Vector3 Front
+        {
+            get
+            {
+                float pitch = MathHelper.DegreesToRadians(owner.transform.rotation.X);
+                float yaw = MathHelper.DegreesToRadians(owner.transform.rotation.Y);
+
+                Vector3 front;
+                front.X = MathF.Cos(pitch) * MathF.Sin(yaw);
+                front.Y = MathF.Sin(pitch);
+                front.Z = -MathF.Cos(pitch) * MathF.Cos(yaw);
+
+                return Vector3.Normalize(front);
+            }
+        }
+
+        public Vector3 Right
+        {
+            get => Vector3.Normalize(Vector3.Cross(Front, Vector3.UnitY));
+        }
+
+        public Vector3 Up
+        {
+            get => Vector3.Normalize(Vector3.Cross(Right, Front));
+        }
+
+        public Matrix4 GetViewMatrix()
+        {
+            return Matrix4.LookAt(owner.transform.position, owner.transform.position + Front, Vector3.UnitY);
+        }
 
         public Vector3 Position
         {
@@ -66,11 +93,6 @@ namespace GameEngine
                 var angle = MathHelper.Clamp(value, 1f, 90f);
                 _fov = MathHelper.DegreesToRadians(angle);
             }
-        }
-
-        public Matrix4 GetViewMatrix()
-        {
-            return Matrix4.LookAt(owner.transform.position, owner.transform.position + owner.transform.Forward, owner.transform.Up);
         }
 
         public Matrix4 GetProjectionMatrix()

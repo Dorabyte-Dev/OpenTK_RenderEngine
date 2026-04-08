@@ -12,7 +12,7 @@ namespace GameEngine
             Shape.LocalScaling = new BulletSharp.Math.Vector3(owner.transform.scale.X, owner.transform.scale.Y, owner.transform.scale.Z);
         }
 
-        public override void OnDestroy()
+        public override void Destroy()
         {
             if (Shape != null)
                 Shape.Dispose();

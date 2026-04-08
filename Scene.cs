@@ -5,7 +5,6 @@ namespace GameEngine
 {
     public class Scene
     {
-        public static Scene ActiveScene { get; private set; }
         public string Name { get; private set; }
         
         // La lista maestra de objetos en esta escena
@@ -15,10 +14,26 @@ namespace GameEngine
         {
             Name = name;
 
-            if(ActiveScene == null)
+            if(SceneManager.CurrentScene == null)
             {
-                ActiveScene = this;
+                SetActiveScene();
             }
+        }
+        public void Unload()
+        {
+            // Recorremos la lista de objetos y los destruimos uno a uno
+            foreach (var go in _gameObjects)
+            {
+                go.Destroy();
+            }
+
+            // Vaciamos la lista de la escena
+            _gameObjects.Clear();
+        }
+
+        public void SetActiveScene()
+        {
+            SceneManager.CurrentScene = this;
         }
 
         // ----- GESTIÓN DE OBJETOS -----
@@ -36,7 +51,7 @@ namespace GameEngine
             if (_gameObjects.Contains(go))
             {
                 _gameObjects.Remove(go);
-                // Opcional: Llamar a una función go.Destroy() si implementas limpieza de memoria en GameObject
+                go.Destroy();
             }
         }
 
@@ -48,11 +63,6 @@ namespace GameEngine
                 Console.WriteLine($"GameObject with name '{name}' not found in scene '{Name}'.");
             }
             return result;
-        }
-
-        public void SetActiveScene()
-        {
-            ActiveScene = this;
         }
 
         // ----- CICLO DE VIDA (LIFECYCLE) -----

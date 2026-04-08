@@ -3,7 +3,6 @@ using OpenTK.Mathematics;
 
 namespace GameEngine
 {
-    // Definimos los tipos de luz disponibles
     public enum LightType
     {
         Directional,
@@ -33,10 +32,7 @@ namespace GameEngine
             RenderManager.AddLight(this);
         }
 
-
-
-        // Es una buena práctica tener un método para limpiar el componente si se destruye el GameObject
-        public void OnDestroy()
+        public override void Destroy()
         {
             RenderManager.RemoveLight(this);
         }

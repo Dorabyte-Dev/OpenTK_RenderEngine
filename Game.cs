@@ -14,6 +14,7 @@ using BulletSharp.Math;
 using Assimp;
 using PrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
 using System.Reflection;
+using Assimp.Unmanaged;
 
 namespace GameEngine
 {
@@ -85,88 +86,129 @@ namespace GameEngine
         {
             base.OnLoad();
 
-            _mainScene = new Scene("Main Scene");
-            GameObject camObj = new GameObject("MainCamera");
-            camObj.transform.position = new Vector3(0, 0, 3);
-            _camera = camObj.AddComponent<Camera>();
-            _camera.AspectRatio = Size.X / (float)Size.Y;
-
             GL.ClearColor(_clearColor);
             GL.Enable(EnableCap.DepthTest);
 
-            RenderManager.InitializeShadowMaps();
+            RenderManager.InitializeShadowMaps(); // Asegúrate de que esta función inicia Direccional, Point y Spot
+    
+
+            // Arrancamos el juego cargando directamente la Escena 1
+            LoadScene1_CubeAndLight();
+            
+        }
+
+        // ==========================================
+        // CONFIGURACIÓN 1: Un cubo, un plano y el sol
+        // ==========================================
+        private void LoadScene1_CubeAndLight()
+        {
+            Scene newScene = new Scene("Escena_Basica");
+
+            SceneManager.LoadScene(newScene);
 
             Shader litShader = new Shader("phong.vert", "phong.frag");
-            Shader unlitShader = new Shader("basic.vert", "basic.frag");
+            Material basicMat = new Material(litShader);
             Texture texDiffuse = Texture.LoadFromFile("Textures/container2.png");
-            Texture texSpecular = Texture.LoadFromFile("Textures/container2_specular.png");
+            basicMat.SetTexture("material.diffuse", texDiffuse);
 
-            Material cubeMaterial = new Material(litShader);
-            cubeMaterial.SetTexture("material.diffuse", texDiffuse);
-            cubeMaterial.SetTexture("material.specular", texSpecular);
-            cubeMaterial.SetFloat("material.shininess", 32.0f);
-
-            // ----- 1. EL SUELO (AABB Estático) -----
+            // 1. Suelo
             GameObject floor = new GameObject("Floor");
-            floor.transform.position = new Vector3(0.0f, -5.0f, -5.0f);
-            floor.transform.scale = new Vector3(15.0f, 1.0f, 15.0f);
-
+            floor.transform.position = new Vector3(0.0f, -2.0f, 0.0f);
+            floor.transform.rotation = new Vector3(15f, 0, 0f);
+            floor.transform.scale = new Vector3(10.0f, 1.0f, 10.0f);
             Renderer floorRend = floor.AddComponent<Renderer>();
-            floorRend.SetMaterial(cubeMaterial);
+            floorRend.SetMaterial(basicMat);
             floorRend.LoadModel("Models/Primitives/Cube.fbx");
             floor.AddComponent<Collider>();
-
             Rigidbody floorRb = floor.AddComponent<Rigidbody>();
-            floorRb.Mass = 0.0f; // Estático
-            floorRb.Friction = 0.8f;
+            floorRb.Mass = 0.0f;
 
-
-            // ----- 2. LA RAMPA (OBB Estática) -----
-            // Demuestra colisión orientada contra un objeto inamovible
-            GameObject ramp = new GameObject("Ramp");
-            ramp.transform.position = new Vector3(0.0f, 0.0f, -5.0f);
-            ramp.transform.scale = new Vector3(8.0f, 0.5f, 4.0f);
-
-            // ¡GIRAMOS LA RAMPA 30 GRADOS EN EL EJE X!
-            ramp.transform.rotation = new Vector3(30.0f, 0.0f, 0.0f);
-
-            Renderer rampRend = ramp.AddComponent<Renderer>();
-            rampRend.SetMaterial(cubeMaterial);
-            rampRend.LoadModel("Models/Primitives/Cube.fbx");
-            ramp.AddComponent<Collider>();
-
-            Rigidbody rampRb = ramp.AddComponent<Rigidbody>();
-            rampRb.Mass = 0.0f; // Estática
-            rampRb.Bounciness = 0.5f; // Un poco de rebote para que el cubo que cae no se quede pegado a la rampa
-
-
-
-            // ----- 3. EL CUBO QUE CAE (OBB Dinámica) -----
-            // Va a caer sobre la rampa y luego al suelo, dando vueltas
-            GameObject tumblingCube = new GameObject("Tumbling Cube");
-            tumblingCube.transform.position = new Vector3(0.0f, 8.0f, -5.0f);
-
-            // ¡Lo giramos de forma aleatoria para que caiga de esquina!
-            tumblingCube.transform.rotation = new Vector3(45.0f, 45.0f, 0.0f);
-
-            Renderer cubeRend = tumblingCube.AddComponent<Renderer>();
-            cubeRend.SetMaterial(cubeMaterial);
+            // 2. Cubo central flotando
+            GameObject cube = new GameObject("CenterCube");
+            cube.AddComponent<Collider>();
+            cube.transform.position = new Vector3(0.0f, 1.0f, -3.0f);
+            cube.transform.rotation = new Vector3(0, 0, 0f);
+            Renderer cubeRend = cube.AddComponent<Renderer>();
+            cubeRend.SetMaterial(basicMat);
             cubeRend.LoadModel("Models/Primitives/Cube.fbx");
-            tumblingCube.AddComponent<Collider>();
+            
+            Rigidbody cubeRb = cube.AddComponent<Rigidbody>();
+            cubeRb.Mass = 1.0f;
 
-            Rigidbody cubeRb = tumblingCube.AddComponent<Rigidbody>();
-            cubeRb.Mass = 1.0f;       // Dinámico
-            cubeRb.Bounciness = 100f; // Un poco de rebote
+            // 3. Luz Direccional
+            GameObject sunObj = new GameObject("SunLight");
+            sunObj.transform.position = new Vector3(5.0f, 10.0f, 5.0f);
+            sunObj.transform.rotation = new Vector3(-45.0f, -45.0f, 0.0f);
+            Light sunLight = sunObj.AddComponent<Light>();
+            sunLight.Type = LightType.Directional;
+            sunLight.Diffuse = new Vector3(2.0f, 2.0f, 2.0f);
 
+            // 4. Cámara
+            GameObject camObj = new GameObject("MainCamera");
+            camObj.transform.position = new Vector3(0, 2, 5);
+            _camera = camObj.AddComponent<Camera>();
+            _camera.AspectRatio = Size.X / (float)Size.Y;
 
-            GameObject dirLightObj = new GameObject("Directional Light");
-            Light directionalLight = dirLightObj.AddComponent<Light>();
-            dirLightObj.transform.rotation = new Vector3(-45.0f, 30.0f, 0.0f);
-            directionalLight.Diffuse = new Vector3(1.8f, 1.8f, 1.8f);
-
-            Time.timeScale = 0.5f;
             PhysicsManager.InitializePhysics();
-            _mainScene.Start();
+
+            newScene.Start();
+        }
+
+        // ==========================================
+        // CONFIGURACIÓN 2: Prisión de sombras rojas
+        // ==========================================
+        private void LoadScene2_RedPointLight()
+        {
+            Scene newScene = new Scene("Escena_Roja");
+
+            SceneManager.LoadScene(newScene);
+
+            Shader litShader = new Shader("phong.vert", "phong.frag");
+            Material basicMat = new Material(litShader);
+            Texture texDiffuse = Texture.LoadFromFile("Textures/container2.png");
+            basicMat.SetTexture("material.diffuse", texDiffuse);
+
+                    // 1. Suelo
+                    GameObject floor = new GameObject("Floor");
+            floor.transform.position = new Vector3(0.0f, -2.0f, 0.0f);
+            floor.transform.scale = new Vector3(10.0f, 1.0f, 10.0f);
+            Renderer floorRend = floor.AddComponent<Renderer>();
+            floorRend.SetMaterial(basicMat);
+            floorRend.LoadModel("Models/Primitives/Cube.fbx");
+
+            // 2. Dos Pilares
+            GameObject p1 = new GameObject("Pilar1");
+            p1.transform.position = new Vector3(-2f, 0f, -3f);
+            p1.transform.scale = new Vector3(0.5f, 3f, 0.5f);
+            Renderer p1Rend = p1.AddComponent<Renderer>();
+            p1Rend.SetMaterial(basicMat);
+            p1Rend.LoadModel("Models/Primitives/Cube.fbx");
+
+            GameObject p2 = new GameObject("Pilar2");
+            p2.transform.position = new Vector3(2f, 0f, -3f);
+            p2.transform.scale = new Vector3(0.5f, 3f, 0.5f);
+            Renderer p2Rend = p2.AddComponent<Renderer>();
+            p2Rend.SetMaterial(basicMat);
+            p2Rend.LoadModel("Models/Primitives/Cube.fbx");
+
+            // 3. Luz Puntual Roja en medio de los pilares
+            GameObject pointObj = new GameObject("RedLight");
+            pointObj.transform.position = new Vector3(0.0f, 0.0f, -3.0f);
+            Light pLight = pointObj.AddComponent<Light>();
+            pLight.Type = LightType.Point;
+            pLight.Diffuse = new Vector3(25.0f, 0.0f, 0.0f); // Rojo intenso HDR
+    
+            // (Opcional: puedes ponerle el Sol aquí también muy tenue para no tener negros puros)
+
+            // 4. Cámara
+            GameObject camObj = new GameObject("MainCamera");
+            camObj.transform.position = new Vector3(0, 1, 3);
+            _camera = camObj.AddComponent<Camera>();
+            _camera.AspectRatio = Size.X / (float)Size.Y;
+
+            PhysicsManager.InitializePhysics();
+
+            newScene.Start();
         }
 
         protected override void OnRenderFrame(FrameEventArgs e) //Se ejecuta al renderizar cada frame visual del juego. Aquí va todo lo que se dibuja.
@@ -197,21 +239,22 @@ namespace GameEngine
 
             Time.Update();
 
-            if (!IsFocused) // check to see if the window is focused
+            if (!IsFocused)
             {
                 return;
             }
             CursorState = CursorState.Grabbed;
 
-            //dirLight.transform.rotation = new Vector3(0.0f, 0, 0.0f); // Hacemos girar la luz para ver cómo se actualizan las sombras en tiempo real
 
             PhysicsManager.StepSimulation((float)Time.deltaTime);
 
 
-
-            _mainScene.Update((float)e.Time);
+            SceneManager.CurrentScene.Update((float)e.Time);
+            SceneManager.CurrentScene.FixedUpdate((float)e.Time);
+            SceneManager.CurrentScene.LateUpdate((float)e.Time);
+            /*_mainScene.Update((float)e.Time);
             _mainScene.FixedUpdate((float)e.Time);
-            _mainScene.LateUpdate((float)e.Time);
+            _mainScene.LateUpdate((float)e.Time);*/
 
 
             if (KeyboardState.IsKeyDown(Keys.R) && fallingCube != null)
@@ -247,12 +290,12 @@ namespace GameEngine
 
 
             float delta = (float)e.Time;
-            if (KeyboardState.IsKeyDown(Keys.W)) _camera.Position += _camera.Front * speed * delta;
-            if (KeyboardState.IsKeyDown(Keys.S)) _camera.Position -= _camera.Front * speed * delta;
-            if (KeyboardState.IsKeyDown(Keys.A)) _camera.Position -= _camera.Right * speed * delta;
-            if (KeyboardState.IsKeyDown(Keys.D)) _camera.Position += _camera.Right * speed * delta;
-            if (KeyboardState.IsKeyDown(Keys.Q) || KeyboardState.IsKeyDown(Keys.LeftShift)) _camera.Position -= _camera.Up * speed * delta;
-            if (KeyboardState.IsKeyDown(Keys.E) || KeyboardState.IsKeyDown(Keys.Space)) _camera.Position += _camera.Up * speed * delta;
+            if (KeyboardState.IsKeyDown(Keys.W)) Camera.Main.Position += Camera.Main.Front * speed * delta;
+            if (KeyboardState.IsKeyDown(Keys.S)) Camera.Main.Position -= Camera.Main.Front * speed * delta;
+            if (KeyboardState.IsKeyDown(Keys.A)) Camera.Main.Position -= Camera.Main.Right * speed * delta;
+            if (KeyboardState.IsKeyDown(Keys.D)) Camera.Main.Position += Camera.Main.Right * speed * delta;
+            if (KeyboardState.IsKeyDown(Keys.Q) || KeyboardState.IsKeyDown(Keys.LeftShift)) Camera.Main.Position -= Camera.Main.Up * speed * delta;
+            if (KeyboardState.IsKeyDown(Keys.E) || KeyboardState.IsKeyDown(Keys.Space)) Camera.Main.Position += Camera.Main.Up * speed * delta;
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
@@ -272,8 +315,8 @@ namespace GameEngine
                     var deltaX = mouse.X - _lastPos.X;
                     var deltaY = mouse.Y - _lastPos.Y;
                     _lastPos = new Vector2(mouse.X, mouse.Y);
-                    _camera.Yaw -= deltaX * sensitivity;
-                    _camera.Pitch -= deltaY * sensitivity;
+                    Camera.Main.Yaw += deltaX * sensitivity;
+                    Camera.Main.Pitch -= deltaY * sensitivity;
                 }
             }
         }
@@ -283,7 +326,7 @@ namespace GameEngine
             base.OnMouseWheel(e);
 
             // Ajustar el FOV usando la rueda del ratón
-            _camera.Fov -= (float)e.OffsetY;
+            Camera.Main.Fov -= (float)e.OffsetY;
         }
 
         protected override void OnUnload()
@@ -297,15 +340,11 @@ namespace GameEngine
         {
             if (differenceState)
             {
-                planeMaterial.SetInt("isNotBlinn", 1);
-                /*planeMaterial.SetInt("gammaCorrection", 1);
-                Texture.temp_sRGB = true;*/
+                LoadScene1_CubeAndLight();
             }
             else
             {
-                planeMaterial.SetInt("isNotBlinn", 0);
-                /*planeMaterial.SetInt("gammaCorrection", 0);
-                Texture.temp_sRGB = false;*/
+                LoadScene2_RedPointLight();
             }
             differenceState = !differenceState;
         }

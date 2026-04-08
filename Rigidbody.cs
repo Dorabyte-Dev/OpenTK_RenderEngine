@@ -146,7 +146,7 @@ namespace GameEngine
             }
         }
 
-        public override void OnDestroy()
+        public override void Destroy()
         {
             if (BulletBody != null)
             {

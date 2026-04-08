@@ -71,6 +71,12 @@ namespace GameEngine
                 _renderers.Remove(renderer);
             }
         }
+
+        public static void ClearSceneData()
+        {
+            _renderers.Clear();
+            _lights.Clear();
+        }
         #endregion
         #region Renderer Loop
         public static void Render()

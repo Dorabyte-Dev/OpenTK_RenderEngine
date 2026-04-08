@@ -25,9 +25,9 @@ namespace GameEngine {
             active = true;
             _transform = AddComponent<Transform>();
 
-            if (Scene.ActiveScene != null)
+            if (SceneManager.CurrentScene != null)
             {
-                Scene.ActiveScene.AddGameObject(this);
+                SceneManager.CurrentScene.AddGameObject(this);
             }
         }
 
@@ -37,9 +37,9 @@ namespace GameEngine {
             active = true;
             _transform = AddComponent<Transform>();
 
-            if (Scene.ActiveScene != null)
+            if (SceneManager.CurrentScene != null)
             {
-                Scene.ActiveScene.AddGameObject(this);
+                SceneManager.CurrentScene.AddGameObject(this);
             }
         }
 
@@ -94,6 +94,16 @@ namespace GameEngine {
             foreach (var c in components)
                 if (c.enabled)
                     c.LateUpdate(deltaTime);
+        }
+
+        public void Destroy()
+        {
+            foreach (var c in components)
+            {
+                c.Destroy();
+            }
+            components.Clear();
+
         }
     }
 }
