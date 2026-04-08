@@ -7,12 +7,17 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Mathematics;
 
+using Newtonsoft.Json;
+
 namespace GameEngine
 {
     public abstract class Component
     {
+        [JsonIgnore]
         protected GameObject owner;
+
         private bool _enabled = true;
+        [JsonProperty]
         public bool enabled
         {
             get {

@@ -1,0 +1,224 @@
+{
+  "_gameObjects": [
+    {
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.0,
+            "Y": -2.0,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 15.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 10.0,
+            "Y": 1.0,
+            "Z": 10.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "material": {
+            "shader": {
+              "_vertexPath": "phong.vert",
+              "_geometryPath": null,
+              "_fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 0.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.5,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.5,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ],
+      "Name": "Floor",
+      "Active": true
+    },
+    {
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": -0.06947348,
+            "Y": -0.45515132,
+            "Z": -1.9168035
+          },
+          "rotation": {
+            "X": 15.00304,
+            "Y": -12.757572,
+            "Z": 0.44187662
+          },
+          "scale": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "material": {
+            "shader": {
+              "_vertexPath": "phong.vert",
+              "_geometryPath": null,
+              "_fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.5,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.5,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ],
+      "Name": "CenterCube",
+      "Active": true
+    },
+    {
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 5.0,
+            "Y": 10.0,
+            "Z": 5.0
+          },
+          "rotation": {
+            "X": -45.0,
+            "Y": -45.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Light, OpenTK_RenderEngine",
+          "Type": 0,
+          "Ambient": {
+            "X": 0.1,
+            "Y": 0.1,
+            "Z": 0.1
+          },
+          "Diffuse": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "Specular": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "Constant": 1.0,
+          "Linear": 0.0,
+          "Quadratic": 0.032,
+          "CutOff": 0.976296,
+          "OuterCutOff": 0.9659258,
+          "enabled": true
+        }
+      ],
+      "Name": "SunLight",
+      "Active": true
+    },
+    {
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.0,
+            "Y": 2.0,
+            "Z": 5.0
+          },
+          "rotation": {
+            "X": -20.200005,
+            "Y": -2.2000003,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Camera, OpenTK_RenderEngine",
+          "enabled": true
+        }
+      ],
+      "Name": "MainCamera",
+      "Active": true
+    }
+  ],
+  "Name": "Escena_Basica"
+}

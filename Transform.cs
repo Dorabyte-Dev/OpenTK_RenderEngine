@@ -6,6 +6,7 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Mathematics;
+using Newtonsoft.Json;
 
 namespace GameEngine
 {
@@ -34,7 +35,7 @@ namespace GameEngine
             this.scale = scale;
         }
 
-        public Vector3 Forward
+        [JsonIgnore]public Vector3 Forward
         {
             get
             {
@@ -55,6 +56,7 @@ namespace GameEngine
             }
         }
 
+        [JsonIgnore]
         public Vector3 Right
         {
             get
@@ -72,6 +74,7 @@ namespace GameEngine
             }
         }
 
+        [JsonIgnore]
         public Vector3 Up
         {
             get
@@ -89,6 +92,7 @@ namespace GameEngine
             }
         }
 
+        [JsonIgnore]
         public Matrix4 ModelMatrix
         {
             get

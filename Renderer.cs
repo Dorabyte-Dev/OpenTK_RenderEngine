@@ -1,6 +1,5 @@
 ﻿using Assimp;
-
-
+using Newtonsoft.Json;
 using OpenTK.Graphics.OpenGL4;
 using PrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
 
@@ -19,7 +18,7 @@ namespace GameEngine
         private int indexCount;
 
         // Resources
-        private Material material;
+        [JsonProperty] private Material material;
 
         // State
         private bool initialized = false;

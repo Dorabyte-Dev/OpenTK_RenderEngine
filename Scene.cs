@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GameEngine
@@ -8,7 +9,7 @@ namespace GameEngine
         public string Name { get; private set; }
         
         // La lista maestra de objetos en esta escena
-        private List<GameObject> _gameObjects = new List<GameObject>();
+        [JsonProperty] private List<GameObject> _gameObjects = new List<GameObject>();
 
         public Scene(string name)
         {

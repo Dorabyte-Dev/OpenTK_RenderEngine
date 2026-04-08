@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using OpenTK.Mathematics;
 
 namespace GameEngine
@@ -12,7 +13,7 @@ namespace GameEngine
 
     public class Light : Component
     {
-        public Transform transform => owner.transform;
+        [JsonIgnore]public Transform transform => owner.transform;
 
         public LightType Type = LightType.Directional;
 

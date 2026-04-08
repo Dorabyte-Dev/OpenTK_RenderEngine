@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Mathematics;
 using System;
+using Newtonsoft.Json;
 
 
 namespace GameEngine
@@ -29,7 +30,7 @@ namespace GameEngine
             }
         }
 
-        public Vector3 Front
+        [JsonIgnore]public Vector3 Front
         {
             get
             {
@@ -45,11 +46,13 @@ namespace GameEngine
             }
         }
 
+        [JsonIgnore]
         public Vector3 Right
         {
             get => Vector3.Normalize(Vector3.Cross(Front, Vector3.UnitY));
         }
 
+        [JsonIgnore]
         public Vector3 Up
         {
             get => Vector3.Normalize(Vector3.Cross(Right, Front));
@@ -60,12 +63,14 @@ namespace GameEngine
             return Matrix4.LookAt(owner.transform.position, owner.transform.position + Front, Vector3.UnitY);
         }
 
+        [JsonIgnore]
         public Vector3 Position
         {
             get => owner.transform.position;
             set => owner.transform.position = value;
         }
 
+        [JsonIgnore]
         public float Pitch
         {
             get => owner.transform.rotation.X;
@@ -76,6 +81,7 @@ namespace GameEngine
             }
         }
 
+        [JsonIgnore]
         public float Yaw
         {
             get => owner.transform.rotation.Y;
@@ -85,6 +91,7 @@ namespace GameEngine
             }
         }
 
+        [JsonIgnore]
         public float Fov
         {
             get => MathHelper.RadiansToDegrees(_fov);

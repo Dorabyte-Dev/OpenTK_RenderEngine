@@ -10,16 +10,19 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using GameEngine;
-using System.Xml.Linq;
+using Newtonsoft.Json;
 
 public class Shader
 {
-    public int Handle;
-
+    [JsonIgnore]public int Handle;
+    [JsonProperty] private string _vertexPath;
+    [JsonProperty] private string _geometryPath;
+    [JsonProperty] private string _fragmentPath;
     public Shader(string vertexPath, string fragmentPath)
     {
         //Declaring and Creating Shaders
-
+        _vertexPath = vertexPath;
+        _fragmentPath = fragmentPath;
         string vertexShaderSource = File.ReadAllText("Shaders/" + vertexPath);
         string fragmentShaderSource = File.ReadAllText("Shaders/" + fragmentPath);
 
@@ -72,6 +75,9 @@ public class Shader
     public Shader(string vertexPath, string geometryPath, string fragmentPath)
     {
         //Declaring and Creating Shaders
+        _vertexPath = vertexPath;
+        _geometryPath = geometryPath;
+        _fragmentPath = fragmentPath;
 
         string vertexShaderSource = File.ReadAllText("Shaders/" + vertexPath);
         string geometryShaderSource = File.ReadAllText("Shaders/" + geometryPath);

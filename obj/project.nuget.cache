@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "b7lX2nR1PkFT/fkf3jbz9t0CQqgJcIzHAXi417n3OIjSEBq2GEobNfTL5B+UKhuAr/P3QuNXE5tGvBPBBY5Wng==",
+  "dgSpecHash": "l0yMwGNtdwMWgmFrnFL+Hz5pZ8W/8HqARX6Jq6i0PQOjwxXyiqoj0HpCuGl8GvQxMbfNUukXLoJxo4Cj6bBnaA==",
   "success": true,
   "projectFilePath": "D:\\Repositorios\\OpenTK_RenderEngine\\OpenTK_RenderEngine.csproj",
   "expectedPackageFiles": [
@@ -10,6 +10,7 @@
     "C:\\Users\\dorab\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\dorab\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\dorab\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
+    "C:\\Users\\dorab\\.nuget\\packages\\newtonsoft.json\\13.0.4\\newtonsoft.json.13.0.4.nupkg.sha512",
     "C:\\Users\\dorab\\.nuget\\packages\\opentk\\4.9.4\\opentk.4.9.4.nupkg.sha512",
     "C:\\Users\\dorab\\.nuget\\packages\\opentk.audio.openal\\4.9.4\\opentk.audio.openal.4.9.4.nupkg.sha512",
     "C:\\Users\\dorab\\.nuget\\packages\\opentk.compute\\4.9.4\\opentk.compute.4.9.4.nupkg.sha512",

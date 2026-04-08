@@ -68,3 +68,4 @@ D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\depth.vert
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\point_depth.frag
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\point_depth.geom
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\point_depth.vert
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Newtonsoft.Json.dll

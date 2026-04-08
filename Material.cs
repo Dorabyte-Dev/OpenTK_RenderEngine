@@ -10,20 +10,21 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using Newtonsoft.Json;
 
 namespace GameEngine
 {
     public class Material
     {
         public Shader shader;
-        private Color4 baseColor = Color4.White;
+        [JsonProperty]private Color4 baseColor = Color4.White;
 
-        private Dictionary<string, Texture> textures = new();
+        [JsonProperty]private Dictionary<string, Texture> textures = new();
 
-        private Dictionary<string, int> ints = new();
-        private Dictionary<string, float> floats = new();
-        private Dictionary<string, Vector3> vectors = new();
-        private Dictionary<string, Matrix4> matrices = new();
+        [JsonProperty] private Dictionary<string, int> ints = new();
+        [JsonProperty] private Dictionary<string, float> floats = new();
+        [JsonProperty] private Dictionary<string, Vector3> vectors = new();
+        [JsonProperty] private Dictionary<string, Matrix4> matrices = new();
 
         public Material(Shader shader)
         {

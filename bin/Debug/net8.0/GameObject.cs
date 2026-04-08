@@ -6,20 +6,22 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Mathematics;
+using Newtonsoft.Json;
 
 namespace GameEngine { 
     public class GameObject
     {
+
         private string name = "GameObject";
         private bool active = true;
 
         private Transform _transform;
 
-        public Transform transform => _transform;
+        [JsonIgnore] public Transform transform => _transform;
         public string Name => name;
         public bool Active => active;
 
-        private List<Component> components = new List<Component>();
+        [JsonProperty] private List<Component> components = new List<Component>();
         public GameObject() {
             name = "GameObject";
             active = true;

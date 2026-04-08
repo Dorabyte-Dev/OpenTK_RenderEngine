@@ -1,6 +1,7 @@
 ﻿using BulletSharp;
 using BulletSharp.Math;
 using OpenTK.Mathematics;
+using System.Text.Json.Serialization;
 using static BulletSharp.Dbvt;
 
 namespace GameEngine
@@ -8,12 +9,13 @@ namespace GameEngine
     public class Rigidbody : Component
     {
         public float Mass = 1.0f;
-        public RigidBody BulletBody { get; private set; }
+        private RigidBody BulletBody;
 
         public float LinearDrag = 0.0f;   // Rozamiento con el aire (frena la velocidad lineal)
         public float AngularDrag = 0.0f;  // Rozamiento rotacional (frena los giros)
         public PhysicsMaterial physicsMaterial = new PhysicsMaterial();
 
+        [JsonIgnore]
         public float Friction
         {
             get { return physicsMaterial.Friction; }
@@ -22,6 +24,8 @@ namespace GameEngine
                 physicsMaterial.Friction = value;
             }
         }
+
+        [JsonIgnore]
         public float Bounciness
         {
             get { return physicsMaterial.Bounciness; }

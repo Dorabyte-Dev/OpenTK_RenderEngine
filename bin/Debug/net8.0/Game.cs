@@ -276,6 +276,11 @@ namespace GameEngine
                 DifferenceComparer2();
             }
 
+            if (KeyboardState.IsKeyPressed(Keys.F5))
+            {
+                SceneSerializer.SaveScene(SceneManager.CurrentScene, SceneManager.CurrentScene.Name + ".json");
+            }
+
             HandleInputs(e);
         }
 

@@ -1,10 +1,11 @@
 ﻿using BulletSharp;
+using Newtonsoft.Json;
 
 namespace GameEngine
 {
     public class Collider : Component
     {
-        public CollisionShape Shape { get; private set; }
+        [JsonIgnore] public CollisionShape Shape { get; private set; }
 
         public Collider(GameObject owner) : base(owner)
         {

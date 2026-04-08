@@ -6,16 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 using OpenTK.Graphics.OpenGL4;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
-using OpenTK.Mathematics;
+using Newtonsoft.Json;
 
 namespace GameEngine
 {
     public class Texture
     {
-        public int Handle;
+        [JsonIgnore]public int Handle;
+        [JsonProperty]public string Path { get; private set; }
+        [JsonProperty]public bool IsSRGB { get; private set; }
         public static Texture LoadFromFile(string path, bool isSRGB = true)
         {
             // Generate handle
@@ -49,11 +48,13 @@ namespace GameEngine
 
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
-            return new Texture(handle);
+            return new Texture(handle, path, isSRGB);
         }
 
-        public Texture(int glHandle)
+        public Texture(int glHandle, string path, bool isSRGB)
         {
+            Path = path;
+            IsSRGB = isSRGB;
             Handle = glHandle;
         }
 
