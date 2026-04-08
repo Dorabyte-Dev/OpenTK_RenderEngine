@@ -9,14 +9,8 @@ using System;
 
 namespace GameEngine
 {
-    public class Camera
+    public class Camera : Component
     {
-        private Vector3 _front = -Vector3.UnitZ;
-        private Vector3 _up = Vector3.UnitY;
-        private Vector3 _right = Vector3.UnitX;
-
-        private float _pitch; //Radians
-        private float _yaw = -MathHelper.PiOver2; //Radians
         private float _fov = MathHelper.PiOver2; //Radians
 
         //Multiple Instances
@@ -26,45 +20,41 @@ namespace GameEngine
             get => main;
             set => main = value;
         }
-        public Camera(Vector3 position, float aspectRatio)
+        public float AspectRatio { private get; set; }
+        public Camera(GameObject owner) : base(owner)
         {
-            Position = position;
-            AspectRatio = aspectRatio;
-
             if(Camera.main == null)
             {
                 this.SetAsMain();
             }
         }
-        // Position
-        public Vector3 Position { get; set; }
 
-        // Aspect ratio (solo set privado)
-        public float AspectRatio { private get; set; }
+        public Vector3 Front => owner.transform.Forward;
+        public Vector3 Up => owner.transform.Up;
+        public Vector3 Right => owner.transform.Right;
 
-        public Vector3 Front => _front;
-        public Vector3 Up => _up;
-        public Vector3 Right => _right;
+        public Vector3 Position
+        {
+            get => owner.transform.position;
+            set => owner.transform.position = value;
+        }
 
-        
         public float Pitch
         {
-            get => MathHelper.RadiansToDegrees(_pitch);
+            get => owner.transform.rotation.X;
             set
             {
                 var angle = MathHelper.Clamp(value, -89f, 89f);
-                _pitch = MathHelper.DegreesToRadians(angle);
-                UpdateVectors();
+                owner.transform.rotation.X = angle;
             }
         }
 
         public float Yaw
         {
-            get => MathHelper.RadiansToDegrees(_yaw);
+            get => owner.transform.rotation.Y;
             set
             {
-                _yaw = MathHelper.DegreesToRadians(value);
-                UpdateVectors();
+                owner.transform.rotation.Y = value;
             }
         }
 
@@ -80,24 +70,12 @@ namespace GameEngine
 
         public Matrix4 GetViewMatrix()
         {
-            return Matrix4.LookAt(Position, Position + _front, _up);
+            return Matrix4.LookAt(owner.transform.position, owner.transform.position + owner.transform.Forward, owner.transform.Up);
         }
 
         public Matrix4 GetProjectionMatrix()
         {
             return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.01f, 100f);
-        }
-
-        private void UpdateVectors()
-        {
-            _front.X = MathF.Cos(_pitch) * MathF.Cos(_yaw);
-            _front.Y = MathF.Sin(_pitch);
-            _front.Z = MathF.Cos(_pitch) * MathF.Sin(_yaw);
-
-            _front = Vector3.Normalize(_front);
-
-            _right = Vector3.Normalize(Vector3.Cross(_front, Vector3.UnitY));
-            _up = Vector3.Normalize(Vector3.Cross(_right, _front));
         }
 
         public void SetAsMain()

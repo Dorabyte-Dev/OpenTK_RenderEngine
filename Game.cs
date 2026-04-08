@@ -86,7 +86,11 @@ namespace GameEngine
             base.OnLoad();
 
             _mainScene = new Scene("Main Scene");
-            _camera = new Camera(new Vector3(0, 0, 3.5f), Size.X / (float)Size.Y); // Cámara un poco más atrás
+            GameObject camObj = new GameObject("MainCamera");
+            camObj.transform.position = new Vector3(0, 0, 3);
+            _camera = camObj.AddComponent<Camera>();
+            _camera.AspectRatio = Size.X / (float)Size.Y;
+
             GL.ClearColor(_clearColor);
             GL.Enable(EnableCap.DepthTest);
 
@@ -155,8 +159,9 @@ namespace GameEngine
             cubeRb.Bounciness = 100f; // Un poco de rebote
 
 
-            Light directionalLight = new Light("Directional Light", LightType.Directional);
-            directionalLight.transform.rotation = new Vector3(-45.0f, 30.0f, 0.0f);
+            GameObject dirLightObj = new GameObject("Directional Light");
+            Light directionalLight = dirLightObj.AddComponent<Light>();
+            dirLightObj.transform.rotation = new Vector3(-45.0f, 30.0f, 0.0f);
             directionalLight.Diffuse = new Vector3(1.8f, 1.8f, 1.8f);
 
             Time.timeScale = 0.5f;
@@ -267,7 +272,7 @@ namespace GameEngine
                     var deltaX = mouse.X - _lastPos.X;
                     var deltaY = mouse.Y - _lastPos.Y;
                     _lastPos = new Vector2(mouse.X, mouse.Y);
-                    _camera.Yaw += deltaX * sensitivity;
+                    _camera.Yaw -= deltaX * sensitivity;
                     _camera.Pitch -= deltaY * sensitivity;
                 }
             }
