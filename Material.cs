@@ -31,6 +31,7 @@ namespace GameEngine
             this.shader = shader;
         }
 
+        [JsonConstructor]
         public Material(Shader shader, Color4 baseColor)
         {
             this.shader = shader;
@@ -43,36 +44,49 @@ namespace GameEngine
             textures.Add("_mainTex", texture);
         }
 
-        public void SetBaseColor(Color4 color)
+        public Material SetBaseColor(Color4 color)
         {
             baseColor = color;
+            return this;
         }
-        public void SetInt(string name, int value)
+
+        public Material SetInt(string name, int value)
         {
             ints[name] = value;
+            return this;
         }
-        public void SetFloat(string name, float value)
+
+        public Material SetFloat(string name, float value)
         {
             floats[name] = value;
+            return this;
         }
 
-        public void SetVector(string name, Vector3 value)
+        public Material SetVector(string name, Vector3 value)
         {
             vectors[name] = value;
+            return this;
         }
 
-        public void SetMatrix(string name, Matrix4 value)
+        public Material SetMatrix(string name, Matrix4 value)
         {
             matrices[name] = value;
+            return this;
         }
 
-        public void SetTexture(string name, Texture texture)
+        public Material SetTexture(string name, Texture texture)
         {
             textures[name] = texture;
+            return this;
         }
 
         public void Apply()
         {
+            if (shader.Handle == 0)
+            {
+                shader.Compile();
+            }
+
             shader.Use();
 
             if(textures.Count <= 0) 

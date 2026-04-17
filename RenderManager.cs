@@ -204,7 +204,7 @@ namespace GameEngine
             //Initialize the framebuffer and texture for the shadow map
             depthCubemapFBO = GL.GenFramebuffer();
             depthCubemap = GL.GenTexture();
-            pointShadowShader = new Shader("point_depth.vert", "point_depth.geom", "point_depth.frag");
+            pointShadowShader = new Shader("point_depth.vert", "point_depth.frag", "point_depth.geom");
 
             //Set textureCubemapArray parameters
             GL.BindTexture(TextureTarget.TextureCubeMapArray, depthCubemap);

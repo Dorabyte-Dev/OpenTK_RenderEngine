@@ -13,12 +13,11 @@ namespace GameEngine
 {
     public abstract class Component
     {
-        [JsonIgnore]
-        protected GameObject owner;
+        [JsonIgnore]public GameObject owner { get; internal set; }
 
         private bool _enabled = true;
-        [JsonProperty]
-        public bool enabled
+        
+        [JsonProperty]public bool enabled
         {
             get {
                 return _enabled;
@@ -39,6 +38,10 @@ namespace GameEngine
         public Component(GameObject owner) 
         {
             this.owner = owner;
+        }
+
+        protected Component() //For JSON Constructor
+        {
         }
 
 

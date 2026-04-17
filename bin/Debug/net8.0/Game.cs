@@ -40,36 +40,6 @@ namespace GameEngine
         private const double FixedTimeStep = 1.0 / 60.0;
 
         // ----- SCENE -----
-        private Scene _mainScene;
-        private readonly Vector3 _cubeScale = new Vector3(1.0f, 1.0f, 1.0f);
-        private readonly Vector3[] _cubePositions =
-        {
-            // Fila Z = 0
-            new Vector3(0f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(2f, 0f, 0f), new Vector3(3f, 0f, 0f), new Vector3(4f, 0f, 0f), new Vector3(5f, 0f, 0f),
-    
-            // Fila Z = 1
-            new Vector3(0f, 0f, 1f), new Vector3(1f, 0f, 1f), new Vector3(2f, 0f, 1f), new Vector3(3f, 0f, 1f), new Vector3(4f, 0f, 1f), new Vector3(5f, 0f, 1f),
-    
-            // Fila Z = 2
-            new Vector3(0f, 0f, 2f), new Vector3(1f, 0f, 2f), new Vector3(2f, 0f, 2f), new Vector3(3f, 0f, 2f), new Vector3(4f, 0f, 2f), new Vector3(5f, 0f, 2f),
-    
-            // Fila Z = 3
-            new Vector3(0f, 0f, 3f), new Vector3(1f, 0f, 3f), new Vector3(2f, 0f, 3f), new Vector3(3f, 0f, 3f), new Vector3(4f, 0f, 3f), new Vector3(5f, 0f, 3f),
-    
-            // Fila Z = 4
-            new Vector3(0f, 0f, 4f), new Vector3(1f, 0f, 4f), new Vector3(2f, 0f, 4f), new Vector3(3f, 0f, 4f), new Vector3(4f, 0f, 4f), new Vector3(5f, 0f, 4f),
-    
-            // Fila Z = 5
-            new Vector3(0f, 0f, 5f), new Vector3(1f, 0f, 5f), new Vector3(2f, 0f, 5f), new Vector3(3f, 0f, 5f), new Vector3(4f, 0f, 5f), new Vector3(5f, 0f, 5f),
-        };
-
-        private readonly Vector3[] _pointLightPositions =
-                {
-            new Vector3(1.7f, 0.2f, 5.0f),
-            new Vector3(2.3f, -3.3f, -4.0f),
-            new Vector3(-4.0f, 2.0f, -12.0f),
-            new Vector3(0.0f, 0.0f, -3.0f)
-        };
 
         GameObject fallingCube;
         Light dirLight;
@@ -252,9 +222,6 @@ namespace GameEngine
             SceneManager.CurrentScene.Update((float)e.Time);
             SceneManager.CurrentScene.FixedUpdate((float)e.Time);
             SceneManager.CurrentScene.LateUpdate((float)e.Time);
-            /*_mainScene.Update((float)e.Time);
-            _mainScene.FixedUpdate((float)e.Time);
-            _mainScene.LateUpdate((float)e.Time);*/
 
 
             if (KeyboardState.IsKeyDown(Keys.R) && fallingCube != null)
@@ -276,10 +243,15 @@ namespace GameEngine
                 DifferenceComparer2();
             }
 
-            if (KeyboardState.IsKeyPressed(Keys.F5))
+            /*if (KeyboardState.IsKeyDown(Keys.LeftControl) && KeyboardState.IsKeyPressed(Keys.S))
             {
                 SceneSerializer.SaveScene(SceneManager.CurrentScene, SceneManager.CurrentScene.Name + ".json");
             }
+
+            if (KeyboardState.IsKeyDown(Keys.LeftControl) && KeyboardState.IsKeyPressed(Keys.L))
+            {
+                SceneSerializer.LoadScene("Escena_Basica.json");
+            }*/
 
             HandleInputs(e);
         }
@@ -301,6 +273,8 @@ namespace GameEngine
             if (KeyboardState.IsKeyDown(Keys.D)) Camera.Main.Position += Camera.Main.Right * speed * delta;
             if (KeyboardState.IsKeyDown(Keys.Q) || KeyboardState.IsKeyDown(Keys.LeftShift)) Camera.Main.Position -= Camera.Main.Up * speed * delta;
             if (KeyboardState.IsKeyDown(Keys.E) || KeyboardState.IsKeyDown(Keys.Space)) Camera.Main.Position += Camera.Main.Up * speed * delta;
+
+            Helper.Inputs(input);
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
@@ -320,8 +294,11 @@ namespace GameEngine
                     var deltaX = mouse.X - _lastPos.X;
                     var deltaY = mouse.Y - _lastPos.Y;
                     _lastPos = new Vector2(mouse.X, mouse.Y);
-                    Camera.Main.Yaw += deltaX * sensitivity;
-                    Camera.Main.Pitch -= deltaY * sensitivity;
+                    if (Camera.Main != null)
+                    {
+                        Camera.Main.Yaw += deltaX * sensitivity;
+                        Camera.Main.Pitch -= deltaY * sensitivity;
+                    }
                 }
             }
         }
@@ -331,7 +308,7 @@ namespace GameEngine
             base.OnMouseWheel(e);
 
             // Ajustar el FOV usando la rueda del ratón
-            Camera.Main.Fov -= (float)e.OffsetY;
+            if(Camera.Main != null) Camera.Main.Fov -= (float)e.OffsetY;
         }
 
         protected override void OnUnload()

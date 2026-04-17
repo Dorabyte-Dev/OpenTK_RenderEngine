@@ -30,9 +30,13 @@ namespace GameEngine
 
         public Light(GameObject owner) : base(owner)
         {
-            RenderManager.AddLight(this);
+            
         }
 
+        public override void Start()
+        {
+            RenderManager.AddLight(this);
+        }
         public override void Destroy()
         {
             RenderManager.RemoveLight(this);

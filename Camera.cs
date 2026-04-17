@@ -12,6 +12,7 @@ namespace GameEngine
 {
     public class Camera : Component
     {
+        [JsonProperty]
         private float _fov = MathHelper.PiOver2; //Radians
 
         //Multiple Instances
@@ -21,13 +22,18 @@ namespace GameEngine
             get => main;
             set => main = value;
         }
+        [JsonProperty]
         public float AspectRatio { private get; set; }
+
+        
         public Camera(GameObject owner) : base(owner)
         {
-            if(Camera.main == null)
-            {
-                this.SetAsMain();
-            }
+
+        }
+        [JsonConstructor]
+        private Camera() : base()
+        {
+
         }
 
         [JsonIgnore]public Vector3 Front
@@ -102,6 +108,12 @@ namespace GameEngine
             }
         }
 
+        public override void Start()
+        {
+            SetAsMain();
+        }
+
+
         public Matrix4 GetProjectionMatrix()
         {
             return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.01f, 100f);
@@ -112,5 +124,12 @@ namespace GameEngine
             Camera.main = this;
         }
 
+        public override void Destroy()
+        {
+            if (Camera.Main == this)
+            {
+                Camera.Main = null;
+            }
+        }
     }
 }

@@ -85,5 +85,11 @@ namespace GameEngine
             _dispatcher?.Dispose();
             _collisionConf?.Dispose();
         }
+
+        public static void ResetPhysics()
+        {
+            CleanUp();
+            InitializePhysics();
+        }
     }
 }

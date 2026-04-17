@@ -8,7 +8,6 @@ namespace GameEngine
     {
         public string Name { get; private set; }
         
-        // La lista maestra de objetos en esta escena
         [JsonProperty] private List<GameObject> _gameObjects = new List<GameObject>();
 
         public Scene(string name)
@@ -22,13 +21,11 @@ namespace GameEngine
         }
         public void Unload()
         {
-            // Recorremos la lista de objetos y los destruimos uno a uno
             foreach (var go in _gameObjects)
             {
                 go.Destroy();
             }
 
-            // Vaciamos la lista de la escena
             _gameObjects.Clear();
         }
 
@@ -37,7 +34,7 @@ namespace GameEngine
             SceneManager.CurrentScene = this;
         }
 
-        // ----- GESTIÓN DE OBJETOS -----
+        // ----- GAMEOBJECTS -----
 
         public void AddGameObject(GameObject go)
         {
@@ -66,10 +63,11 @@ namespace GameEngine
             return result;
         }
 
-        // ----- CICLO DE VIDA (LIFECYCLE) -----
+        // ----- LIFECYCLE -----
 
         public void Start()
         {
+            Helper.SaveTempScene();
             foreach (var go in _gameObjects.ToList())
             {
                 if (go.Active)

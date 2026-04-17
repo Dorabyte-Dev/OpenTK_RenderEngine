@@ -15,6 +15,7 @@ namespace GameEngine
         public Vector3 position = Vector3.Zero;
         public Vector3 rotation = Vector3.Zero; 
         public Vector3 scale = Vector3.One;
+        [JsonConstructor]
         public Transform(GameObject owner) : base(owner){}
 
         public Transform(GameObject owner, Vector3 position) : base(owner)

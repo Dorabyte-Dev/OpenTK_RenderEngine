@@ -11,9 +11,10 @@ namespace GameEngine
         public float Mass = 1.0f;
         private RigidBody BulletBody;
 
-        public float LinearDrag = 0.0f;   // Rozamiento con el aire (frena la velocidad lineal)
-        public float AngularDrag = 0.0f;  // Rozamiento rotacional (frena los giros)
+        public float LinearDrag = 0.0f;
+        public float AngularDrag = 0.0f;
         public PhysicsMaterial physicsMaterial = new PhysicsMaterial();
+        private CollisionShape _shape;
 
         [JsonIgnore]
         public float Friction
@@ -44,15 +45,12 @@ namespace GameEngine
                 _useGravity = value;
                 if (BulletBody != null)
                 {
-                    // Si es falso, ponemos su gravedad local a cero. 
-                    // Si es verdadero, volverá a usar la global en el siguiente tick.
                     if (!_useGravity)
                     {
                         BulletBody.Gravity = BulletSharp.Math.Vector3.Zero;
                     }
                     else
                     {
-                        // Para restaurarla, le pasamos la global del manager
                         var globalGrav = PhysicsManager.Gravity;
                         BulletBody.Gravity = new BulletSharp.Math.Vector3(globalGrav.X, globalGrav.Y, globalGrav.Z);
                     }
@@ -66,23 +64,23 @@ namespace GameEngine
         {
             //Autodetect Collider
             Collider col = owner.GetComponent<Collider>();
-            CollisionShape shape;
+            
 
             if (col != null && col.Shape != null)
             {
-                shape = col.Shape;
-                shape.LocalScaling = new BulletSharp.Math.Vector3(owner.transform.scale.X, owner.transform.scale.Y, owner.transform.scale.Z);
+                _shape = col.Shape;
+                _shape.LocalScaling = new BulletSharp.Math.Vector3(owner.transform.scale.X, owner.transform.scale.Y, owner.transform.scale.Z);
             }
             else
             {
-                shape = new EmptyShape();
+                _shape = new EmptyShape();
             }
 
             // Calculate Inertia
             BulletSharp.Math.Vector3 localInertia = BulletSharp.Math.Vector3.Zero;
             if (Mass > 0.0f)
             {
-                shape.CalculateLocalInertia(Mass, out localInertia);
+                _shape.CalculateLocalInertia(Mass, out localInertia);
             }
 
             // Initialize BulletBody
@@ -96,9 +94,11 @@ namespace GameEngine
             Matrix startTransform = Matrix.RotationYawPitchRoll(radY, radX, radZ) * Matrix.Translation(pos.X, pos.Y, pos.Z);
 
             DefaultMotionState motionState = new DefaultMotionState(startTransform);
-            RigidBodyConstructionInfo rbInfo = new RigidBodyConstructionInfo(Mass, motionState, shape, localInertia);
+            RigidBodyConstructionInfo rbInfo = new RigidBodyConstructionInfo(Mass, motionState, _shape, localInertia);
             BulletBody = new BulletSharp.RigidBody(rbInfo);
             PhysicsManager.AddRigidBody(BulletBody);
+
+            rbInfo.Dispose();
 
             //Set Gravity
             if (!_useGravity)
@@ -112,7 +112,7 @@ namespace GameEngine
             BulletBody.Restitution = physicsMaterial.Bounciness;
         }
 
-        public void SetVelocity(OpenTK.Mathematics.Vector3 velocity)
+        public Rigidbody SetVelocity(OpenTK.Mathematics.Vector3 velocity)
         {
             if (BulletBody != null && Mass > 0.0f)
             {
@@ -120,6 +120,8 @@ namespace GameEngine
 
                 BulletBody.LinearVelocity = new BulletSharp.Math.Vector3(velocity.X, velocity.Y, velocity.Z);
             }
+
+            return this;
         }
 
         public override void FixedUpdate(float fixedDeltaTime)

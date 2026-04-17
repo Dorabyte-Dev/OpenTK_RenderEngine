@@ -60,6 +60,13 @@ namespace GameEngine
 
         public void Use(TextureUnit unit = TextureUnit.Texture0)
         {
+            if (Handle == 0 && !string.IsNullOrEmpty(Path))
+            {
+                Console.WriteLine($"[GPU] Cargando textura JIT: {Path}");
+                Texture reloaded = LoadFromFile(Path, IsSRGB);
+                this.Handle = reloaded.Handle;
+            }
+
             GL.ActiveTexture(unit);
             GL.BindTexture(TextureTarget.Texture2D, Handle);
         }

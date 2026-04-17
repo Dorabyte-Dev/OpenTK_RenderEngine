@@ -7,19 +7,20 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Mathematics;
 using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace GameEngine { 
     public class GameObject
     {
 
-        private string name = "GameObject";
-        private bool active = true;
+        [JsonProperty]private string name = "GameObject";
+        [JsonProperty]private bool active = true;
 
         private Transform _transform;
 
         [JsonIgnore] public Transform transform => _transform;
-        public string Name => name;
-        public bool Active => active;
+        [JsonIgnore]public string Name => name;
+        [JsonIgnore]public bool Active => active;
 
         [JsonProperty] private List<Component> components = new List<Component>();
         public GameObject() {
@@ -57,7 +58,7 @@ namespace GameEngine {
             foreach (var c in components)
                 if (c is T t) return t;
 
-            //Console Write Error "Component Not Found"
+            Console.WriteLine("Error: Component of type " + typeof(T) + " not found in GameObject '" + name + "'.");
             return null;
         }
 
@@ -107,5 +108,24 @@ namespace GameEngine {
             components.Clear();
 
         }
+        #region Json
+        [JsonConstructor]
+        private GameObject(string name, bool active)
+        {
+            this.name = name;
+            this.active = active;
+        }
+
+        [OnDeserialized]
+        private void OnDeserializedMethod(StreamingContext context)
+        {
+            _transform = GetComponent<Transform>();
+
+            foreach (var c in components)
+            {
+                c.owner = this;
+            }
+        }
+        #endregion
     }
 }

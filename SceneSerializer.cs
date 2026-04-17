@@ -8,19 +8,14 @@ namespace GameEngine
 {
     public static class SceneSerializer
     {
-        // Configuramos las reglas de oro para serializar videojuegos
         private static JsonSerializerSettings GetSettings()
         {
             var settings = new JsonSerializerSettings
             {
-                // Hace que el JSON tenga saltos de línea y sea fácil de leer para un humano
                 Formatting = Formatting.Indented,
 
-                // ¡LA MAGIA DEL POLIMORFISMO!
-                // Esto añade una línea "$type" en el JSON indicando si un componente es Light, Camera, etc.
                 TypeNameHandling = TypeNameHandling.Auto,
 
-                // Por si se nos ha escapado algún bucle infinito, esto evita que el motor crashee
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
 
@@ -33,53 +28,58 @@ namespace GameEngine
 
         public static void SaveScene(Scene scene, string filePath)
         {
-            Console.WriteLine($"Guardando escena '{scene.Name}' en {filePath}...");
-
             try
             {
-                // Convertimos toda la instancia de la escena a un string JSON gigante
                 string json = JsonConvert.SerializeObject(scene, GetSettings());
 
-                // Lo guardamos en el disco duro
-                File.WriteAllText(filePath, json);
+                File.WriteAllText("Scenes/" + filePath, json);
 
-                Console.WriteLine("¡Escena guardada con éxito!");
+                Console.WriteLine("Saved Scene successfully in " + filePath);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al guardar la escena: {ex.Message}");
+                Console.WriteLine($"Error saving scene: {ex.Message}");
             }
         }
-        /*public static Scene LoadScene(string filePath)
+        private static Scene DeserializeScene(string filePath)
         {
-            Console.WriteLine($"Intentando cargar escena desde {filePath}...");
+            filePath = "Scenes/" + filePath;
 
             if (!File.Exists(filePath))
             {
-                Console.WriteLine($"Error: No se encontró el archivo {filePath}");
+                Console.WriteLine($"Error: Scene not found in {filePath}");
                 return null;
             }
 
             try
             {
-                // 1. Leemos el texto plano
                 string json = File.ReadAllText(filePath);
 
-                // 2. ¡La magia de Newtonsoft! Reconstruye todo el árbol de objetos
                 Scene loadedScene = JsonConvert.DeserializeObject<Scene>(json, GetSettings());
-
-                Console.WriteLine($"¡Escena '{loadedScene.Name}' cargada con éxito en la memoria RAM!");
+                Console.WriteLine($"Scene '{loadedScene.Name}' loaded successfully!");
                 return loadedScene;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error crítico al cargar la escena: {ex.Message}");
+                Console.WriteLine($"Critical error when loading scene: {ex.Message}");
                 return null;
             }
-        }*/
+        }
+
+        public static void LoadScene(string filePath)
+        {
+            Scene loadedScene = DeserializeScene(filePath);
+            if (loadedScene != null)
+            {
+                SceneManager.CurrentScene = loadedScene;
+
+                PhysicsManager.ResetPhysics();
+
+                SceneManager.CurrentScene.Start();
+            }
+        }   
     }
 
-    // --- CONVERTIDOR PARA VECTOR 3 ---
     public class Vector3Converter : JsonConverter<Vector3>
     {
         public override void WriteJson(JsonWriter writer, Vector3 value, JsonSerializer serializer)
@@ -102,7 +102,6 @@ namespace GameEngine
         }
     }
 
-    // --- CONVERTIDOR PARA VECTOR 2 ---
     public class Vector2Converter : JsonConverter<Vector2>
     {
         public override void WriteJson(JsonWriter writer, Vector2 value, JsonSerializer serializer)
@@ -123,7 +122,6 @@ namespace GameEngine
         }
     }
 
-    // --- CONVERTIDOR PARA COLOR4 ---
     public class Color4Converter : JsonConverter<Color4>
     {
         public override void WriteJson(JsonWriter writer, Color4 value, JsonSerializer serializer)

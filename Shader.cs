@@ -15,79 +15,44 @@ using Newtonsoft.Json;
 public class Shader
 {
     [JsonIgnore]public int Handle;
-    [JsonProperty] private string _vertexPath;
-    [JsonProperty] private string _geometryPath;
-    [JsonProperty] private string _fragmentPath;
-    public Shader(string vertexPath, string fragmentPath)
-    {
-        //Declaring and Creating Shaders
-        _vertexPath = vertexPath;
-        _fragmentPath = fragmentPath;
-        string vertexShaderSource = File.ReadAllText("Shaders/" + vertexPath);
-        string fragmentShaderSource = File.ReadAllText("Shaders/" + fragmentPath);
+    [JsonProperty("vertexPath")] private string _vertexPath;
+    [JsonProperty("geometryPath")] private string _geometryPath;
+    [JsonProperty("fragmentPath")] private string _fragmentPath;
 
-        int vertexShader = GL.CreateShader(ShaderType.VertexShader);
-        GL.ShaderSource(vertexShader, vertexShaderSource);
-
-        int fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
-        GL.ShaderSource(fragmentShader, fragmentShaderSource);
-
-        //Compiling Shaders
-
-        GL.CompileShader(vertexShader);
-
-        GL.GetShader(vertexShader, ShaderParameter.CompileStatus, out int vertexSuccess);
-        if (vertexSuccess == 0)
-        {
-            string infoLog = GL.GetShaderInfoLog(vertexShader);
-            Console.WriteLine(infoLog);
-        }
-
-        GL.CompileShader(fragmentShader);
-        GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out int fragmentSuccess);
-        if (fragmentSuccess == 0)
-        {
-            string infoLog = GL.GetShaderInfoLog(fragmentShader);
-            Console.WriteLine(infoLog);
-        }
-
-        //Attaching Shaders to a program
-
-        Handle = GL.CreateProgram();
-
-        GL.AttachShader(Handle, vertexShader);
-        GL.AttachShader(Handle, fragmentShader);
-
-        GL.LinkProgram(Handle);
-
-        GL.GetProgram(Handle, GetProgramParameterName.LinkStatus, out int success);
-        if (success == 0)
-        {
-            string infoLog = GL.GetProgramInfoLog(Handle);
-            Console.WriteLine(infoLog);
-        }
-
-        GL.DetachShader(Handle, vertexShader);
-        GL.DetachShader(Handle, fragmentShader);
-        GL.DeleteShader(vertexShader);
-        GL.DeleteShader(fragmentShader);
-    }
-    public Shader(string vertexPath, string geometryPath, string fragmentPath)
+    [JsonConstructor]
+    public Shader(string vertexPath, string fragmentPath, string geometryPath = null)
     {
         //Declaring and Creating Shaders
         _vertexPath = vertexPath;
         _geometryPath = geometryPath;
         _fragmentPath = fragmentPath;
+    }
 
-        string vertexShaderSource = File.ReadAllText("Shaders/" + vertexPath);
-        string geometryShaderSource = File.ReadAllText("Shaders/" + geometryPath);
-        string fragmentShaderSource = File.ReadAllText("Shaders/" + fragmentPath);
+    public void Compile() //Just In Time method
+    {
+        if (Handle != 0) return;
+
+        bool hasGeometryShader = _geometryPath != null;
+
+        string vertexShaderSource = File.ReadAllText("Shaders/" + _vertexPath);
+
+        string geometryShaderSource = null;
+        if (hasGeometryShader)
+        {
+            geometryShaderSource = File.ReadAllText("Shaders/" + _geometryPath);
+        }
+
+        string fragmentShaderSource = File.ReadAllText("Shaders/" + _fragmentPath);
 
         int vertexShader = GL.CreateShader(ShaderType.VertexShader);
         GL.ShaderSource(vertexShader, vertexShaderSource);
 
-        int geometryShader = GL.CreateShader(ShaderType.GeometryShader);
-        GL.ShaderSource(geometryShader, geometryShaderSource);
+        int geometryShader = -1;
+        if (hasGeometryShader)
+        {
+            geometryShader = GL.CreateShader(ShaderType.GeometryShader);
+            GL.ShaderSource(geometryShader, geometryShaderSource);
+        }
 
         int fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
         GL.ShaderSource(fragmentShader, fragmentShaderSource);
@@ -103,13 +68,17 @@ public class Shader
             Console.WriteLine(infoLog);
         }
 
-        GL.CompileShader(geometryShader);
-        GL.GetShader(geometryShader, ShaderParameter.CompileStatus, out int geometrySuccess);
-        if(geometrySuccess == 0)
+        if (hasGeometryShader)
         {
-            string infolog = GL.GetShaderInfoLog(geometryShader);
-            Console.WriteLine(infolog);
+            GL.CompileShader(geometryShader);
+            GL.GetShader(geometryShader, ShaderParameter.CompileStatus, out int geometrySuccess);
+            if (geometrySuccess == 0)
+            {
+                string infolog = GL.GetShaderInfoLog(geometryShader);
+                Console.WriteLine(infolog);
+            }
         }
+
 
         GL.CompileShader(fragmentShader);
         GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out int fragmentSuccess);
@@ -124,7 +93,8 @@ public class Shader
         Handle = GL.CreateProgram();
 
         GL.AttachShader(Handle, vertexShader);
-        GL.AttachShader(Handle, geometryShader);
+        if (hasGeometryShader) GL.AttachShader(Handle, geometryShader);
+
         GL.AttachShader(Handle, fragmentShader);
 
         GL.LinkProgram(Handle);
@@ -137,10 +107,11 @@ public class Shader
         }
 
         GL.DetachShader(Handle, vertexShader);
+        if (hasGeometryShader) GL.DetachShader(Handle, geometryShader);
         GL.DetachShader(Handle, geometryShader);
         GL.DetachShader(Handle, fragmentShader);
         GL.DeleteShader(vertexShader);
-        GL.DeleteShader(geometryShader);
+        if (hasGeometryShader) GL.DeleteShader(geometryShader);
         GL.DeleteShader(fragmentShader);
     }
 

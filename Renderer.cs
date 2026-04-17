@@ -7,6 +7,9 @@ namespace GameEngine
 {
     public class Renderer : Component
     {
+        //Json
+        [JsonProperty]private string modelPath;
+
         // OpenGL
         private int vao;
         private int vbo;
@@ -25,14 +28,19 @@ namespace GameEngine
 
         public Renderer(GameObject owner) : base(owner) 
         {
-            RenderManager.AddRenderer(this);
+            
         }
 
 
 
         public override void Start()
         {
-            
+            RenderManager.AddRenderer(this);
+
+            if (vao == 0 && !string.IsNullOrEmpty(modelPath))
+            {
+                LoadModel(modelPath);
+            }
         }
 
         public void Render()
@@ -151,15 +159,19 @@ namespace GameEngine
             GL.BindVertexArray(0);
         }
 
-        public void LoadModel(string path)
+        public Renderer LoadModel(string path)
         {
             ImportModel(path);
 
             InitializeBuffers();
+
+            return this;
         }
 
         private void ImportModel(string path)
         {
+            modelPath = path;
+
             AssimpContext importer = new AssimpContext();
 
             var scene = importer.ImportFile(
@@ -274,9 +286,10 @@ namespace GameEngine
         {
             return material?.shader;
         }
-        public void SetMaterial(Material material)
+        public Renderer SetMaterial(Material material)
         {
             this.material = material;
+            return this;
         }
 
 
@@ -284,13 +297,10 @@ namespace GameEngine
         {
             RenderManager.RemoveRenderer(this);
 
-            // Liberar la memoria de la tarjeta gráfica
-            // (Asegúrate de que estas variables coincidan con cómo las llamaste en tu Renderer)
             if (vao != 0) GL.DeleteVertexArray(vao);
             if (vbo != 0) GL.DeleteBuffer(vbo);
             if (ebo != 0) GL.DeleteBuffer(ebo);
 
-            // Opcional: Si el material carga texturas únicas, también podrías llamar a GL.DeleteTexture()
         }
     }
 }
