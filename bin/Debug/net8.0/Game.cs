@@ -47,6 +47,8 @@ namespace GameEngine
         private bool differenceState;
         private bool differenceState2;
 
+        GameObject sunObj;
+
         // ----- SHADERS -----
         Shader litShader;
 
@@ -84,8 +86,8 @@ namespace GameEngine
             // 1. Suelo
             GameObject floor = new GameObject("Floor");
             floor.transform.position = new Vector3(0.0f, -2.0f, 0.0f);
-            floor.transform.rotation = new Vector3(15f, 0, 0f);
-            floor.transform.scale = new Vector3(10.0f, 1.0f, 10.0f);
+            floor.transform.rotation = new Vector3(10f, 0, 0f);
+            floor.transform.scale = new Vector3(20.0f, 1.0f, 20.0f);
             Renderer floorRend = floor.AddComponent<Renderer>();
             floorRend.SetMaterial(basicMat);
             floorRend.LoadModel("Models/Primitives/Cube.fbx");
@@ -106,12 +108,15 @@ namespace GameEngine
             cubeRb.Mass = 1.0f;
 
             // 3. Luz Direccional
-            GameObject sunObj = new GameObject("SunLight");
+            sunObj = new GameObject("SunLight");
             sunObj.transform.position = new Vector3(5.0f, 10.0f, 5.0f);
             sunObj.transform.rotation = new Vector3(-45.0f, -45.0f, 0.0f);
             Light sunLight = sunObj.AddComponent<Light>();
             sunLight.Type = LightType.Directional;
             sunLight.Diffuse = new Vector3(2.0f, 2.0f, 2.0f);
+            Renderer sunRend = sunObj.AddComponent<Renderer>();
+            sunRend.SetMaterial(basicMat);
+            sunRend.LoadModel("Models/Primitives/Cube.fbx");
 
             // 4. Cámara
             GameObject camObj = new GameObject("MainCamera");
@@ -254,6 +259,8 @@ namespace GameEngine
             }*/
 
             HandleInputs(e);
+
+            sunObj.transform.SetRotation(new Vector3(10f * Time.time, 0, 0));
         }
 
         #region Inputs
@@ -274,7 +281,7 @@ namespace GameEngine
             if (KeyboardState.IsKeyDown(Keys.Q) || KeyboardState.IsKeyDown(Keys.LeftShift)) Camera.Main.Position -= Camera.Main.Up * speed * delta;
             if (KeyboardState.IsKeyDown(Keys.E) || KeyboardState.IsKeyDown(Keys.Space)) Camera.Main.Position += Camera.Main.Up * speed * delta;
 
-            Helper.Inputs(input);
+            Helper.Inputs(input, CursorState);
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)

@@ -1,4 +1,5 @@
-﻿using OpenTK.Windowing.GraphicsLibraryFramework;
+﻿using OpenTK.Windowing.Common;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +13,16 @@ namespace GameEngine
         private const string tempScenePath = "temp_currentScene.json";
         private static string[] sceneSlots = new string[maxSceneSlots];
 
-        private const int maxSceneSlots = 9;
+        private const int maxSceneSlots = 10;
         private static int currentSceneSlot = 0;
 
-        private static float currentTimeScale;
-        public static void Inputs(KeyboardState Keyboard)
+        private static float currentTimeScale = 1;
+        public static void Inputs(KeyboardState Keyboard, CursorState cursorState)
         {
             if(Keyboard.IsKeyPressed(Keys.KeyPad1))
             {
                 SelectSceneSlot(1);
+                sceneSlots[currentSceneSlot] = "Escena_Basica.json";
                 Console.WriteLine($"Selected Scene Slot: {currentSceneSlot}");
             }
             else if (Keyboard.IsKeyPressed(Keys.KeyPad2))
@@ -107,6 +109,7 @@ namespace GameEngine
             if (Keyboard.IsKeyPressed(Keys.P) || Keyboard.IsKeyPressed(Keys.Space))
             {
                 Time.timeScale = Time.timeScale == 0 ? currentTimeScale : 0;
+                cursorState = Time.timeScale == 0 ?  CursorState.Normal : CursorState.Grabbed;
             }
 
             if(Keyboard.IsKeyDown(Keys.LeftAlt) && Keyboard.IsKeyPressed(Keys.Right))

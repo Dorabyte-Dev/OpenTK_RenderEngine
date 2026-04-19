@@ -79,6 +79,9 @@
     <None Update="Shaders\basic.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Shaders\debug_shadow.frag">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Shaders\depth.frag">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

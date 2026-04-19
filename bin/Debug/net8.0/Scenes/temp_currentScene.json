@@ -12,14 +12,14 @@
             "Z": 0.0
           },
           "rotation": {
-            "X": 15.0,
+            "X": 10.0,
             "Y": 0.0,
             "Z": 0.0
           },
           "scale": {
-            "X": 10.0,
+            "X": 20.0,
             "Y": 1.0,
-            "Z": 10.0
+            "Z": 20.0
           },
           "enabled": true
         },
@@ -53,6 +53,13 @@
         },
         {
           "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
           "enabled": true
         },
         {
@@ -96,6 +103,13 @@
         },
         {
           "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
           "enabled": true
         },
         {
@@ -188,6 +202,34 @@
           "Quadratic": 0.032,
           "CutOff": 0.976296,
           "OuterCutOff": 0.9659258,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
           "enabled": true
         }
       ]

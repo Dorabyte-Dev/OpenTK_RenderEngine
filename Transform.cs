@@ -36,6 +36,23 @@ namespace GameEngine
             this.scale = scale;
         }
 
+        public Transform SetPosition(Vector3 newPosition)
+        {
+            position = newPosition;
+            return this;
+        }
+
+        public Transform SetRotation(Vector3 newRotation)
+        {
+            rotation = newRotation;
+            return this;
+        }
+
+        public Transform SetScale(Vector3 newScale)
+        {
+            scale = newScale;
+            return this;
+        }
         [JsonIgnore]public Vector3 Forward
         {
             get

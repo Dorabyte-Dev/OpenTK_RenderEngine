@@ -11,8 +11,8 @@ namespace GameEngine
         public float Mass = 1.0f;
         private RigidBody BulletBody;
 
-        public float LinearDrag = 0.0f;   // Rozamiento con el aire (frena la velocidad lineal)
-        public float AngularDrag = 0.0f;  // Rozamiento rotacional (frena los giros)
+        public float LinearDrag = 0.0f;
+        public float AngularDrag = 0.0f;
         public PhysicsMaterial physicsMaterial = new PhysicsMaterial();
         private CollisionShape _shape;
 
@@ -112,7 +112,7 @@ namespace GameEngine
             BulletBody.Restitution = physicsMaterial.Bounciness;
         }
 
-        public void SetVelocity(OpenTK.Mathematics.Vector3 velocity)
+        public Rigidbody SetVelocity(OpenTK.Mathematics.Vector3 velocity)
         {
             if (BulletBody != null && Mass > 0.0f)
             {
@@ -120,6 +120,8 @@ namespace GameEngine
 
                 BulletBody.LinearVelocity = new BulletSharp.Math.Vector3(velocity.X, velocity.Y, velocity.Z);
             }
+
+            return this;
         }
 
         public override void FixedUpdate(float fixedDeltaTime)
