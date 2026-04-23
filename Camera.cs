@@ -123,6 +123,18 @@ namespace GameEngine
         {
             Camera.main = this;
         }
+        
+        public Camera SetFov(float fov)
+        {
+            Fov = fov;
+            return this;
+        }
+
+        public Camera SetAspectRatio(float aspectRatio)
+        {
+            AspectRatio = aspectRatio;
+            return this;
+        }
 
         public override void Destroy()
         {

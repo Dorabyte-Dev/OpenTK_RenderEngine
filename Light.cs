@@ -41,5 +41,37 @@ namespace GameEngine
         {
             RenderManager.RemoveLight(this);
         }
+
+        public Light SetType(LightType type)
+        {
+            Type = type;
+            return this;
+        }
+
+        public Light SetAmbient(Vector3 ambient)
+        {
+            Ambient = ambient;
+            return this;
+        }
+
+        public Light SetDiffuse(Vector3 diffuse)
+        {
+            Diffuse = diffuse;
+            return this;
+        }
+
+        public Light SetSpecular(Vector3 specular)
+        {
+            Specular = specular;
+            return this;
+        }
+
+        public Light SetAttenuation(float constant, float linear, float quadratic)
+        {
+            Constant = constant;
+            Linear = linear;
+            Quadratic = quadratic;
+            return this;
+        }
     }
 }

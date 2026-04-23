@@ -11,7 +11,6 @@ namespace GameEngine
     public static class Helper
     {
         private const string tempScenePath = "temp_currentScene.json";
-        private static string[] sceneSlots = new string[maxSceneSlots];
 
         private const int maxSceneSlots = 10;
         private static int currentSceneSlot = 0;
@@ -22,7 +21,6 @@ namespace GameEngine
             if(Keyboard.IsKeyPressed(Keys.KeyPad1))
             {
                 SelectSceneSlot(1);
-                sceneSlots[currentSceneSlot] = "Escena_Basica.json";
                 Console.WriteLine($"Selected Scene Slot: {currentSceneSlot}");
             }
             else if (Keyboard.IsKeyPressed(Keys.KeyPad2))
@@ -82,12 +80,12 @@ namespace GameEngine
             }
             if (Keyboard.IsKeyDown(Keys.LeftControl) && Keyboard.IsKeyPressed(Keys.S))
             {
-                SceneSerializer.SaveScene(SceneManager.CurrentScene, SceneManager.CurrentScene.Name + ".json");
-                sceneSlots[currentSceneSlot] = SceneManager.CurrentScene.Name + ".json";
+                SceneSerializer.SaveScene(SceneManager.CurrentScene, currentSceneSlot + ".json");
+                //sceneSlots[currentSceneSlot] = SceneManager.CurrentScene.Name + ".json";
             }
             if (Keyboard.IsKeyDown(Keys.LeftControl) && Keyboard.IsKeyPressed(Keys.L))
             {
-                string sceneToLoad = sceneSlots[currentSceneSlot];
+                string sceneToLoad = currentSceneSlot + ".json";
                 if (string.IsNullOrEmpty(sceneToLoad))
                 {
                     Console.WriteLine("No scene saved in this slot!");
