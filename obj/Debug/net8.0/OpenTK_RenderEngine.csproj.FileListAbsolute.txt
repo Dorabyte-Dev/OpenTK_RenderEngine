@@ -69,3 +69,11 @@ D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\point_depth.frag
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\point_depth.geom
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\point_depth.vert
 D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Newtonsoft.Json.dll
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\debug_quad.frag
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Shaders\debug_quad.vert
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\metal_floor.jpg
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\metal_floor_normal.png
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\plastic_floor.png
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\plastic_normal.png
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Models\RealCastle.fbx
+D:\Repositorios\OpenTK_RenderEngine\bin\Debug\net8.0\Textures\castle_diff.png

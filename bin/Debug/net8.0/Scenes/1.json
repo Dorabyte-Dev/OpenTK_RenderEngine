@@ -1,0 +1,462 @@
+{
+  "_gameObjects": [
+    {
+      "name": "Suelo_Estudio",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.0,
+            "Y": -1.0,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 20.0,
+            "Y": 1.0,
+            "Z": 20.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/brickwall.jpg",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {
+              "material.shininess": 16.0
+            },
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Esfera_Mate",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": -4.0,
+            "Y": 1.5,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 1.5,
+            "Y": 1.5,
+            "Z": 1.5
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Sphere.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/WhiteTex.jpg",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {
+              "material.shininess": 8.0
+            },
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Esfera_Plastico",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.0,
+            "Y": 1.5,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 1.5,
+            "Y": 1.5,
+            "Z": 1.5
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Sphere.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/plastic_floor.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {
+              "material.shininess": 64.0
+            },
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Esfera_Metal",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 4.0,
+            "Y": 1.5,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 1.5,
+            "Y": 1.5,
+            "Z": 1.5
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Sphere.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/metal_floor.jpg",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {
+              "material.shininess": 256.0
+            },
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "MainCamera",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.0,
+            "Y": 4.0004463,
+            "Z": 12.00253
+          },
+          "rotation": {
+            "X": -10.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Camera, OpenTK_RenderEngine",
+          "_fov": 1.0471976,
+          "AspectRatio": 1.2642968,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Luz_Relleno",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": -45.0,
+            "Y": -45.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Light, OpenTK_RenderEngine",
+          "Type": 0,
+          "Ambient": {
+            "X": 0.2,
+            "Y": 0.2,
+            "Z": 0.2
+          },
+          "Diffuse": {
+            "X": 0.4,
+            "Y": 0.4,
+            "Z": 0.4
+          },
+          "Specular": {
+            "X": 0.3,
+            "Y": 0.3,
+            "Z": 0.3
+          },
+          "Constant": 1.0,
+          "Linear": 0.0,
+          "Quadratic": 0.032,
+          "CutOff": 0.976296,
+          "OuterCutOff": 0.9659258,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Puntual_Roja",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": -4.0,
+            "Y": 3.0,
+            "Z": 3.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Light, OpenTK_RenderEngine",
+          "Type": 1,
+          "Ambient": {
+            "X": 0.1,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "Diffuse": {
+            "X": 3.0,
+            "Y": 0.4,
+            "Z": 0.4
+          },
+          "Specular": {
+            "X": 1.0,
+            "Y": 0.2,
+            "Z": 0.2
+          },
+          "Constant": 1.0,
+          "Linear": 0.1125,
+          "Quadratic": 0.046875,
+          "CutOff": 0.976296,
+          "OuterCutOff": 0.9659258,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Puntual_Cyan",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 4.0,
+            "Y": 3.0,
+            "Z": 3.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Light, OpenTK_RenderEngine",
+          "Type": 1,
+          "Ambient": {
+            "X": 0.0,
+            "Y": 0.1,
+            "Z": 0.1
+          },
+          "Diffuse": {
+            "X": 0.2,
+            "Y": 1.5,
+            "Z": 1.5
+          },
+          "Specular": {
+            "X": 0.2,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "Constant": 1.0,
+          "Linear": 0.1125,
+          "Quadratic": 0.046875,
+          "CutOff": 0.976296,
+          "OuterCutOff": 0.9659258,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Linterna_Central",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.0,
+            "Y": 6.0,
+            "Z": 4.0
+          },
+          "rotation": {
+            "X": -35.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Light, OpenTK_RenderEngine",
+          "Type": 2,
+          "Ambient": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "Diffuse": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "Specular": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "Constant": 1.0,
+          "Linear": 0.15,
+          "Quadratic": 0.083333336,
+          "CutOff": 0.9659258,
+          "OuterCutOff": 0.9396926,
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "clearColor": {
+    "R": 0.1,
+    "G": 0.1,
+    "B": 0.1,
+    "A": 1.0
+  },
+  "Name": "Laboratorio_Iluminacion_Claro"
+}

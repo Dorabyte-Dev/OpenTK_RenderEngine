@@ -32,6 +32,9 @@ public class Shader
     {
         if (Handle != 0) return;
 
+
+        Console.WriteLine("Compiling shader: " + _vertexPath + ", " + _geometryPath + ", " + _fragmentPath);
+
         bool hasGeometryShader = _geometryPath != null;
 
         string vertexShaderSource = File.ReadAllText("Shaders/" + _vertexPath);

@@ -1,0 +1,2432 @@
+{
+  "_gameObjects": [
+    {
+      "name": "Suelo_Fisico",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.0,
+            "Y": -1.0,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 30.0,
+            "Y": 1.0,
+            "Z": 30.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 0.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.5,
+            "Bounciness": 0.1
+          },
+          "Friction": 0.5,
+          "Bounciness": 0.1,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Rampa",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": -10.0,
+            "Y": 4.0,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": -25.0
+          },
+          "scale": {
+            "X": 10.0,
+            "Y": 1.0,
+            "Z": 5.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 0.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.1,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.1,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_-2_0",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.8000002,
+            "Y": 0.5,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_-1_0",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 2.9,
+            "Y": 0.5,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_0_0",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 5.0,
+            "Y": 0.5,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_1_0",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 7.1,
+            "Y": 0.5,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_2_0",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 9.2,
+            "Y": 0.5,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_-2_1",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.8000002,
+            "Y": 2.6,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_-1_1",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 2.9,
+            "Y": 2.6,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_0_1",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 5.0,
+            "Y": 2.6,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_1_1",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 7.1,
+            "Y": 2.6,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_2_1",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 9.2,
+            "Y": 2.6,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_-2_2",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.8000002,
+            "Y": 4.7,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_-1_2",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 2.9,
+            "Y": 4.7,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_0_2",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 5.0,
+            "Y": 4.7,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_1_2",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 7.1,
+            "Y": 4.7,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_2_2",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 9.2,
+            "Y": 4.7,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_-2_3",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.8000002,
+            "Y": 6.7999997,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_-1_3",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 2.9,
+            "Y": 6.7999997,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_0_3",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 5.0,
+            "Y": 6.7999997,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_1_3",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 7.1,
+            "Y": 6.7999997,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_2_3",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 9.2,
+            "Y": 6.7999997,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_-2_4",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.8000002,
+            "Y": 8.9,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_-1_4",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 2.9,
+            "Y": 8.9,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_0_4",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 5.0,
+            "Y": 8.9,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_1_4",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 7.1,
+            "Y": 8.9,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Caja_Muro_2_4",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 9.2,
+            "Y": 8.9,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Cube.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/container2.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 0,
+          "Dimensions": {
+            "X": 0.5,
+            "Y": 0.5,
+            "Z": 0.5
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 1.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.8,
+            "Bounciness": 0.0
+          },
+          "Friction": 0.8,
+          "Bounciness": 0.0,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Bola_Boliche_0",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": -12.0,
+            "Y": 12.0,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Sphere.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/awesomeface.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 1,
+          "Dimensions": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 5.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.2,
+            "Bounciness": 0.8
+          },
+          "Friction": 0.2,
+          "Bounciness": 0.8,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Bola_Boliche_1",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": -9.0,
+            "Y": 17.0,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Sphere.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/awesomeface.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 1,
+          "Dimensions": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 5.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.2,
+            "Bounciness": 0.8
+          },
+          "Friction": 0.2,
+          "Bounciness": 0.8,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Bola_Boliche_2",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": -6.0,
+            "Y": 22.0,
+            "Z": 0.0
+          },
+          "rotation": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 2.0,
+            "Y": 2.0,
+            "Z": 2.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Renderer, OpenTK_RenderEngine",
+          "modelPath": "Models/Primitives/Sphere.fbx",
+          "material": {
+            "shader": {
+              "vertexPath": "phong.vert",
+              "geometryPath": null,
+              "fragmentPath": "phong.frag"
+            },
+            "baseColor": {
+              "R": 1.0,
+              "G": 1.0,
+              "B": 1.0,
+              "A": 1.0
+            },
+            "textures": {
+              "material.diffuse": {
+                "Path": "Textures/awesomeface.png",
+                "IsSRGB": true
+              }
+            },
+            "ints": {},
+            "floats": {},
+            "vectors": {},
+            "matrices": {}
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Collider, OpenTK_RenderEngine",
+          "Type": 1,
+          "Dimensions": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "MeshPath": null,
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Rigidbody, OpenTK_RenderEngine",
+          "Mass": 5.0,
+          "LinearDrag": 0.0,
+          "AngularDrag": 0.0,
+          "physicsMaterial": {
+            "Friction": 0.2,
+            "Bounciness": 0.8
+          },
+          "Friction": 0.2,
+          "Bounciness": 0.8,
+          "UseGravity": true,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "MainCamera",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 0.0,
+            "Y": 10.0,
+            "Z": 25.0
+          },
+          "rotation": {
+            "X": -15.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Camera, OpenTK_RenderEngine",
+          "_fov": 1.0471976,
+          "AspectRatio": 1.2642968,
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "name": "Sol",
+      "active": true,
+      "components": [
+        {
+          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
+          "position": {
+            "X": 10.0,
+            "Y": 20.0,
+            "Z": 10.0
+          },
+          "rotation": {
+            "X": -45.0,
+            "Y": -45.0,
+            "Z": 0.0
+          },
+          "scale": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "$type": "GameEngine.Light, OpenTK_RenderEngine",
+          "Type": 0,
+          "Ambient": {
+            "X": 0.3,
+            "Y": 0.3,
+            "Z": 0.3
+          },
+          "Diffuse": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "Specular": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "Constant": 1.0,
+          "Linear": 0.0,
+          "Quadratic": 0.032,
+          "CutOff": 0.976296,
+          "OuterCutOff": 0.9659258,
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "clearColor": {
+    "R": 0.5,
+    "G": 0.7,
+    "B": 0.9,
+    "A": 1.0
+  },
+  "Name": "Playground_Fisicas"
+}

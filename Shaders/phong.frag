@@ -248,6 +248,10 @@ float DirectionalShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lig
     // 2. Transformar de rango [-1, 1] a rango [0, 1] para leer la textura
     projCoords = projCoords * 0.5 + 0.5;
 
+
+    if(projCoords.z > 1.0)
+    return 0.0;
+
     // 3. Obtener la profundidad más cercana desde el punto de vista de la luz
     float closestDepth = texture(shadowMap, projCoords.xy).r; 
     

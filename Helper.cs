@@ -108,6 +108,7 @@ namespace GameEngine
             {
                 Time.timeScale = Time.timeScale == 0 ? currentTimeScale : 0;
                 cursorState = Time.timeScale == 0 ?  CursorState.Normal : CursorState.Grabbed;
+                Game.instance.ResetMouseFirstMove();
             }
 
             if(Keyboard.IsKeyDown(Keys.LeftAlt) && Keyboard.IsKeyPressed(Keys.Right))

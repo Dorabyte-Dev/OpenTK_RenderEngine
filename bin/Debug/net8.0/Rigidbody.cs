@@ -22,6 +22,10 @@ namespace GameEngine
             get { return physicsMaterial.Friction; }
             set
             {
+                if(physicsMaterial == null)
+                {
+                    physicsMaterial = new PhysicsMaterial();
+                }
                 physicsMaterial.Friction = value;
             }
         }
@@ -32,6 +36,10 @@ namespace GameEngine
             get { return physicsMaterial.Bounciness; }
             set
             {
+                if (physicsMaterial == null)
+                {
+                    physicsMaterial = new PhysicsMaterial();
+                }
                 physicsMaterial.Bounciness = value;
             }
         }
@@ -124,6 +132,62 @@ namespace GameEngine
             return this;
         }
 
+        public Rigidbody SetMass(float mass)
+        {
+            Mass = mass;
+            if (BulletBody != null)
+            {
+                BulletBody.SetMassProps(Mass, BulletSharp.Math.Vector3.Zero);
+            }
+            return this;
+        }
+
+        public Rigidbody SetUseGravity(bool useGravity)
+        {
+            UseGravity = useGravity;
+            return this;
+        }
+
+        public Rigidbody SetLinearDrag(float linearDrag)
+        {
+            LinearDrag = linearDrag;
+            if (BulletBody != null)
+            {
+                BulletBody.SetDamping(LinearDrag, AngularDrag);
+            }
+            return this;
+        }
+
+        public Rigidbody SetAngularDrag(float angularDrag)
+        {
+            AngularDrag = angularDrag;
+            if (BulletBody != null)
+            {
+                BulletBody.SetDamping(LinearDrag, AngularDrag);
+            }
+            return this;
+        }
+
+        public Rigidbody SetFriction(float friction)
+        {
+            Friction = friction;
+            if (BulletBody != null)
+            {
+                BulletBody.Friction = physicsMaterial.Friction;
+            }
+            return this;
+        }
+
+        public Rigidbody SetBounciness(float bounciness)
+        {
+            Bounciness = bounciness;
+            if (BulletBody != null)
+            {
+                BulletBody.Restitution = physicsMaterial.Bounciness;
+            }
+            return this;
+        }
+
         public override void FixedUpdate(float fixedDeltaTime)
         {
             if (Mass > 0 && BulletBody != null && BulletBody.MotionState != null)
@@ -160,5 +224,6 @@ namespace GameEngine
                 BulletBody.Dispose();
             }
         }
+
     }
 }

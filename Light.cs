@@ -66,11 +66,28 @@ namespace GameEngine
             return this;
         }
 
-        public Light SetAttenuation(float constant, float linear, float quadratic)
+        public Light SetDistance(float distance)
         {
-            Constant = constant;
-            Linear = linear;
-            Quadratic = quadratic;
+            if (distance <= 0.001f)
+                distance = 0.1f;
+
+            this.Constant = 1.0f;
+
+            this.Linear = 4.5f / distance;
+            this.Quadratic = 75.0f / (distance * distance);
+
+            return this;
+        }
+
+        public Light SetCutOff(float cutOff)
+        {
+            CutOff = MathF.Cos(MathHelper.DegreesToRadians(cutOff));
+            return this;
+        }
+
+        public Light SetOuterCutOff(float outerCutOff)
+        {
+            OuterCutOff = MathF.Cos(MathHelper.DegreesToRadians(outerCutOff));
             return this;
         }
     }

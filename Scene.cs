@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,6 +12,9 @@ namespace GameEngine
         
         [JsonProperty] private List<GameObject> _gameObjects = new List<GameObject>();
 
+        [JsonProperty] public Color4 clearColor;
+
+        private bool tempSceneSaved = false;
         public Scene(string name)
         {
             Name = name;
@@ -67,7 +72,8 @@ namespace GameEngine
 
         public void Start()
         {
-            Helper.SaveTempScene();
+            
+            GL.ClearColor(clearColor);
             foreach (var go in _gameObjects.ToList())
             {
                 if (go.Active)
@@ -77,6 +83,12 @@ namespace GameEngine
 
         public void Update(float deltaTime)
         {
+            if (!tempSceneSaved)
+            {
+                Helper.SaveTempScene();
+                tempSceneSaved = true;
+            }
+
             foreach (var go in _gameObjects.ToList())
             {
                 if (go.Active)

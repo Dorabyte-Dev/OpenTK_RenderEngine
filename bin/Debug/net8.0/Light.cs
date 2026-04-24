@@ -41,5 +41,54 @@ namespace GameEngine
         {
             RenderManager.RemoveLight(this);
         }
+
+        public Light SetType(LightType type)
+        {
+            Type = type;
+            return this;
+        }
+
+        public Light SetAmbient(Vector3 ambient)
+        {
+            Ambient = ambient;
+            return this;
+        }
+
+        public Light SetDiffuse(Vector3 diffuse)
+        {
+            Diffuse = diffuse;
+            return this;
+        }
+
+        public Light SetSpecular(Vector3 specular)
+        {
+            Specular = specular;
+            return this;
+        }
+
+        public Light SetDistance(float distance)
+        {
+            if (distance <= 0.001f)
+                distance = 0.1f;
+
+            this.Constant = 1.0f;
+
+            this.Linear = 4.5f / distance;
+            this.Quadratic = 75.0f / (distance * distance);
+
+            return this;
+        }
+
+        public Light SetCutOff(float cutOff)
+        {
+            CutOff = MathF.Cos(MathHelper.DegreesToRadians(cutOff));
+            return this;
+        }
+
+        public Light SetOuterCutOff(float outerCutOff)
+        {
+            OuterCutOff = MathF.Cos(MathHelper.DegreesToRadians(outerCutOff));
+            return this;
+        }
     }
 }

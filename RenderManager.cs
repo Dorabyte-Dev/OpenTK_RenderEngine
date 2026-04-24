@@ -26,8 +26,8 @@ namespace GameEngine
         public const int SHADOW_WIDTH = 2048;
         public const int SHADOW_HEIGHT = 2048;
         private static float near_plane_dir = 1.0f;
-        private static float far_plane_dir = 50.0f;
-        private static float shadowOrthoSize = 50.0f;
+        private static float far_plane_dir = 150.0f;
+        private static float shadowOrthoSize = 10.0f;
 
         // Point Shadows
         public static int depthCubemapFBO;
@@ -173,6 +173,7 @@ namespace GameEngine
             depthMapFBO = GL.GenFramebuffer();
             depthMap = GL.GenTexture();
             depthShader = new Shader("depth.vert", "depth.frag");
+            depthShader.Compile();
 
             //Set texture parameters
             GL.BindTexture(TextureTarget.Texture2D, depthMap);
@@ -205,6 +206,7 @@ namespace GameEngine
             depthCubemapFBO = GL.GenFramebuffer();
             depthCubemap = GL.GenTexture();
             pointShadowShader = new Shader("point_depth.vert", "point_depth.frag", "point_depth.geom");
+            pointShadowShader.Compile();
 
             //Set textureCubemapArray parameters
             GL.BindTexture(TextureTarget.TextureCubeMapArray, depthCubemap);
@@ -367,8 +369,7 @@ namespace GameEngine
                 if (shader != null)
                 {
                     shader.Use();
-                    Matrix4 safeLightSpaceMatrix = dirLight != null ? GetDirectionalLightMatrix(dirLight) : Matrix4.Identity;
-                    shader.SetMatrix4("lightSpaceMatrix", safeLightSpaceMatrix);
+                    shader.SetMatrix4("lightSpaceMatrix", GetDirectionalLightMatrix(dirLight));
 
                     for(int i = 0; i< spotLights.Count; i++)
                     {
