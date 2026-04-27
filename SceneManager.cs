@@ -16,27 +16,23 @@ namespace GameEngine
                 }
                 else
                 {
-                    Console.WriteLine("Error: No se puede asignar una escena nula a CurrentScene.");
+                    Console.WriteLine("Error: Cannot assign null scene to CurrentScene.");
                 }
             }
         }
 
         public static void LoadScene(Scene newScene)
         {
-            Console.WriteLine($"Cargando escena: {newScene.Name}");
+            Console.WriteLine($"Loading Scene: {newScene.Name}");
 
-            // 1. LIMPIEZA DE MEMORIA (El paso crítico)
             if (_currentScene != null)
             {
                 _currentScene.Unload();
                 RenderManager.ClearSceneData();
             }
 
-            // 2. ASIGNACIÓN
             _currentScene = newScene;
 
-            // 3. INICIALIZACIÓN
-            // Llamamos al Start de todos los objetos de la nueva escena
             _currentScene.Start();
         }
     }

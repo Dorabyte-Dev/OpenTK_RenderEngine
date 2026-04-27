@@ -85,7 +85,6 @@ namespace GameEngine
                     List<Vector3> concaveVerts = modelDataConcave.Vertices;
                     List<int> indices = modelDataConcave.Indices;
 
-                    // 2. Creamos la malla de triángulos de Bullet
                     var triangleMesh = new TriangleMesh();
                     for (int i = 0; i < indices.Count; i += 3)
                     {

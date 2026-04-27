@@ -1,15 +1,5 @@
-﻿using Assimp.Unmanaged;
-using OpenTK.Mathematics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL4;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 using Newtonsoft.Json;
 
 namespace GameEngine
@@ -118,6 +108,11 @@ namespace GameEngine
 
             foreach (var kv in matrices)
                 shader.SetMatrix4(kv.Key, kv.Value);
+        }
+
+        public IEnumerable<Texture> GetAllTextures()
+        {
+            return textures.Values;
         }
 
     }

@@ -1,10 +1,4 @@
 ﻿using StbImageSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using OpenTK.Graphics.OpenGL4;
 using Newtonsoft.Json;
 
@@ -62,13 +56,22 @@ namespace GameEngine
         {
             if (Handle == 0 && !string.IsNullOrEmpty(Path))
             {
-                Console.WriteLine($"[GPU] Cargando textura JIT: {Path}");
+                Console.WriteLine($"Loading JIT Texture: {Path}");
                 Texture reloaded = LoadFromFile(Path, IsSRGB);
                 this.Handle = reloaded.Handle;
             }
 
             GL.ActiveTexture(unit);
             GL.BindTexture(TextureTarget.Texture2D, Handle);
+        }
+
+        public void Dispose()
+        {
+            if (Handle != 0)
+            {
+                GL.DeleteTexture(Handle);
+                Handle = 0;
+            }
         }
     }
 }

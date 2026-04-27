@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-public class PhysicsMaterial
+﻿public class PhysicsMaterial
 {
     public float Friction { get; set; }
     public float Bounciness { get; set; }

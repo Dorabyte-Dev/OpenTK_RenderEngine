@@ -1,5 +1,4 @@
 ﻿using GameEngine;
-using OpenTK.Windowing.Desktop;
 
 internal static class Program
 {

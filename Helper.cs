@@ -1,10 +1,5 @@
 ﻿using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameEngine
 {
@@ -81,7 +76,6 @@ namespace GameEngine
             if (Keyboard.IsKeyDown(Keys.LeftControl) && Keyboard.IsKeyPressed(Keys.S))
             {
                 SceneSerializer.SaveScene(SceneManager.CurrentScene, currentSceneSlot + ".json");
-                //sceneSlots[currentSceneSlot] = SceneManager.CurrentScene.Name + ".json";
             }
             if (Keyboard.IsKeyDown(Keys.LeftControl) && Keyboard.IsKeyPressed(Keys.L))
             {
@@ -96,15 +90,15 @@ namespace GameEngine
                     Console.WriteLine("Invalid scene file in this slot!");
                     return;
                 }
-                SceneSerializer.LoadScene(sceneToLoad);
+                SceneSerializer.LoadSceneFromFile(sceneToLoad);
             }
             if (Keyboard.IsKeyDown(Keys.LeftControl) && Keyboard.IsKeyPressed(Keys.R))
             {
-                SceneSerializer.LoadScene(tempScenePath);
+                SceneSerializer.LoadSceneFromFile(tempScenePath);
                 Console.WriteLine($"Scene Reset Successfully");
             }
 
-            if (Keyboard.IsKeyPressed(Keys.P) || Keyboard.IsKeyPressed(Keys.Space))
+            if (Keyboard.IsKeyPressed(Keys.P))
             {
                 Time.timeScale = Time.timeScale == 0 ? currentTimeScale : 0;
                 cursorState = Time.timeScale == 0 ?  CursorState.Normal : CursorState.Grabbed;

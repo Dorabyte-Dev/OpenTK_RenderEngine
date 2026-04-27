@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Desktop;
 
 namespace GameEngine
 {
@@ -35,6 +28,8 @@ namespace GameEngine
         public static Shader pointShadowShader;
         public const int SHADOW_CUBE_RESOLUTION = 1024;
         public const int MAX_POINT_LIGHTS = 16;
+        public const float near_plane_point = 1.0f;
+        public const float far_plane_point = 25.0f;
 
         //Spot Shadows
         public static int spotDepthMapFBO;
@@ -74,6 +69,42 @@ namespace GameEngine
 
         public static void ClearSceneData()
         {
+            HashSet<Shader> shadersToDispose = new HashSet<Shader>();
+            HashSet<Texture> texturesToDispose = new HashSet<Texture>();
+
+            foreach (var renderer in _renderers.ToList())
+            {
+                Shader s = renderer.GetShader();
+                if (s != null)
+                {
+                    shadersToDispose.Add(s);
+                }
+
+                Material mat = renderer.GetMaterial();
+                if (mat != null)
+                {
+                    foreach (var tex in mat.GetAllTextures())
+                    {
+                        if (tex != null)
+                        {
+                            texturesToDispose.Add(tex);
+                        }
+                    }
+                }
+
+                renderer.Destroy();
+            }
+
+            foreach (var shader in shadersToDispose)
+            {
+                shader.Dispose();
+            }
+
+            foreach (var tex in texturesToDispose)
+            {
+                tex.Dispose();
+            }
+
             _renderers.Clear();
             _lights.Clear();
         }
@@ -135,12 +166,12 @@ namespace GameEngine
             Matrix4 shadowProj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(90.0f), 1.0f, nearPlane, farPlane);
 
             //Cubemap Directions
-            shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj); // Derecha
-            shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj); // Izquierda
-            shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, 1.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f)) * shadowProj); // Arriba
-            shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, 0.0f, -1.0f)) * shadowProj); // Abajo
-            shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj); // Cerca
-            shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj); // Lejos
+            shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj); // Right
+            shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj); // Left
+            shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, 1.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f)) * shadowProj); // Up
+            shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, 0.0f, -1.0f)) * shadowProj); // Down
+            shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj); // Near
+            shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj); // Far
 
             return shadowTransforms;
         }
@@ -235,13 +266,13 @@ namespace GameEngine
 
         public static void InitSpotShadowMap()
         {
+            //Initialize the framebuffer and texture for the shadow map
             spotDepthMapFBO = GL.GenFramebuffer();
             spotDepthMapArray = GL.GenTexture();
 
-            // Atamos como Texture2DArray
+            //Set texture2DArray parameters
             GL.BindTexture(TextureTarget.Texture2DArray, spotDepthMapArray);
 
-            // Asignamos memoria: Anchura, Altura, y MAX_SPOT_LIGHTS como número de capas (Z)
             GL.TexImage3D(TextureTarget.Texture2DArray, 0, PixelInternalFormat.DepthComponent32f,
                           SHADOW_WIDTH, SHADOW_WIDTH, MAX_SPOT_LIGHTS,
                           0, PixelFormat.DepthComponent, PixelType.Float, IntPtr.Zero);
@@ -249,18 +280,21 @@ namespace GameEngine
             GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 
-            // MUY IMPORTANTE: ClampToBorder con color blanco.
-            // Lo que caiga fuera del cono de la linterna NO debe tener sombra falsa.
             GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToBorder);
             GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToBorder);
+
             float[] borderColor = { 1.0f, 1.0f, 1.0f, 1.0f };
             GL.TexParameter(TextureTarget.Texture2DArray, TextureParameterName.TextureBorderColor, borderColor);
 
+            //Set framebuffer parameters
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, spotDepthMapFBO);
-            // Atamos la textura, pero NO a una capa específica aún (pasamos 0)
+
             GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, spotDepthMapArray, 0);
+
             GL.DrawBuffer(DrawBufferMode.None);
             GL.ReadBuffer(ReadBufferMode.None);
+
+            //Restore Default Framebuffer
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
         #endregion
@@ -295,12 +329,10 @@ namespace GameEngine
                 pointShadowShader.Use();
 
                 //Get Each Cubemap Face Transforms and Set them in Shader
-                //TO DO: Adjust far planes by code
-                float near_plane_point = 1.0f;
-                float far_plane_point = 25.0f;
-
+                //For each light, calculate 6 shadow matrices and render the scene depth cubemap from the light's perspective
                 int lightCount = Math.Min(pointLights.Count, MAX_POINT_LIGHTS);
-                //For each light, calculate 6 shadow matrices and render the scene depth cubemap for each light
+
+                
                 for (int lightIndex = 0; lightIndex < lightCount; lightIndex++)
                 {
                     Light pLight = pointLights[lightIndex];
@@ -329,6 +361,8 @@ namespace GameEngine
             {
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, spotDepthMapFBO);
                 GL.Viewport(0, 0, SHADOW_WIDTH, SHADOW_WIDTH);
+
+                //Use depth shader
                 depthShader.Use();
 
                 int spotCount = Math.Min(spotLights.Count, MAX_SPOT_LIGHTS);

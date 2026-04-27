@@ -1,15 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
-using GameEngine;
 using Newtonsoft.Json;
 
 public class Shader
@@ -178,7 +168,7 @@ public class Shader
     {
         if (!_disposedValue)
         {
-            Console.WriteLine("GPU Resource leak! Did you forget to call Dispose()?");
+            //Console.WriteLine("GPU Resource leak! Did you forget to call Dispose()?");
         }
     }
 

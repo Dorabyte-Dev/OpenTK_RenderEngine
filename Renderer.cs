@@ -45,7 +45,12 @@ namespace GameEngine
 
         public void Render()
         {
-            if (!initialized) return;
+            if (!initialized || material == null || material.shader == null)
+            {
+                Console.WriteLine("Renderer on GameObject " + owner.Name + " is not properly initialized. Skipping render.");
+                return;
+            }
+                
 
             material.shader.Use();
 
@@ -99,7 +104,7 @@ namespace GameEngine
             //SpotLights
             List<Light> spotLights = RenderManager.GetActiveSpotLights();
 
-            material.shader.SetInt("activeSpotLights", spotLights.Count/*Math.Clamp(spotLights.Count, 0, RenderManager.MAX_SPOT_LIGHTS)*/);
+            material.shader.SetInt("activeSpotLights", Math.Clamp(spotLights.Count, 0, RenderManager.MAX_SPOT_LIGHTS));
 
             for (int i = 0; i < 2; i++)
             {
@@ -220,13 +225,6 @@ namespace GameEngine
 
         private void InitializeBuffers()
         {
-            if (material == null)
-            {
-                Shader defaultShader = new Shader("basic.vert", "basic.frag");
-                material = new Material(defaultShader);
-            }
-
-
             vao = GL.GenVertexArray();
             vbo = GL.GenBuffer();
             ebo = GL.GenBuffer();

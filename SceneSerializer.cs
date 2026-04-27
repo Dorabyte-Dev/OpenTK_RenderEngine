@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenTK.Mathematics;
 
@@ -66,20 +64,18 @@ namespace GameEngine
             }
         }
 
-        public static void LoadScene(string filePath)
+        public static void LoadSceneFromFile(string filePath)
         {
             Scene loadedScene = DeserializeScene(filePath);
             if (loadedScene != null)
             {
-                SceneManager.CurrentScene = loadedScene;
-
                 PhysicsManager.ResetPhysics();
-
-                SceneManager.CurrentScene.Start();
+                SceneManager.CurrentScene = loadedScene;
             }
         }   
     }
 
+    #region Custom Converters for OpenTK types
     public class Vector3Converter : JsonConverter<Vector3>
     {
         public override void WriteJson(JsonWriter writer, Vector3 value, JsonSerializer serializer)
@@ -145,4 +141,5 @@ namespace GameEngine
             );
         }
     }
+    #endregion
 }

@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace GameEngine
 {
@@ -39,7 +37,7 @@ namespace GameEngine
             SceneManager.CurrentScene = this;
         }
 
-        // ----- GAMEOBJECTS -----
+        #region GameObject Management
 
         public void AddGameObject(GameObject go)
         {
@@ -68,7 +66,8 @@ namespace GameEngine
             return result;
         }
 
-        // ----- LIFECYCLE -----
+        #endregion
+        #region LifeCycle
 
         public void Start()
         {
@@ -113,5 +112,7 @@ namespace GameEngine
                     go.LateUpdate(deltaTime);
             }
         }
+
+        #endregion
     }
 }

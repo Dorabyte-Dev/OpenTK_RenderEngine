@@ -2,7 +2,6 @@
 using BulletSharp.Math;
 using OpenTK.Mathematics;
 using System.Text.Json.Serialization;
-using static BulletSharp.Dbvt;
 
 namespace GameEngine
 {

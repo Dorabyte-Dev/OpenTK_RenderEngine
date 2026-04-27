@@ -41,7 +41,7 @@ namespace GameEngine
         {
             RenderManager.RemoveLight(this);
         }
-
+        #region Builder Pattern
         public Light SetType(LightType type)
         {
             Type = type;
@@ -90,5 +90,7 @@ namespace GameEngine
             OuterCutOff = MathF.Cos(MathHelper.DegreesToRadians(outerCutOff));
             return this;
         }
+
+        #endregion
     }
 }

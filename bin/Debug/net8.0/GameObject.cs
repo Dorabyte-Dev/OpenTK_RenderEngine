@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
-using OpenTK.Mathematics;
+﻿using OpenTK.Mathematics;
 using Newtonsoft.Json;
 using System.Runtime.Serialization;
 

@@ -1,5 +1,5 @@
 ﻿using BulletSharp;
-using BulletSharp.Math; // Recuerda: Bullet usa sus propias matemáticas internamente
+using BulletSharp.Math;
 
 namespace GameEngine
 {

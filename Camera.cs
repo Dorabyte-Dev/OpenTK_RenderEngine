@@ -15,7 +15,6 @@ namespace GameEngine
         [JsonProperty]
         private float _fov = MathHelper.PiOver2; //Radians
 
-        //Multiple Instances
         private static Camera main;
         public static Camera Main
         {
