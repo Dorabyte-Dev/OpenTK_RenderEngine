@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
-using OpenTK.Mathematics;
+﻿using OpenTK.Mathematics;
 using Newtonsoft.Json;
 
 namespace GameEngine
@@ -57,18 +50,14 @@ namespace GameEngine
         {
             get
             {
-                // Asumimos que tu variable 'rotation' está en GRADOS (ej: rotation.Y = 90f).
-                // Si ya estuviera en radianes, puedes quitar el 'MathHelper.DegreesToRadians'.
                 Vector3 radRot = new Vector3(
                     MathHelper.DegreesToRadians(rotation.X),
                     MathHelper.DegreesToRadians(rotation.Y),
                     MathHelper.DegreesToRadians(rotation.Z)
                 );
 
-                // Creamos un Quaternion (la forma más segura de rotar en 3D sin bugs extraños)
                 Quaternion q = Quaternion.FromEulerAngles(radRot);
 
-                // Multiplicamos el vector -Z por nuestra rotación
                 Vector3 forward = Vector3.Transform(-Vector3.UnitZ, q);
                 return forward.Normalized();
             }
@@ -86,7 +75,6 @@ namespace GameEngine
                 );
                 Quaternion q = Quaternion.FromEulerAngles(radRot);
 
-                // Multiplicamos el vector +X por nuestra rotación
                 Vector3 right = Vector3.Transform(Vector3.UnitX, q);
                 return right.Normalized();
             }
@@ -104,7 +92,6 @@ namespace GameEngine
                 );
                 Quaternion q = Quaternion.FromEulerAngles(radRot);
 
-                // Multiplicamos el vector +Y por nuestra rotación
                 Vector3 up = Vector3.Transform(Vector3.UnitY, q);
                 return up.Normalized();
             }
@@ -115,14 +102,12 @@ namespace GameEngine
         {
             get
             {
-                // 1. Convertir la rotación a radianes para la matriz
                 Vector3 radRot = new Vector3(
                     MathHelper.DegreesToRadians(rotation.X),
                     MathHelper.DegreesToRadians(rotation.Y),
                     MathHelper.DegreesToRadians(rotation.Z)
                 );
 
-                // 2. El orden correcto en OpenGL suele ser: Escala * Rotación * Traslación
                 Matrix4 scaleMat = Matrix4.CreateScale(scale);
                 Matrix4 rotMat = Matrix4.CreateFromQuaternion(Quaternion.FromEulerAngles(radRot));
                 Matrix4 transMat = Matrix4.CreateTranslation(position);

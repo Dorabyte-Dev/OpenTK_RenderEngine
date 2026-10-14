@@ -14,22 +14,12 @@ namespace GameEngine
         }
 
         public static Game instance;
-        
-        private Color4 _clearColor = new Color4(0.1f, 0.1f, 0.1f, 1.0f);
 
         // ----- CAMERA MOVEMENT -----
-        private float speed = 1.5f;
+        private float speed = 3f;
         private Vector2 _lastPos;
         private bool _firstMove = true;
         private float sensitivity = 0.2f;
-
-        // ---- PHYSICS -----
-        private double _physicsAccumulator = 0.0;
-        private const double FixedTimeStep = 1.0 / 60.0;
-
-        // ----- DEBUG -----
-        private bool differenceState;
-        private bool differenceState2;
 
         #endregion
         #region LifeCycle Functions
@@ -46,246 +36,10 @@ namespace GameEngine
 
             base.OnLoad();
 
-            GL.ClearColor(_clearColor);
-            GL.Enable(EnableCap.DepthTest);
-
-            RenderManager.InitializeShadowMaps();
+            RenderManager.Initialize();
             PhysicsManager.InitializePhysics();
 
-            LoadBaseArchitectureScene();
-        }
-
-        private void LoadBaseArchitectureScene()
-        {
-            Scene architectureScene = new Scene("Demostracion_Arquitectura");
-
-            Shader litShader = new Shader("phong.vert", "phong.frag");
-            Texture floorTex = Texture.LoadFromFile("Textures/brickwall.jpg");
-            Texture modelTex = Texture.LoadFromFile("Textures/TexturasMago.png");
-
-            GameObject floor = new GameObject("Suelo_Tecnico")
-            .transform.SetPosition(new Vector3(0, -2f, 0))
-            .SetScale(new Vector3(15, 1, 15)).owner
-            .AddComponent<Renderer>()
-            .LoadModel("Models/Primitives/Cube.fbx")
-            .SetMaterial(new Material(litShader).SetTexture("material.diffuse", floorTex)).owner;
-
-            GameObject heroModel = new GameObject("Modelo_Importado")
-            .transform.SetPosition(new Vector3(0, 0, 0))
-            .SetRotation(new Vector3(-90, 0, 0))
-            .SetScale(new Vector3(2, 2, 2)).owner
-            .AddComponent<Renderer>()
-            .LoadModel("Models/Castle.fbx")
-            .SetMaterial(new Material(litShader)
-              .SetTexture("material.diffuse", modelTex)
-              .SetFloat("material.shininess", 64.0f)).owner;
-
-            GameObject camera = new GameObject("MainCamera")
-            .transform.SetPosition(new Vector3(10, 10, 10)).owner
-            .AddComponent<Camera>()
-            .SetFov(60f)
-            .SetAspectRatio(Size.X / (float)Size.Y).owner;
-            
-            GameObject sunObj = new GameObject("Luz_Estudio")
-              .transform.SetPosition(new Vector3(5, 5, 5))
-              .SetRotation(new Vector3(-45, 45, 0))
-              .owner
-              .AddComponent<Light>()
-              .SetType(LightType.Directional)
-              .SetDiffuse(new Vector3(1.2f, 1.2f, 1.2f))
-              .SetAmbient(new Vector3(0.2f, 0.2f, 0.2f))
-              .owner;
-
-            architectureScene.Start();
-        }
-
-        private void LoadLightingLabScene()
-        {
-            Scene lightingScene = new Scene("Laboratorio_Iluminacion_Claro");
-            SceneManager.LoadScene(lightingScene);
-
-            lightingScene.clearColor = _clearColor;
-
-            Shader litShader = new Shader("phong.vert", "phong.frag");
-
-            Texture floorTex = Texture.LoadFromFile("Textures/brickwall.jpg");
-            Texture whiteTex = Texture.LoadFromFile("Textures/WhiteTex.jpg");
-            Texture sphereTex = Texture.LoadFromFile("Textures/plastic_floor.png");
-            Texture metalTex = Texture.LoadFromFile("Textures/metal_floor.jpg");
-            
-            GameObject floor = new GameObject("Suelo_Estudio")
-                .transform.SetPosition(new Vector3(0, -1.0f, 0))
-                .SetScale(new Vector3(20, 1, 20)).owner
-                .AddComponent<Renderer>()
-                .LoadModel("Models/Primitives/Cube.fbx")
-                .SetMaterial(new Material(litShader)
-                    .SetTexture("material.diffuse", floorTex)
-                    .SetFloat("material.shininess", 16.0f)).owner;
-
-            GameObject sphereMatte = new GameObject("Esfera_Mate")
-                .transform.SetPosition(new Vector3(-4, 1.5f, 0))
-                .SetScale(new Vector3(1.5f, 1.5f, 1.5f)).owner
-                .AddComponent<Renderer>()
-                .LoadModel("Models/Primitives/Sphere.fbx")
-                .SetMaterial(new Material(litShader)
-                    .SetTexture("material.diffuse", whiteTex)
-                    .SetFloat("material.shininess", 8.0f)).owner;
-
-            GameObject spherePlastic = new GameObject("Esfera_Plastico")
-                .transform.SetPosition(new Vector3(0, 1.5f, 0))
-                .SetScale(new Vector3(1.5f, 1.5f, 1.5f)).owner
-                .AddComponent<Renderer>()
-                .LoadModel("Models/Primitives/Sphere.fbx")
-                .SetMaterial(new Material(litShader)
-                    .SetTexture("material.diffuse", sphereTex)
-                    .SetFloat("material.shininess", 64.0f)).owner; 
-         
-            GameObject sphereMetal = new GameObject("Esfera_Metal")
-                .transform.SetPosition(new Vector3(4, 1.5f, 0))
-                .SetScale(new Vector3(1.5f, 1.5f, 1.5f)).owner
-                .AddComponent<Renderer>()
-                .LoadModel("Models/Primitives/Sphere.fbx")
-                .SetMaterial(new Material(litShader)
-                    .SetTexture("material.diffuse", metalTex)
-                    .SetFloat("material.shininess", 256.0f)).owner; 
-           
-            GameObject camera = new GameObject("MainCamera")
-                .transform.SetPosition(new Vector3(0, 4, 12))
-                .SetRotation(new Vector3(-10, 0, 0)).owner 
-                .AddComponent<Camera>()
-                .SetFov(60f)
-                .SetAspectRatio(Size.X / (float)Size.Y).owner;
-            
-            GameObject dirLight = new GameObject("Luz_Relleno")
-                .transform.SetRotation(new Vector3(-45, -45, 0)).owner
-                .AddComponent<Light>()
-                .SetType(LightType.Directional)
-                .SetDiffuse(new Vector3(0.4f, 0.4f, 0.4f)) 
-                .SetAmbient(new Vector3(0.2f, 0.2f, 0.2f))
-                .SetSpecular(new Vector3(0.3f, 0.3f, 0.3f)).owner;
-
-            
-            GameObject pointLightRed = new GameObject("Puntual_Roja")
-                .transform.SetPosition(new Vector3(-4, 3f, 3f)).owner
-                .AddComponent<Light>()
-                .SetType(LightType.Point)
-                .SetDiffuse(new Vector3(3f, 0.4f, 0.4f)) 
-                .SetAmbient(new Vector3(0.1f, 0.0f, 0.0f))
-                .SetSpecular(new Vector3(1.0f, 0.2f, 0.2f))
-                .SetDistance(40.0f).owner; 
-
-            
-            GameObject pointLightCyan = new GameObject("Puntual_Cyan")
-                .transform.SetPosition(new Vector3(4, 3f, 3f)).owner
-                .AddComponent<Light>()
-                .SetType(LightType.Point)
-                .SetDiffuse(new Vector3(0.2f, 1.5f, 1.5f)) 
-                .SetAmbient(new Vector3(0.0f, 0.1f, 0.1f))
-                .SetSpecular(new Vector3(0.2f, 1.0f, 1.0f))
-                .SetDistance(40.0f).owner;
-
-            
-            GameObject spotLight = new GameObject("Linterna_Central")
-                .transform.SetPosition(new Vector3(0, 6f, 4f))
-                .SetRotation(new Vector3(-35, 0, 0)).owner 
-                .AddComponent<Light>()
-                .SetType(LightType.Spot)
-                .SetDiffuse(new Vector3(2.0f, 2.0f, 2.0f)) 
-                .SetAmbient(new Vector3(0.0f, 0.0f, 0.0f))
-                .SetSpecular(new Vector3(2.0f, 2.0f, 2.0f))
-                .SetCutOff(15.0f)
-                .SetOuterCutOff(20.0f)
-                .SetDistance(30.0f).owner;
-
-            lightingScene.Start();
-        }
-
-        private void LoadPhysicsPlaygroundScene()
-        {
-            Scene physicsScene = new Scene("Playground_Fisicas");
-
-            
-            SceneManager.LoadScene(physicsScene);
-            physicsScene.clearColor = new Color4(0.5f, 0.7f, 0.9f, 1.0f);
-
-            Shader litShader = new Shader("phong.vert", "phong.frag");
-            Texture gridTex = Texture.LoadFromFile("Textures/container2.png");
-            Texture ballTex = Texture.LoadFromFile("Textures/awesomeface.png");
-
-            
-            GameObject floor = new GameObject("Suelo_Fisico")
-                .transform.SetPosition(new Vector3(0, -1, 0))
-                .SetScale(new Vector3(30, 1, 30)).owner
-                .AddComponent<Renderer>().LoadModel("Models/Primitives/Cube.fbx")
-                .SetMaterial(new Material(litShader).SetTexture("material.diffuse", gridTex)).owner
-                .AddComponent<Collider>()
-                .SetBox(new Vector3(0.5f, 0.5f, 0.5f))
-                .owner 
-                .AddComponent<Rigidbody>()
-                .SetMass(0.0f) 
-                .SetFriction(0.5f)
-                .SetBounciness(0.1f).owner;
-
-            
-            GameObject ramp = new GameObject("Rampa")
-                .transform.SetPosition(new Vector3(-10, 4, 0))
-                .SetRotation(new Vector3(0, 0, -25)) 
-                .SetScale(new Vector3(10, 1, 5)).owner
-                .AddComponent<Renderer>().LoadModel("Models/Primitives/Cube.fbx")
-                .SetMaterial(new Material(litShader).SetTexture("material.diffuse", gridTex)).owner
-                .AddComponent<Collider>()
-                .SetBox(new Vector3(0.5f,0.5f,0.5f)).owner
-                .AddComponent<Rigidbody>().SetMass(0.0f).SetFriction(0.1f).owner; 
-
-
-            for (int y = 0; y < 5; y++)
-            {
-                for (int x = -2; x <= 2; x++)
-                {
-                    GameObject cajaNueva = new GameObject($"Caja_Muro_{x}_{y}")
-                        .transform.SetPosition(new Vector3(5 + x * 2.1f, 0.5f + y * 2.1f, 0))
-                        .SetScale(new Vector3(2, 2, 2)).owner
-                        .AddComponent<Renderer>().LoadModel("Models/Primitives/Cube.fbx")
-                        .SetMaterial(new Material(litShader).SetTexture("material.diffuse", gridTex)).owner
-                        .AddComponent<Collider>()
-                        .SetBox(new Vector3(0.5f, 0.5f, 0.5f))
-                        .owner
-                        .AddComponent<Rigidbody>()
-                        .SetMass(1.0f) 
-                        .SetFriction(0.8f).owner;
-
-                }
-            }
-
-            for (int i = 0; i < 3; i++)
-            {
-                GameObject esferaNueva = new GameObject($"Bola_Boliche_{i}")
-                    .transform.SetPosition(new Vector3(-12 + i * 3, 12 + i * 5, 0)) 
-                    .SetScale(new Vector3(2, 2, 2)).owner
-                    .AddComponent<Renderer>().LoadModel("Models/Primitives/Sphere.fbx")
-                    .SetMaterial(new Material(litShader).SetTexture("material.diffuse", ballTex)).owner
-                    .AddComponent<Collider>()
-                    .SetSphere(1)
-                    .owner 
-                    .AddComponent<Rigidbody>()
-                    .SetMass(5.0f) 
-                    .SetBounciness(0.8f) 
-                    .SetFriction(0.2f).owner;
-            }
-
-            GameObject camera = new GameObject("MainCamera")
-                .transform.SetPosition(new Vector3(0, 10, 25))
-                .SetRotation(new Vector3(-15, 0, 0)).owner
-                .AddComponent<Camera>().SetFov(60f).SetAspectRatio(Size.X / (float)Size.Y).owner;
-
-            GameObject sun = new GameObject("Sol")
-                .transform.SetPosition(new Vector3(10, 20, 10))
-                .SetRotation(new Vector3(-45, -45, 0)).owner
-                .AddComponent<Light>().SetType(LightType.Directional)
-                .SetDiffuse(new Vector3(1.0f, 1.0f, 1.0f))
-                .SetAmbient(new Vector3(0.3f, 0.3f, 0.3f)).owner; 
-
-            physicsScene.Start();
+            LoadShadowMappingScene();
         }
 
         private void LoadShadowMappingScene()
@@ -299,22 +53,22 @@ namespace GameEngine
             Texture floorTex = Texture.LoadFromFile("Textures/brickwall.jpg");
             Texture heroTex = Texture.LoadFromFile("Textures/TexturasMago.png");
             Texture boxTex = Texture.LoadFromFile("Textures/container2.png");
-            Texture whiteTex = Texture.LoadFromFile("Textures/WhiteTex.jpg"); 
+            Texture whiteTex = Texture.LoadFromFile("Textures/WhiteTex.jpg");
 
             GameObject floor = new GameObject("Suelo_Sombras")
-                .transform.SetPosition(new Vector3(0, -0.5f, 0)) 
+                .transform.SetPosition(new Vector3(0, -0.5f, 0))
                 .SetScale(new Vector3(50, 1, 50)).owner
                 .AddComponent<Renderer>().LoadModel("Models/Primitives/Cube.fbx")
                 .SetMaterial(new Material(litShader)
                     .SetTexture("material.diffuse", floorTex)
                     .SetFloat("material.shininess", 16.0f)).owner;
 
-            
+
             GameObject hero = new GameObject("Personaje_Central")
-                .transform.SetPosition(new Vector3(0, 1.25f, 0)) 
+                .transform.SetPosition(new Vector3(0, 1.25f, 0))
                 .SetRotation(new Vector3(-90, 0, 0))
                 .SetScale(new Vector3(2.5f, 2.5f, 2.5f)).owner
-                .AddComponent<Renderer>().LoadModel("Models/Castle.fbx") 
+                .AddComponent<Renderer>().LoadModel("Models/Castle.fbx")
                 .SetMaterial(new Material(litShader)
                     .SetTexture("material.diffuse", heroTex)
                     .SetFloat("material.shininess", 32.0f)).owner;
@@ -338,20 +92,20 @@ namespace GameEngine
                 .AddComponent<Renderer>().LoadModel("Models/Primitives/Cube.fbx")
                 .SetMaterial(new Material(litShader).SetTexture("material.diffuse", boxTex)).owner;
 
-            GameObject sun = new GameObject("Sol_Atardecer")
+            /*sunObj = new GameObject("Sol_Atardecer")
                 .transform.SetPosition(new Vector3(20, 30, 20))
                 .SetRotation(new Vector3(-50, 45, 0)).owner
                 .AddComponent<Light>().SetType(LightType.Directional)
-                .SetDiffuse(new Vector3(1.5f, 1.2f, 0.9f)) 
-                .SetAmbient(new Vector3(0.05f, 0.05f, 0.05f)) 
-                .SetSpecular(new Vector3(1.0f, 0.9f, 0.8f)).owner;
+                .SetDiffuse(new Vector3(1.5f, 1.2f, 0.9f))
+                .SetAmbient(new Vector3(0.05f, 0.05f, 0.05f))
+                .SetSpecular(new Vector3(1.0f, 0.9f, 0.8f)).owner;*/
 
 
 
             float pointZoneX = -18f;
             float pointZoneZ = -5f;
 
-            
+
             GameObject Point_Pared_F = new GameObject("Point_Pared_Fondo")
                 .transform.SetPosition(new Vector3(pointZoneX, 4, pointZoneZ - 5))
                 .SetScale(new Vector3(12, 8, 1)).owner
@@ -365,7 +119,7 @@ namespace GameEngine
                 .AddComponent<Renderer>().LoadModel("Models/Primitives/Cube.fbx")
                 .SetMaterial(new Material(litShader).SetTexture("material.diffuse", floorTex)).owner;
 
-            
+
             GameObject Point_Pared_Derecha = new GameObject("Point_Pared_Derecha")
                 .transform.SetPosition(new Vector3(pointZoneX + 5.5f, 4, pointZoneZ))
                 .SetScale(new Vector3(1, 8, 10)).owner
@@ -373,7 +127,7 @@ namespace GameEngine
                 .SetMaterial(new Material(litShader).SetTexture("material.diffuse", floorTex)).owner;
 
 
-            
+
             GameObject Point_Caja = new GameObject("Point_Caja_Central")
                 .transform.SetPosition(new Vector3(pointZoneX, 2f, pointZoneZ))
                 .SetRotation(new Vector3(0, 45, 0))
@@ -381,18 +135,18 @@ namespace GameEngine
                 .AddComponent<Renderer>().LoadModel("Models/Primitives/Cube.fbx")
                 .SetMaterial(new Material(litShader).SetTexture("material.diffuse", boxTex)).owner;
 
-            
+
             GameObject Point_Esfera = new GameObject("Point_Esfera_Flotante")
                 .transform.SetPosition(new Vector3(pointZoneX + 3, 5f, pointZoneZ - 2))
                 .SetScale(new Vector3(1.5f, 1.5f, 1.5f)).owner
                 .AddComponent<Renderer>().LoadModel("Models/Primitives/Sphere.fbx")
                 .SetMaterial(new Material(litShader).SetTexture("material.diffuse", whiteTex)).owner;
 
-            
+
             GameObject pointLight = new GameObject("Luz_Puntual_Magica")
                 .transform.SetPosition(new Vector3(pointZoneX - 2f, 4f, pointZoneZ + 2f)).owner
                 .AddComponent<Light>().SetType(LightType.Point)
-                .SetDiffuse(new Vector3(0.4f, 3.0f, 5.0f)) 
+                .SetDiffuse(new Vector3(0.4f, 3.0f, 5.0f))
                 .SetAmbient(new Vector3(0.0f, 0.05f, 0.1f))
                 .SetSpecular(new Vector3(0.5f, 1.0f, 1.0f))
                 .SetDistance(40.0f).owner;
@@ -407,7 +161,7 @@ namespace GameEngine
                 .AddComponent<Renderer>().LoadModel("Models/Primitives/Cube.fbx")
                 .SetMaterial(new Material(litShader).SetTexture("material.diffuse", whiteTex)).owner;
 
-            GameObject Spot_Estatua =  new GameObject("Spot_Estatua")
+            GameObject Spot_Estatua = new GameObject("Spot_Estatua")
                 .transform.SetPosition(new Vector3(spotZoneX, 2f, spotZoneZ - 2))
                 .SetRotation(new Vector3(0, 0, 0))
                 .SetScale(new Vector3(2f, 4f, 2f)).owner
@@ -434,111 +188,18 @@ namespace GameEngine
             shadowScene.Start();
         }
 
-        private void LoadGrandFinaleScene()
-        {
-            Scene finaleScene = new Scene("Gran_Final_StressTest");
-            SceneManager.LoadScene(finaleScene);
-
-            finaleScene.clearColor = new Color4(0.15f, 0.15f, 0.2f, 1.0f);
-
-            Shader litShader = new Shader("phong.vert", "phong.frag");
-            Texture castleTex = Texture.LoadFromFile("Textures/castle_diff.png");
-            Texture boxTex = Texture.LoadFromFile("Textures/container2.png");
-            Texture ballTex = Texture.LoadFromFile("Textures/awesomeface.png");
-
-            GameObject castle = new GameObject("Castillo_Fisico")
-                .transform.SetPosition(new Vector3(0, -2f, 0))
-                .SetRotation(new Vector3(-90, 0, 0))
-                .SetScale(new Vector3(3f, 3f, 3f)).owner
-                .AddComponent<Renderer>().LoadModel("Models/RealCastle.fbx")
-                .SetMaterial(new Material(litShader)
-                    .SetTexture("material.diffuse", castleTex)
-                    .SetFloat("material.shininess", 16.0f)).owner
-                .AddComponent<Collider>()
-                .SetConcaveMesh("Models/RealCastle.fbx").owner
-                .AddComponent<Rigidbody>()
-                .SetMass(0.0f) 
-                .SetFriction(0.6f).owner;
-
-            Random rnd = new Random();
-            for (int i = 0; i < 30; i++)
-            {
-                float xOffset = (float)(rnd.NextDouble() * 10 - 5);
-                float zOffset = (float)(rnd.NextDouble() * 10 - 5);
-                float yHeight = 15f + (i * 2f);
-
-                bool isSphere = i % 2 == 0;
-
-                GameObject prop = new GameObject($"Prop_Dinamico_{i}")
-                    .transform.SetPosition(new Vector3(xOffset, yHeight, zOffset))
-                    .SetScale(new Vector3(1f, 1f, 1f)).owner
-                    .AddComponent<Renderer>().LoadModel(isSphere ? "Models/Primitives/Sphere.fbx" : "Models/Primitives/Cube.fbx")
-                    .SetMaterial(new Material(litShader).SetTexture("material.diffuse", isSphere ? ballTex : boxTex)).owner
-                    .AddComponent<Collider>().owner;
-
-                if (isSphere) prop.GetComponent<Collider>().SetSphere(0.5f);
-                else prop.GetComponent<Collider>().SetBox(new Vector3(0.5f, 0.5f, 0.5f));
-
-                prop.AddComponent<Rigidbody>()
-                    .SetMass(isSphere ? 3.0f : 1.5f)
-                    .SetBounciness(isSphere ? 0.7f : 0.1f)
-                    .SetFriction(0.5f);
-            }
-
-            GameObject moonLight = new GameObject("Luna_Direccional")
-                .transform.SetPosition(new Vector3(-20, 30, -20))
-                .SetRotation(new Vector3(-45, -135, 0)).owner
-                .AddComponent<Light>().SetType(LightType.Directional)
-                .SetDiffuse(new Vector3(1.5f, 1.8f, 2.5f))
-                .SetAmbient(new Vector3(0.15f, 0.15f, 0.25f))
-                .SetSpecular(new Vector3(2.0f, 2.0f, 2.5f)).owner;
-
-            GameObject fireLight = new GameObject("Fuego_Central")
-                .transform.SetPosition(new Vector3(0, 2f, 0)).owner
-                .AddComponent<Light>().SetType(LightType.Point)
-                .SetDiffuse(new Vector3(8.0f, 4.0f, 0.5f))
-                .SetAmbient(new Vector3(0.2f, 0.1f, 0.0f))
-                .SetSpecular(new Vector3(4.0f, 2.0f, 0.2f))
-                .SetDistance(45.0f).owner;
-
-            GameObject explorerSpot = new GameObject("Foco_Explorador")
-                .transform.SetPosition(new Vector3(15, 15, 15))
-                .SetRotation(new Vector3(-35, 45, 0)).owner
-                .AddComponent<Light>().SetType(LightType.Spot)
-                .SetDiffuse(new Vector3(6.0f, 6.0f, 6.0f))
-                .SetAmbient(new Vector3(0.0f, 0.0f, 0.0f))
-                .SetSpecular(new Vector3(5.0f, 5.0f, 5.0f))
-                .SetCutOff(10.0f)
-                .SetOuterCutOff(15.0f)
-                .SetDistance(70.0f).owner;
-
-            GameObject camera = new GameObject("MainCamera")
-                .transform.SetPosition(new Vector3(0, 12, 30))
-                .SetRotation(new Vector3(-15, 0, 0)).owner
-                .AddComponent<Camera>().SetFov(60f).SetAspectRatio(Size.X / (float)Size.Y).owner;
-
-            finaleScene.Start();
-        }
-
         protected override void OnRenderFrame(FrameEventArgs e) //It's executed once for each visual frame rendered by the engine. Here goes anything related to drawing, post-processing and visual effects.
         {
             base.OnRenderFrame(e);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
             RenderManager.RenderScene();
-
             SwapBuffers();
         }
 
         protected override void OnFramebufferResize(FramebufferResizeEventArgs e) //It's executed each time the Framebuffer resizes, which usually happens when the window is resized. Here we adjust the viewport and any related settings to ensure the rendering scales correctly with the new window size.
         {
             base.OnFramebufferResize(e);
-
-            GL.Viewport(0, 0, e.Width, e.Height);
-
-            RenderManager.ScreenWidth = e.Width;
-            RenderManager.ScreenHeight = e.Height;
+            RenderManager.Resize(e.Width, e.Height);
         }
 
         
@@ -552,32 +213,20 @@ namespace GameEngine
             {
                 return;
             }
-            if(Time.timeScale != 0)
+
+            CursorState = (Time.timeScale != 0) ? CursorState.Grabbed : CursorState.Normal;
+
+            PhysicsManager.Update(Time.deltaTime);
+
+            if (SceneManager.CurrentScene != null)
             {
-                CursorState = CursorState.Grabbed;
+                SceneManager.CurrentScene.Update(Time.deltaTime);
+                SceneManager.CurrentScene.LateUpdate(Time.deltaTime);
             }
-            else
-            {
-                CursorState = CursorState.Normal;
-            }
-
-            _physicsAccumulator += Time.deltaTime;
-
-            while (_physicsAccumulator >= FixedTimeStep)
-            {
-                PhysicsManager.StepSimulation((float)FixedTimeStep);
-
-                SceneManager.CurrentScene.FixedUpdate((float)FixedTimeStep);
-
-                _physicsAccumulator -= FixedTimeStep;
-            }
-
-            PhysicsManager.StepSimulation((float)Time.deltaTime);
-
-            SceneManager.CurrentScene.Update((float)e.Time);
-            SceneManager.CurrentScene.LateUpdate((float)e.Time);
 
             HandleInputs(e);
+
+            //sunObj.transform.rotation = new Vector3(sunObj.transform.rotation.X, sunObj.transform.rotation.Y + 10f * Time.deltaTime, sunObj.transform.rotation.Z);
         }
 
         #region Inputs
@@ -591,15 +240,6 @@ namespace GameEngine
 
             if(Time.timeScale != 0)
             {
-                if (KeyboardState.IsKeyPressed(Keys.G))
-                {
-                    DifferenceComparer();
-                }
-
-                if (KeyboardState.IsKeyPressed(Keys.H))
-                {
-                    DifferenceComparer2();
-                }
 
                 float delta = (float)e.Time;
                 if (KeyboardState.IsKeyDown(Keys.W)) Camera.Main.Position += Camera.Main.Front * speed * delta;
@@ -653,31 +293,6 @@ namespace GameEngine
         }
         #endregion
         #endregion
-        void DifferenceComparer() //Useful for comparing two states of the engine, for example, to see the difference between two rendering techniques or physics settings.
-                                  //You can toggle between them with a key press and observe the changes in real-time.
-        {
-            if (differenceState)
-            {
-
-            }
-            else
-            {
-
-            }
-            differenceState = !differenceState;
-        }
-        void DifferenceComparer2()
-        {
-            if (differenceState2)
-            {
-
-            }
-            else
-            {
-
-            }
-            differenceState2 = !differenceState2;
-        }
 
         public void ResetMouseFirstMove()
         {

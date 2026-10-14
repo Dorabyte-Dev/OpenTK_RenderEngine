@@ -51,7 +51,7 @@ uniform int activeSpotLights;
 
 uniform Material material;
 uniform vec3 viewPos;
-uniform int gammaCorrection;
+uniform int notGammaCorrection;
 uniform sampler2D shadowMap;
 uniform samplerCubeArray shadowCubemap;
 uniform float far_plane;
@@ -98,7 +98,7 @@ void main()
     
     result = result / (result + vec3(1.0));    
 
-    if(gammaCorrection == 1)
+    if(notGammaCorrection == 0)
     {
         float gamma = 2.2;
         result = pow(result, vec3(1.0/gamma));

@@ -5,6 +5,9 @@ namespace GameEngine
 {
     public static class PhysicsManager
     {
+        private static double _physicsAccumulator = 0.0;
+        private const double FixedTimeStep = 1.0 / 60.0;
+
         //Physics Pipeline
         private static DefaultCollisionConfiguration _collisionConf;
         private static CollisionDispatcher _dispatcher;
@@ -56,6 +59,21 @@ namespace GameEngine
         }
 
         //Called on OnUpdateFrame inside Game.cs
+
+        public static void Update(float deltaTime)
+        {
+            _physicsAccumulator += deltaTime;
+
+            while (_physicsAccumulator >= FixedTimeStep)
+            {
+                StepSimulation((float)FixedTimeStep);
+
+                SceneManager.CurrentScene.FixedUpdate((float)FixedTimeStep);
+
+                _physicsAccumulator -= FixedTimeStep;
+            }
+        }
+
         public static void StepSimulation(float deltaTime)
         {
             if (_physicsWorld != null)

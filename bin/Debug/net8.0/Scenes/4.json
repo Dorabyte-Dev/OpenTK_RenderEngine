@@ -741,56 +741,6 @@
       ]
     },
     {
-      "name": "Foco_Teatro",
-      "active": true,
-      "components": [
-        {
-          "$type": "GameEngine.Transform, OpenTK_RenderEngine",
-          "position": {
-            "X": 18.0,
-            "Y": 7.0,
-            "Z": 5.0
-          },
-          "rotation": {
-            "X": -20.0,
-            "Y": 0.0,
-            "Z": 0.0
-          },
-          "scale": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 1.0
-          },
-          "enabled": true
-        },
-        {
-          "$type": "GameEngine.Light, OpenTK_RenderEngine",
-          "Type": 2,
-          "Ambient": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0
-          },
-          "Diffuse": {
-            "X": 3.0,
-            "Y": 3.0,
-            "Z": 3.0
-          },
-          "Specular": {
-            "X": 2.0,
-            "Y": 2.0,
-            "Z": 2.0
-          },
-          "Constant": 1.0,
-          "Linear": 0.09,
-          "Quadratic": 0.03,
-          "CutOff": 0.976296,
-          "OuterCutOff": 0.95371693,
-          "enabled": true
-        }
-      ]
-    },
-    {
       "name": "MainCamera",
       "active": true,
       "components": [
@@ -798,8 +748,8 @@
           "$type": "GameEngine.Transform, OpenTK_RenderEngine",
           "position": {
             "X": 0.0,
-            "Y": 8.0,
-            "Z": 25.0
+            "Y": 8.000934,
+            "Z": 25.005293
           },
           "rotation": {
             "X": -10.0,

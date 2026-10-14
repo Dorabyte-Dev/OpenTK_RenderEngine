@@ -5,7 +5,8 @@ namespace GameEngine
 {
     public static class RenderManager
     {
-        #region Variables
+        #region Variables & Settings
+        private static Color4 _clearColor = new Color4(0.1f, 0.1f, 0.1f, 1.0f);
         public static int ScreenWidth { get; set; } = 800;
         public static int ScreenHeight { get; set; } = 600;
 
@@ -37,6 +38,22 @@ namespace GameEngine
         public const int MAX_SPOT_LIGHTS = 8;
         public const float near_plane_spot = 1.0f;
         public const float far_plane_spot = 50.0f;
+        #endregion
+        #region Initialization & Frame Lifecycle
+        public static void Initialize()
+        {
+            GL.ClearColor(_clearColor);
+            GL.Enable(EnableCap.DepthTest);
+
+            InitializeShadowMaps();
+        }
+
+        public static void Resize(int width, int height)
+        {
+            ScreenWidth = width;
+            ScreenHeight = height;
+            GL.Viewport(0, 0, width, height);
+        }
         #endregion
         #region Light and Renderer Management
         public static void AddLight(Light light)
